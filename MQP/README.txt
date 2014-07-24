@@ -1,0 +1,1 @@
+Make sure this folder is in the same directory as your C4 root folder.
