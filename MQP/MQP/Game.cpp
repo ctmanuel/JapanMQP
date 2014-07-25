@@ -9,7 +9,10 @@ Application* ConstructApplication(void)
 	return (new Game);
 }
 
-Game::Game() : Singleton<Game>(TheGame)
+Game::Game() : 
+	Singleton<Game>(TheGame),
+	tankControllerReg(kControllerTank, "Tank"),
+	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank)
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 }

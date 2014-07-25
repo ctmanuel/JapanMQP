@@ -1,6 +1,7 @@
 #pragma once
 
 #include "C4Cameras.h"
+#include "C4World.h"
 
 namespace C4
 {
