@@ -7,6 +7,9 @@ namespace C4
 {
 	class GameCamera : public FrustumCamera
 	{
+	private:
+
+		Quaternion origin;
 
 	public:
 		GameCamera();
@@ -14,5 +17,6 @@ namespace C4
 
 		void Preprocess(void);
 		void Move(void);
+		void Reset(void);
 	};
 }

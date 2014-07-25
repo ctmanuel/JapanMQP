@@ -43,5 +43,26 @@ void TankController::Preprocess(void)
 
 void TankController::Move(void)
 {
-	// TODO
+	if (leap.isConnected())
+	{
+		Leap::HandList hands = leap.frame().hands();
+		if (!hands.isEmpty())
+		{
+			Leap::Hand hand = hands.frontmost();
+			Point3D leapMotion = 
+				Point3D(hand.palmPosition()[2] * 0.01f, hand.palmPosition()[0] * 0.01, hand.palmPosition()[1] * 0.01);
+			GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 2.0f) + leapMotion);
+			GetTargetNode()->Invalidate();
+		}
+		else
+		{
+			GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 2.0f));
+			GetTargetNode()->Invalidate();
+		}
+	}
+	else
+	{
+		GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 2.0f));
+		GetTargetNode()->Invalidate();
+	}
 }

@@ -2,6 +2,7 @@
 
 #include "C4Controller.h"
 #include "C4World.h"
+#include "Leap.h"
 
 namespace C4
 {
@@ -16,6 +17,8 @@ namespace C4
 	class TankController : public Controller
 	{
 	private:
+
+		Leap::Controller leap;
 
 		TankController(const TankController& tankController);
 

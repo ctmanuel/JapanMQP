@@ -15,6 +15,9 @@ Game::Game() :
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank)
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
+	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
+	resetAction = new ResetAction(kActionReset);
+	TheInputMgr->AddAction(resetAction);
 }
 
 Game::~Game()
