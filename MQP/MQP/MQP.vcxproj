@@ -89,6 +89,7 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ResetAction.h" />
     <ClInclude Include="Tank.h" />
   </ItemGroup>
@@ -96,6 +97,7 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ResetAction.cpp" />
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>
