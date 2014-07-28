@@ -26,3 +26,5 @@ C4/msvcr120d.dll
 C4/SimpleBall.dll
 C4/SimpleChar.dll
 C4/Xcode4.zip
+*.sdf
+*.suo
