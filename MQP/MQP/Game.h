@@ -8,6 +8,7 @@
 #include "GameWorld.h"
 #include "ResetAction.h"
 #include "Tank.h"
+#include "HandController.h"
 #include "Player.h"
 
 using namespace C4;
@@ -20,6 +21,7 @@ private:
 
 	ModelRegistration				tankModelReg;
 	ControllerReg<TankController>	tankControllerReg;
+	ControllerReg<HandController>	handControllerReg;
 	ControllerReg<PlayerController>	playerControllerReg;
 
 public:

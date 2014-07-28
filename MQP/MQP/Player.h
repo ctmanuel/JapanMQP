@@ -1,6 +1,6 @@
 
-#ifndef PLAYER H
-#define PLAYER H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "C4Controller.h"
 #include "C4World.h"
