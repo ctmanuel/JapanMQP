@@ -11,9 +11,10 @@ Application* ConstructApplication(void)
 
 Game::Game() :
 	Singleton<Game>(TheGame),
-	tankControllerReg(kControllerTank, "Tank"),
 	handControllerReg(kControllerHand, "Hand"),
-	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank)
+	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
+	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
+	playerControllerReg(kControllerPlayer, "Player")
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
