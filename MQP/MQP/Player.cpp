@@ -5,7 +5,8 @@ using namespace C4;
 
 PlayerController::PlayerController() : Controller(kControllerPlayer)
 {
-
+	//Node *thisnode = GetTargetNode();
+	PlayerNode = GetTargetNode();
 }
 
 PlayerController::PlayerController(const PlayerController& playerController) : Controller(playerController)
@@ -25,7 +26,7 @@ PlayerController::~PlayerController()
 
 bool PlayerController::ValidNode(const Node *node)
 {
-	return ((node) && (node->GetNodeType() == kNodeModel));
+	return ((node) && (node->GetNodeType() == kNodeModel) || node->GetNodeType() == kNodeGeometry);
 }
 
 void PlayerController::Pack(Packer& data, unsigned long packFlags) const
@@ -45,6 +46,12 @@ void PlayerController::Preprocess(void)
 
 void PlayerController::Move(void)
 {
+	
+}
 
+Point3D PlayerController::PlayerPosition()
+{
+	
+	 return PlayerNode->GetNodePosition();
 }
 

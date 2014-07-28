@@ -11,9 +11,9 @@ Application* ConstructApplication(void)
 
 Game::Game() : 
 	Singleton<Game>(TheGame),
+	playerControllerReg(kControllerPlayer, "Player"),								//register the player controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
-	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
-	playerControllerReg(kControllerPlayer, "Player")
+	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank)		//register the tank model
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
@@ -25,6 +25,7 @@ Game::~Game()
 {
 	TheWorldMgr->UnloadWorld();
 	TheWorldMgr->SetWorldConstructor(nullptr);
+	delete resetAction;
 }
 
 World* Game::ConstructWorld(const char* name, void* cookie)

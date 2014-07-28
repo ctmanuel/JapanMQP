@@ -16,10 +16,11 @@ namespace C4
 	class PlayerController : public Controller
 	{
 	private:
-		//private constructor
-		PlayerController(const PlayerController& playerController);
+		PlayerController(const PlayerController& playerController);				//private constructor
 
 		Controller *Replicate(void) const;
+
+		Node *PlayerNode;														//Player's node
 
 	public:
 
@@ -35,6 +36,8 @@ namespace C4
 
 		void Preprocess(void);
 		void Move(void);
+
+		Point3D PlayerPosition();
 	};
 }
 
