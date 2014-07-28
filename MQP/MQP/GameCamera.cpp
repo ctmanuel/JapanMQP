@@ -18,8 +18,8 @@ void GameCamera::Preprocess(void)
 
 void GameCamera::Move(void)
 {
-	SetNodePosition(Point3D(4.0F, 0.0F, 3.0F));
-	LookAtPoint(Point3D(0.0F, 0.0F, 0.0F));
+	SetNodePosition(Point3D(-5.0F, 0.0F, 1.0F));
+	LookAtPoint(Point3D(100.0F, 0.0F, 1.0F));
 	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
 	SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
 }

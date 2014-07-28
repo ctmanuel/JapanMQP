@@ -30,6 +30,9 @@
     <ClInclude Include="ResetAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HandController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResetAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HandController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
