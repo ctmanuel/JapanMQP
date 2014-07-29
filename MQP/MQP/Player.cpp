@@ -46,7 +46,8 @@ void PlayerController::Preprocess(void)
 
 void PlayerController::Move(void)
 {
-	
+	Point3D currentpos = PlayerNode->GetNodePosition();
+	PlayerNode->SetNodePosition(Point3D(currentpos.x += 5.0F, currentpos.y, currentpos.z));
 }
 
 Point3D PlayerController::PlayerPosition()
