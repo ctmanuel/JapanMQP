@@ -10,6 +10,7 @@ namespace C4
 	private:
 
 		Quaternion origin;
+		Model *playerModel;
 
 	public:
 		GameCamera();

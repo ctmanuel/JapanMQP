@@ -25,6 +25,7 @@ namespace C4
 		Controller *Replicate(void) const;
 
 		Node *PlayerNode;														//Player's node
+		Model *PlayerModel;														//Player model
 
 	public:
 
@@ -42,6 +43,16 @@ namespace C4
 		void Move(void);
 
 		Point3D PlayerPosition();
+		
+		void SetPlayerModel(Model* model)
+		{
+			PlayerModel = model;
+		}
+
+		Model *GetPlayerModel()
+		{
+			return PlayerModel;
+		}
 	};
 }
 

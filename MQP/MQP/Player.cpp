@@ -6,6 +6,7 @@ using namespace C4;
 PlayerController::PlayerController() : Controller(kControllerPlayer)
 {
 	PlayerNode = GetTargetNode();
+	SetPlayerModel(Model::Get(kModelPlayer));
 }
 
 PlayerController::PlayerController(const PlayerController& playerController) : Controller(playerController)
