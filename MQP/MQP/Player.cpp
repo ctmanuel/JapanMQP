@@ -5,7 +5,6 @@ using namespace C4;
 
 PlayerController::PlayerController() : Controller(kControllerPlayer)
 {
-	//Node *thisnode = GetTargetNode();
 	PlayerNode = GetTargetNode();
 }
 

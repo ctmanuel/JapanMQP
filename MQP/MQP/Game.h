@@ -20,6 +20,7 @@ private:
 	ResetAction*					resetAction;
 
 	ModelRegistration				tankModelReg;
+	ModelRegistration				playerModelReg;
 	ControllerReg<TankController>	tankControllerReg;
 	ControllerReg<HandController>	handControllerReg;
 	ControllerReg<PlayerController>	playerControllerReg;
