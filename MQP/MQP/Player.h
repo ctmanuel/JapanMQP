@@ -12,6 +12,10 @@ namespace C4
 	{
 		kControllerPlayer = 'Play'
 	};
+	enum
+	{
+		kModelPlayer = 'Play'
+	};
 
 	class PlayerController : public Controller
 	{
