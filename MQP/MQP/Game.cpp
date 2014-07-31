@@ -15,7 +15,7 @@ Game::Game() :
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
 	playerControllerReg(kControllerPlayer, "Player"),
-	lightPathControllerReg(kControllerLightPath, "Light Path")
+	lightPathControllerReg(kControllerLightPath, "Light Path"),
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
