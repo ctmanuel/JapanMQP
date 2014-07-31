@@ -25,7 +25,9 @@ PlayerController::~PlayerController()
 
 bool PlayerController::ValidNode(const Node *node)
 {
-	return ((node) && (node->GetNodeType() == kNodeModel));
+	return ((node) && 
+		((node->GetNodeType() == kNodeModel) ||
+		 (node->GetNodeType() == kNodeGeometry)));
 }
 
 void PlayerController::Pack(Packer& data, unsigned long packFlags) const
