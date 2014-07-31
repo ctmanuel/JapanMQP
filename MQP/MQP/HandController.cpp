@@ -40,7 +40,9 @@ void HandController::Preprocess(void)
 void HandController::Move(void)
 {
 	// TODO: Set up basePosition based on player position
-	Point3D basePosition = Point3D(3.0f, 0.0f, 0.5f);
+	Model *playerModel = Model::Get(kModelPlayer);
+	const Point3D& PlayerPosition = playerModel->GetNodePosition();
+	Point3D basePosition = Point3D(PlayerPosition.x + 1.1F, PlayerPosition.y + 1.1F, PlayerPosition.z);
 
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
 	if (leap.isConnected())

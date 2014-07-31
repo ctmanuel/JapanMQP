@@ -20,10 +20,11 @@ private:
 
 	ResetAction*						resetAction;
 
-	ModelRegistration					tankModelReg;
-	ControllerReg<TankController>		tankControllerReg;
-	ControllerReg<HandController>		handControllerReg;
-	ControllerReg<PlayerController>		playerControllerReg;
+	ModelRegistration				tankModelReg;
+	ModelRegistration				playerModelReg;
+	ControllerReg<TankController>	tankControllerReg;
+	ControllerReg<HandController>	handControllerReg;
+	ControllerReg<PlayerController>	playerControllerReg;
 	ControllerReg<LightPathController>	lightPathControllerReg;
 
 public:

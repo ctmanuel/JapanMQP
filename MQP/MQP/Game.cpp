@@ -9,26 +9,25 @@ Application* ConstructApplication(void)
 	return (new Game);
 }
 
-Game::Game() :
-	Singleton<Game>(TheGame),
-	handControllerReg(kControllerHand, "Hand"),
+Game::Game() : 
+	Singleton<Game>(TheGame),								//register the player controller
+	handControllerReg(kControllerHand, "Hand"),										//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
 	playerControllerReg(kControllerPlayer, "Player"),
 	lightPathControllerReg(kControllerLightPath, "Light Path")
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
-	TheWorldMgr->LoadWorld("GameWorld_01");
 }
 
 Game::~Game()
 {
 	TheWorldMgr->UnloadWorld();
 	TheWorldMgr->SetWorldConstructor(nullptr);
-
 	delete resetAction;
 }
 
