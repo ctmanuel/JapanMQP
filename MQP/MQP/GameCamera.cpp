@@ -35,10 +35,13 @@ void GameCamera::Move(void)
 	}*/
 //	else
 //	{
-	Point3D startPosition = playerModel->GetNodePosition();
-	SetNodePosition(Point3D(startPosition.x+1.5F, startPosition.y+1.5F, startPosition.z+1.5F));
+	//Point3D startPosition = playerModel->GetNodePosition();
+	//SetNodePosition(Point3D(startPosition.x+1.5F, startPosition.y+1.5F, startPosition.z+1.5F));
 		//SetNodePosition(Point3D(4.0f, 0.0f, 4.0f));
-		LookAtPoint(Point3D(0.0F, 0.0F, 1.0F));
+		SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
+		LookAtPoint(Point3D(1.0F, 0.0F, 1.0F));
+
+		// These two lines handle Rift head tracking
 		Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
 		SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
 //	}

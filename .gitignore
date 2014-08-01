@@ -32,3 +32,5 @@ C4/_MACOSX/Xcode4/*
 C4/Data/Lake/*
 C4/Import/Lake/*
 C4/Data/MQP/AdamsSecretLab.wld
+*.obj
+*.tlog

@@ -4,12 +4,21 @@
 #include "C4World.h"
 #include "Leap.h"
 
+#include "LightPathController.h"
+
+#define Z_MID 225
+#define PITCH_SENSITIVITY 1.0f
+#define ROLL_SENSITIVITY 0.5f
+#define YAW_SENSITIVITY 0.005f
+
 namespace C4
 {
 	enum 
 	{
 		kControllerHand = 'hand'
 	};
+
+	class LightPathController;
 
 	class HandController : public Controller
 	{
@@ -22,6 +31,8 @@ namespace C4
 		HandController(const HandController& handController);
 		Controller* Replicate(void) const;
 
+		LightPathController* lightPath;
+
 	public:
 
 		HandController();
@@ -33,6 +44,8 @@ namespace C4
 		void Preprocess(void);
 
 		void Move(void);
+
+		void SetLightPath(LightPathController* lightPath);
 	};
 }
 

@@ -1,9 +1,15 @@
-﻿Build started 7/31/2014 10:55:24.
+﻿Build started 8/1/2014 19:11:06.
      1>Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp Player.cpp
-         Player.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp HandController.cpp LightPathController.cpp Player.cpp ResetAction.cpp Tank.cpp
          Game.cpp
+         Generating Code...
+         Compiling...
+         Tank.cpp
+         ResetAction.cpp
+         Player.cpp
+         LightPathController.cpp
+         HandController.cpp
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\Game.obj
@@ -14,8 +20,6 @@
          Debug\Player.obj
          Debug\ResetAction.obj
          Debug\Tank.obj
-         LINK : ..\..\C4\MQP.dll not found or not built by the last incremental link; performing full link
-            Creating library ..\..\C4\MQP.lib and object ..\..\C4\MQP.exp
          MQP.vcxproj -> C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
        PostBuildEvent:
          xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
@@ -32,4 +36,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.95
+Time Elapsed 00:00:12.38
