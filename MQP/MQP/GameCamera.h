@@ -16,6 +16,16 @@ namespace C4
 		GameCamera();
 		~GameCamera();
 
+		Model *GetTargetModel(void) const
+		{
+			return (playerModel);
+		}
+
+		void SetTargetModel(Model *model)
+		{
+			playerModel = model;
+		}
+
 		void Preprocess(void);
 		void Move(void);
 		void Reset(void);

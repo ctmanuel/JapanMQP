@@ -3,56 +3,111 @@
 
 using namespace C4;
 
-PlayerController::PlayerController() : Controller(kControllerPlayer)
+
+MainPlayerController::MainPlayerController(float azimuth) :
+		CharacterController(kControllerPlayer),
+		playerInteractor(this)
 {
-	PlayerNode = GetTargetNode();
-	SetPlayerModel(Model::Get(kModelPlayer));
+	playerMotion = kMotionNone;
+	movementFlags = 0;
+
+	modelAzimuth = azimuth;
+	modelAltitude = 0.0F;
 }
 
-PlayerController::PlayerController(const PlayerController& playerController) : Controller(playerController)
+MainPlayerController::MainPlayerController() :
+	CharacterController(kControllerPlayer),
+	playerInteractor(this)
 {
-
 }
 
-Controller *PlayerController::Replicate(void) const
+MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
+		CharacterController(playerController),
+		playerInteractor(this)
 {
-	return (new PlayerController(*this));
+	playerMotion = kMotionNone;
+	movementFlags = 0;
+
+	modelAzimuth = 0.0F;
+	modelAltitude = 0.0F;
 }
 
-PlayerController::~PlayerController()
+MainPlayerController::~MainPlayerController()
 {
-
 }
 
-bool PlayerController::ValidNode(const Node *node)
+//make duplicate of controller with pointer to current controller
+Controller *MainPlayerController::Replicate(void) const
+{
+	return (new MainPlayerController(*this));
+}
+
+bool MainPlayerController::ValidNode(const Node *node)
 {
 	return ((node) && (node->GetNodeType() == kNodeModel) || node->GetNodeType() == kNodeGeometry);
 }
 
-void PlayerController::Pack(Packer& data, unsigned long packFlags) const
+void MainPlayerController::Pack(Packer& data, unsigned long packFlags) const
 {
 	Controller::Pack(data, packFlags);
 }
 
-void PlayerController::Unpack(Unpacker& data, unsigned long unpackFlags)
+void MainPlayerController::Unpack(Unpacker& data, unsigned long unpackFlags)
 {
 	Controller::Unpack(data, unpackFlags);
 }
 
-void PlayerController::Preprocess(void)
+void MainPlayerController::Preprocess(void)
 {
+	//This function is called once before the target node is ever
+	//rendered or moved. The base class PreProcess() function should
+	// always be called first, and then the subclass can do whatever 
+	//preprocessing it needs to do.
+
 	Controller::Preprocess();
+
+	//TODO: Set rigid body flags
+	SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
+	SetFrictionCoefficient(0.0F);
+
+	//We use a frame animator to play animation resources
+	//for the player model
+
+	Model *player = GetTargetNode();
+	frameAnimator.SetTargetModel(player);
+	player->SetRootAnimator(&frameAnimator);
+
+	//Initialize the previous center of mass to the current center of mass
+	//so that this doesn't contain garbage the first time we call ActivateTriggers()
+
+	previousCenterOfMass = GetFinalWorldTransform() * GetCenterOfMass();
+
+	//Register our interactor with the world.
+
+	player->GetWorld()->AddInteractor(&playerInteractor);
 }
 
-void PlayerController::Move(void)
+void MainPlayerController::Move(void)
 {
-	Point3D currentpos = PlayerNode->GetNodePosition();
-	PlayerNode->SetNodePosition(Point3D(currentpos.x += 5.0F, currentpos.y, currentpos.z));
+	//This is called once per frame to allow the controller to 
+	//move its target node.
+
 }
 
-Point3D PlayerController::PlayerPosition()
-{
-	
-	 return PlayerNode->GetNodePosition();
-}
+void MainPlayerController::SetPlayerMotion(int32 motion){
+	//This function sets the animation resource corresponding to 
+	//the current type of motion assigned to the player
 
+	Interpolator *interpolator = frameAnimator.GetFrameInterpolator();
+
+	if (motion == kMotionStand)
+	{
+		frameAnimator.SetAnimation("player/Stand");
+		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
+	}
+	else if (motion == kMotionForward)
+	{
+		frameAnimator.SetAnimation("player/Forward");
+		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
+	}
+}

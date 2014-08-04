@@ -15,7 +15,7 @@ Game::Game() :
 	handControllerReg(kControllerHand, "Hand"),										//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
-	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer) //register player model
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
