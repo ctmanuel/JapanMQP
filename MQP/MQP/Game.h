@@ -24,7 +24,7 @@ private:
 	ModelRegistration				playerModelReg;
 	ControllerReg<TankController>	tankControllerReg;
 	ControllerReg<HandController>	handControllerReg;
-	ControllerReg<PlayerController>	playerControllerReg;
+	ControllerReg<MainPlayerController>	playerControllerReg;
 	ControllerReg<LightPathController>	lightPathControllerReg;
 
 public:
