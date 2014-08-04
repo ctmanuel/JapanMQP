@@ -13,9 +13,10 @@ LightPathController::LightPathController() : Controller(kControllerLightPath)
 	nextPitch = 0.0f;
 	nextRoll = 0.0f;
 	nextYaw = 0.0f;
-	timer = 0;
 	changed = true;
 	hand = nullptr;
+	distance = 0.0f;
+	speed = START_SPEED;
 }
 
 LightPathController::LightPathController(const LightPathController& lightPathController) :
@@ -70,11 +71,11 @@ void LightPathController::Preprocess(void)
 
 void LightPathController::Move(void)
 {
-	timer += TheTimeMgr->GetDeltaTime();
+	distance += speed * (float)((float)TheTimeMgr->GetDeltaTime() / 1000.0f);
 
 	// Scale forward
 	Matrix3D stretch;
-	stretch.Set(Vector3D((timer * SPEED), 0.0f, 0.0f),
+	stretch.Set(Vector3D(distance, 0.0f, 0.0f),
 		Vector3D(0.0f, 1.0f, 0.0f),
 		Vector3D(0.0f, 0.0f, 1.0f));
 
@@ -98,7 +99,26 @@ void LightPathController::Move(void)
 	GetTargetNode()->SetNodeMatrix3D(rotation * stretch);
 	GetTargetNode()->Invalidate();
 
-	// Move to next piece
+	// Gain or lose speed depending on pitch
+	speed += (-1.0f * pitch) * HILL_ACCELERATION * TheTimeMgr->GetDeltaTime();
+	if (speed < MIN_SPEED)
+	{
+		speed = MIN_SPEED;
+	}
+	if (speed > MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	if ((speed < BASE_SPEED) && (pitch < BASE_PITCH))
+	{
+		speed += (BASE_ACCELERATION * TheTimeMgr->GetDeltaTime());
+	}
+
+	char s[64];
+	sprintf(s, "Pitch: %f", pitch);
+	TheEngine->Report(s);
+
+	// Move to next piece if it's time
 	if ((abs(nextPitch - pitch) >= PITCH_THRESHOLD) ||
 		(abs(nextRoll - roll) >= ROLL_THRESHOLD) ||
 		(abs(nextYaw - yaw) >= YAW_THRESHOLD))
@@ -108,17 +128,18 @@ void LightPathController::Move(void)
 		next->SetController(new LightPathController());
 
 		// Set position
-		float horizDistance = timer * 0.2 * SPEED * cos(pitch);
+		float horizDistance = distance * 0.2 * cos(pitch);
 		next->SetNodePosition(GetTargetNode()->GetNodePosition() +
 			Point3D(horizDistance * cos(yaw),
 					horizDistance * sin(yaw),
-					timer * 0.2 * SPEED * sin(pitch)));
+					distance * 0.2 * sin(pitch)));
 
 		// Set rotation
 		LightPathController* nextController = (LightPathController*)(next->GetController());
 		nextController->SetPitch(nextPitch);
 		nextController->SetRoll(nextRoll);
 		nextController->SetYaw(nextYaw);
+		nextController->SetSpeed(speed);
 
 		if (hand)
 		{
@@ -154,14 +175,35 @@ void LightPathController::SetYaw(float yaw)
 	changed = true;
 }
 
+void LightPathController::SetSpeed(float speed)
+{
+	this->speed = speed;
+}
+
 void LightPathController::ChangePitch(float pitch)
 {
 	nextPitch = pitch;
+	if (nextPitch > K::pi_over_2)
+	{
+		nextPitch = K::pi_over_2;
+	}
+	if (nextPitch < (-1.0f * K::pi_over_2))
+	{
+		nextPitch = (-1.0f * K::pi_over_2);
+	}
 }
 
 void LightPathController::ChangeRoll(float roll)
 {
 	nextRoll = roll;
+	if (nextRoll > K::pi_over_2)
+	{
+		nextRoll = K::pi_over_2;
+	}
+	if (nextRoll < (-1.0f * K::pi_over_2))
+	{
+		nextRoll = (-1.0f * K::pi_over_2);
+	}
 }
 
 void LightPathController::ChangeYaw(float change)

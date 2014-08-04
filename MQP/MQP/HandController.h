@@ -6,10 +6,10 @@
 
 #include "LightPathController.h"
 
-#define Z_MID 225
+#define Z_MID 225.0f
 #define PITCH_SENSITIVITY 1.0f
-#define ROLL_SENSITIVITY 0.5f
-#define YAW_SENSITIVITY 0.005f
+#define ROLL_SENSITIVITY 1.0f
+#define YAW_SENSITIVITY 0.001f
 
 namespace C4
 {

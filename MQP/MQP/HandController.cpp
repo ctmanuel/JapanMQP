@@ -80,7 +80,7 @@ void HandController::Move(void)
 	{
 		Point3D position = GetTargetNode()->GetNodePosition();
 		lightPath->ChangePitch(position.z * PITCH_SENSITIVITY);
-		lightPath->ChangeYaw(position.y * YAW_SENSITIVITY);
+		lightPath->ChangeYaw(position.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
 }
 
