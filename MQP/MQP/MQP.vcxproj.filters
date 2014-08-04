@@ -36,7 +36,7 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerInteractor.h">
+    <ClInclude Include="LightPathController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,7 +62,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerInteractor.cpp">
+    <ClCompile Include="LightPathController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

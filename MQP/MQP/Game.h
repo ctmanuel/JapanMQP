@@ -10,6 +10,7 @@
 #include "Tank.h"
 #include "HandController.h"
 #include "Player.h"
+#include "LightPathController.h"
 
 using namespace C4;
 
@@ -17,13 +18,14 @@ class Game : public Singleton<Game>, public Application
 {
 private:
 
-	ResetAction*					resetAction;
+	ResetAction*						resetAction;
 
 	ModelRegistration				tankModelReg;
 	ModelRegistration				playerModelReg;
 	ControllerReg<TankController>	tankControllerReg;
 	ControllerReg<HandController>	handControllerReg;
-	ControllerReg<MainPlayerController>	playerControllerReg;
+	ControllerReg<PlayerController>	playerControllerReg;
+	ControllerReg<LightPathController>	lightPathControllerReg;
 
 public:
 

@@ -10,12 +10,13 @@ Application* ConstructApplication(void)
 }
 
 Game::Game() : 
-	Singleton<Game>(TheGame),
-	playerControllerReg(kControllerPlayer, "Player"),								//register the player controller
+	Singleton<Game>(TheGame),														//register the player controller
 	handControllerReg(kControllerHand, "Hand"),										//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
-	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer) //register player model
+	playerControllerReg(kControllerPlayer, "Player"),
+	lightPathControllerReg(kControllerLightPath, "Light Path"),
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
