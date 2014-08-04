@@ -21,7 +21,8 @@ void GameCamera::Preprocess(void)
 
 void GameCamera::Move(void)
 {
-/*	if (model)
+	/* I commented this out while working on the light path and I don't remember how it was before that, so I'm leaving it commented for now. Sorry. -Adam
+	if (model)
 	{
 		//find player controller
 		PlayerController *controller = static_cast<PlayerController *>(model->GetController());
@@ -32,20 +33,12 @@ void GameCamera::Move(void)
 		LookAtPoint(Point3D(100.0F, 0.0F, 1.0F));
 		Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
 		SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
-	}*/
-//	else
-//	{
-	//Point3D startPosition = playerModel->GetNodePosition();
-	//SetNodePosition(Point3D(startPosition.x+1.5F, startPosition.y+1.5F, startPosition.z+1.5F));
-		//SetNodePosition(Point3D(4.0f, 0.0f, 4.0f));
-		SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
-		LookAtPoint(Point3D(1.0F, 0.0F, 1.0F));
-
-		// These two lines handle Rift head tracking
-		Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
-		SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
-//	}
-	/*
+	}
+	else
+	{
+		Point3D startPosition = playerModel->GetNodePosition();
+		SetNodePosition(Point3D(startPosition.x+1.5F, startPosition.y+1.5F, startPosition.z+1.5F));
+	}
 	Node *root = TheWorldMgr->GetWorld()->GetRootNode();
 	Node *node = root;
 	do
@@ -56,7 +49,15 @@ void GameCamera::Move(void)
 		}
 		Engine::Report(node->GetNodeName());
 		node = root->GetNextNode(node);
-	} while (node); */
+	} while (node);
+*/
+
+	SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
+	LookAtPoint(Point3D(1.0F, 0.0F, 1.0F));
+
+	// These two lines handle Rift head tracking
+	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
+	SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
 }
 
 void GameCamera::Reset(void)

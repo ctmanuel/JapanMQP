@@ -34,3 +34,4 @@ C4/Import/Lake/*
 C4/Data/MQP/AdamsSecretLab.wld
 *.obj
 *.tlog
+*.log
