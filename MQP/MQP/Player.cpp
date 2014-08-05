@@ -11,6 +11,7 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
+	currentPathNode = nullptr;
 
 	modelAzimuth = azimuth;
 	modelAltitude = 0.0F;
@@ -20,6 +21,7 @@ CharacterController(kControllerPlayer),
 playerInteractor(this)
 {
 	 speed = START_SPEED;
+	 currentPathNode = nullptr;
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -30,6 +32,7 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
+	currentPathNode = nullptr;
 
 	modelAzimuth = 0.0F;
 	modelAltitude = 0.0F;
@@ -85,20 +88,50 @@ Controller *MainPlayerController::Replicate(void) const
 	//move its target node.
 	 if (lightPathNodes.empty()){
 		 //go straight
-		 x += 0.5;
-		 y += 0.5;
-		 z += 0.5;
+		 if (currentPathNode)
+		 {
+			 // Get angles from light path
+			 float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
+			 float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
+			 float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+
+			 float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
+			 x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
+			 y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
+			 z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
+		 }
+		 else // At the beginning
+		 {
+			 x = GetTargetNode()->GetNodePosition().x + speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+			 TheEngine->Report("made it here");
+		 }
 	 }
 	 else{
 		 
 		 Point3D lpos = lightPathNodes.front()->GetNodePosition();
 		 Point3D ppos = GetTargetNode()->GetNodePosition();
 		 distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
-		 while (distance < 0.2f){
+
+		 float vt = (speed * TheTimeMgr->GetFloatDeltaTime()) / 1000.0F;
+		 x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
+		 y = ((lpos.y - ppos.y) / distance) * vt + ppos.y;
+		 z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;
+
+		 while (distance < 0.1f){
 			 //POP
+			 currentPathNode = lightPathNodes.front();
 			 lightPathNodes.pop();
 			 //check if empty
 			 if (lightPathNodes.empty()){
+				 // Get angles from light path
+				 float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
+				 float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
+				 float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+
+				 float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
+				 x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
+				 y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
+				 z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
 				 break;
 			 }
 			 else {
@@ -115,10 +148,6 @@ Controller *MainPlayerController::Replicate(void) const
 				 GetTargetNode()->SetNodeMatrix3D(rotation);
 			 }
 		 }
-		 float vt = (speed * TheTimeMgr->GetFloatDeltaTime()) / 1000.0F;
-		 x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
-		 y = ((lpos.y - ppos.y) / distance) * vt + ppos.y;
-		 z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;
 	 }
 
 	 /*GetTargetNode()->SetNodePosition(Point3D(GetTargetNode()->GetNodePosition().x + speed * (TheTimeMgr->GetFloatDeltaTime()/1000.0F)
@@ -150,7 +179,25 @@ Point3D MainPlayerController::GetDestination()
 {
 	if (lightPathNodes.empty())
 	{
-		return Point3D(0.0f, 0.0f, 0.0f);
+		// Look straight
+		if (currentPathNode)
+		{
+			// Get angles from light path
+			float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
+			float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
+			float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+
+			float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
+			float x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
+			float y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
+			float z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
+
+			return Point3D(x, y, z);
+		}
+		else // At the beginning
+		{
+			return Point3D(GetTargetNode()->GetNodePosition().x + 1.0f, 0.0f, 1.0f);
+		}
 	}
 	else
 	{
