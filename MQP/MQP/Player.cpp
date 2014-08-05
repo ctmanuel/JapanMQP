@@ -10,13 +10,16 @@ playerInteractor(this)
 	playerMotion = kMotionNone;
 	movementFlags = 0;
 	
-		modelAzimuth = azimuth;
+	speed = START_SPEED;
+
+	modelAzimuth = azimuth;
 	modelAltitude = 0.0F;
 }
  MainPlayerController::MainPlayerController() :
 CharacterController(kControllerPlayer),
 playerInteractor(this)
 {
+	 speed = START_SPEED;
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -26,7 +29,9 @@ playerInteractor(this)
 	playerMotion = kMotionNone;
 	movementFlags = 0;
 	
-		modelAzimuth = 0.0F;
+	speed = START_SPEED;
+
+	modelAzimuth = 0.0F;
 	modelAltitude = 0.0F;
 }
 
@@ -66,11 +71,60 @@ Controller *MainPlayerController::Replicate(void) const
 		Controller::Preprocess();
 }
 
+ void MainPlayerController::LightpathNode(Node *node){
+	 lightPathNodes.push(node);
+ }
+
  void MainPlayerController::Move(void)
 {
-		//This is called once per frame to allow the controller to 
-			//move its target node.
-		
+	 float x = 0;
+	 float y = 0;
+	 float z = 0;
+	 float distance = 1;
+	//This is called once per frame to allow the controller to 
+	//move its target node.
+	 if (lightPathNodes.empty()){
+		 //go straight
+		 x += 0.5;
+		 y += 0.5;
+		 z += 0.5;
+	 }
+	 else{
+		 
+		 Point3D lpos = lightPathNodes.front()->GetNodePosition();
+		 Point3D ppos = GetTargetNode()->GetNodePosition();
+		 distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
+		 while (distance < 0.2f){
+			 //POP
+			 lightPathNodes.pop();
+			 //check if empty
+			 if (lightPathNodes.empty()){
+				 break;
+			 }
+			 else {
+				 lpos = lightPathNodes.front()->GetNodePosition();
+				 distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
+
+				 // Face forwards
+				 float rotx = 0;
+				 float roty = 0;
+				 float rotz = 0;
+				 lightPathNodes.front()->GetNodeTransform().GetEulerAngles(&rotx, &roty, &rotz);
+				 Matrix3D rotation;
+				 rotation.SetEulerAngles(rotx, roty, rotz);
+				 GetTargetNode()->SetNodeMatrix3D(rotation);
+			 }
+		 }
+		 float vt = (speed * TheTimeMgr->GetFloatDeltaTime()) / 1000.0F;
+		 x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
+		 y = ((lpos.y - ppos.y) / distance) * vt + ppos.y;
+		 z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;
+	 }
+
+	 /*GetTargetNode()->SetNodePosition(Point3D(GetTargetNode()->GetNodePosition().x + speed * (TheTimeMgr->GetFloatDeltaTime()/1000.0F)
+		 ,0
+		 ,0));*/
+	 GetTargetNode()->SetNodePosition(Point3D(x, y, z));
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion){
@@ -90,4 +144,16 @@ void MainPlayerController::SetPlayerMotion(int32 motion){
 		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
 		}
 	
+}
+
+Point3D MainPlayerController::GetDestination()
+{
+	if (lightPathNodes.empty())
+	{
+		return Point3D(0.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		return lightPathNodes.front()->GetNodePosition();
+	}
 }

@@ -11,7 +11,8 @@ namespace C4
 
 		Quaternion origin;
 		Model *playerModel;
-
+		Node *playerNode;
+		Node *GetPlayerNode();
 	public:
 		GameCamera();
 		~GameCamera();
@@ -19,5 +20,6 @@ namespace C4
 		void Preprocess(void);
 		void Move(void);
 		void Reset(void);
+
 	};
 }

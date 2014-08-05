@@ -14,7 +14,7 @@ Game::Game() :
 	handControllerReg(kControllerHand, "Hand"),										//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
-	playerControllerReg(kControllerPlayer, "Player"),
+	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
 {

@@ -4,8 +4,9 @@
 #include "C4World.h"
 
 #include "HandController.h"
+#include "Player.h"
 
-#define START_SPEED (5.0f) // m/s
+//#define START_SPEED (5.0f) // m/s
 #define MIN_SPEED (1.0f)
 #define MAX_SPEED (15.0f)
 #define BASE_SPEED (7.0f) // base acceleration happens if speed is lower than this
@@ -44,6 +45,7 @@ namespace C4
 		float speed;
 
 		HandController* hand;
+		MainPlayerController* player;
 
 	public:
 		LightPathController();
@@ -66,5 +68,18 @@ namespace C4
 		void ChangePitch(float pitch);
 		void ChangeRoll(float roll);
 		void ChangeYaw(float change);
+
+		float GetPitch(){
+			return pitch;
+		}
+		float GetYaw(){
+			return yaw;
+		}
+		float GetRoll(){
+			return roll;
+		}
+		float GetSpeed(){
+			return speed;
+		}
 	};
 }

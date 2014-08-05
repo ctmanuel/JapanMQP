@@ -8,6 +8,7 @@ GameCamera::GameCamera() : FrustumCamera(2.0F, 1.0F)
 {
 	origin = TheWorldMgr->GetTrackingOrientation();
 	playerModel = Model::Get(kModelPlayer);
+	playerNode = nullptr;
 }
 
 GameCamera::~GameCamera()
@@ -19,41 +20,41 @@ void GameCamera::Preprocess(void)
 	FrustumCamera::Preprocess();
 }
 
-void GameCamera::Move(void)
+Node *GameCamera::GetPlayerNode()
 {
-	/* I commented this out while working on the light path and I don't remember how it was before that, so I'm leaving it commented for now. Sorry. -Adam
-	if (model)
-	{
-		//find player controller
-		PlayerController *controller = static_cast<PlayerController *>(model->GetController());
-
-		//calculate locat coordinate frame for the camera based on the direction the player is looking
-		const Point3D& startPosition = model->GetWorldPosition();
-		SetNodePosition(Point3D(startPosition.x, startPosition.y, startPosition.z));
-		LookAtPoint(Point3D(100.0F, 0.0F, 1.0F));
-		Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
-		SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
-	}
-	else
-	{
-		Point3D startPosition = playerModel->GetNodePosition();
-		SetNodePosition(Point3D(startPosition.x+1.5F, startPosition.y+1.5F, startPosition.z+1.5F));
-	}
-	Node *root = TheWorldMgr->GetWorld()->GetRootNode();
-	Node *node = root;
+	World* wrld = TheWorldMgr->GetWorld();
+	Node* root = wrld->GetRootNode();
+	Node* node = root;
 	do
 	{
-		if (node->GetNodeName() =="Player"){
-			Engine::Report("Thisii a repotr");
-			startPosition = node->GetNodePosition();
+		if (node->GetController())
+		{
+			if (node->GetController()->GetControllerType() == kControllerPlayer)
+			{
+				return node;
+			}
 		}
-		Engine::Report(node->GetNodeName());
 		node = root->GetNextNode(node);
 	} while (node);
-*/
+	return nullptr;
+}
 
-	SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
-	LookAtPoint(Point3D(1.0F, 0.0F, 1.0F));
+void GameCamera::Move(void)
+{
+	
+	//SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
+	if (playerNode != nullptr){
+		Point3D playerpos = playerNode->GetNodePosition();
+		SetNodePosition(Point3D(playerpos.x, playerpos.y, playerpos.z+1.0F));
+		LookAtPoint(((MainPlayerController*)(playerNode->GetController()))->GetDestination() + 
+			Point3D(0.0f, 0.0f, 1.0f));
+		//SetNodeMatrix3D(playerNode->GetNodeTransform().GetMatrix3D());
+	}
+	else{
+
+		playerNode = GetPlayerNode();
+	}
+
 
 	// These two lines handle Rift head tracking
 	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());

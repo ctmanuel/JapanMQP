@@ -15,6 +15,7 @@ LightPathController::LightPathController() : Controller(kControllerLightPath)
 	nextYaw = 0.0f;
 	changed = true;
 	hand = nullptr;
+	player = nullptr;
 	distance = 0.0f;
 	speed = START_SPEED;
 }
@@ -48,6 +49,7 @@ void LightPathController::Unpack(Unpacker& data, unsigned long unpackFlags)
 	Controller::Unpack(data, unpackFlags);
 }
 
+//Find hand node and set controller
 void LightPathController::Preprocess(void)
 {
 	Controller::Preprocess();
@@ -64,14 +66,25 @@ void LightPathController::Preprocess(void)
 				hand = (HandController*)(node->GetController());
 				hand->SetLightPath(this);
 			}
+
+			if (node->GetController()->GetControllerType() == kControllerPlayer)
+			{
+				player = (MainPlayerController*)(node->GetController());
+			}
 		}
 		node = root->GetNextNode(node);
 	} while (node);
+	
+	if (player == nullptr){
+		//TheWorldMgr->UnloadWorld();
+		Engine::Report("Player pointer not found");
+	} 
 }
 
 void LightPathController::Move(void)
 {
-	distance += speed * (float)((float)TheTimeMgr->GetDeltaTime() / 1000.0f);
+	speed = 5.0F * player->GetSpeed();
+	distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
 
 	// Scale forward
 	Matrix3D stretch;
@@ -98,7 +111,7 @@ void LightPathController::Move(void)
 
 	GetTargetNode()->SetNodeMatrix3D(rotation * stretch);
 	GetTargetNode()->Invalidate();
-
+	/*
 	// Gain or lose speed depending on pitch
 	speed += (-1.0f * pitch) * HILL_ACCELERATION * TheTimeMgr->GetDeltaTime();
 	if (speed < MIN_SPEED)
@@ -113,11 +126,7 @@ void LightPathController::Move(void)
 	{
 		speed += (BASE_ACCELERATION * TheTimeMgr->GetDeltaTime());
 	}
-
-	char s[64];
-	sprintf(s, "Pitch: %f", pitch);
-	TheEngine->Report(s);
-
+	*/
 	// Move to next piece if it's time
 	if ((abs(nextPitch - pitch) >= PITCH_THRESHOLD) ||
 		(abs(nextRoll - roll) >= ROLL_THRESHOLD) ||
@@ -145,6 +154,13 @@ void LightPathController::Move(void)
 		{
 			hand->SetLightPath(nextController);
 		}
+
+		//send player information 
+		if (player)
+		{
+			player->LightpathNode(GetTargetNode());
+		}
+
 		GetTargetNode()->GetRootNode()->AddNewSubnode(next);
 		next->Update();
 
