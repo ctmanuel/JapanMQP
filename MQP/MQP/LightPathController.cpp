@@ -18,6 +18,7 @@ LightPathController::LightPathController() : Controller(kControllerLightPath)
 	player = nullptr;
 	distance = 0.0f;
 	speed = START_SPEED;
+	firstFrame = true;
 }
 
 LightPathController::LightPathController(const LightPathController& lightPathController) :
@@ -53,38 +54,40 @@ void LightPathController::Unpack(Unpacker& data, unsigned long unpackFlags)
 void LightPathController::Preprocess(void)
 {
 	Controller::Preprocess();
-
-	// Find hand
-	Node* root = GetTargetNode()->GetRootNode();
-	Node* node = root;
-	do
-	{
-		if (node->GetController())
-		{
-			if (node->GetController()->GetControllerType() == kControllerHand)
-			{
-				hand = (HandController*)(node->GetController());
-				hand->SetLightPath(this);
-			}
-
-			if (node->GetController()->GetControllerType() == kControllerPlayer)
-			{
-				player = (MainPlayerController*)(node->GetController());
-			}
-		}
-		node = root->GetNextNode(node);
-	} while (node);
-	
-	if (player == nullptr){
-		//TheWorldMgr->UnloadWorld();
-		Engine::Report("Player pointer not found");
-	} 
 }
 
 void LightPathController::Move(void)
 {
+	// Make sure this has hand and controller
+	if ((hand == nullptr) || (player == nullptr))
+	{
+		Node* root = GetTargetNode()->GetRootNode();
+		Node* node = root;
+		do
+		{
+			if (node->GetController())
+			{
+				if (node->GetController()->GetControllerType() == kControllerHand)
+				{
+					hand = (HandController*)(node->GetController());
+					hand->SetLightPath(this);
+				}
+
+				if (node->GetController()->GetControllerType() == kControllerPlayer)
+				{
+					player = (MainPlayerController*)(node->GetController());
+				}
+			}
+			node = root->GetNextNode(node);
+		} while (node);
+	}
+
 	speed = 5.0F * player->GetSpeed();
-	distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
+	if (!firstFrame)
+	{
+		distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
+	}
+	firstFrame = false;
 
 	// Scale forward
 	Matrix3D stretch;
@@ -111,6 +114,7 @@ void LightPathController::Move(void)
 
 	GetTargetNode()->SetNodeMatrix3D(rotation * stretch);
 	GetTargetNode()->Invalidate();
+
 	/*
 	// Gain or lose speed depending on pitch
 	speed += (-1.0f * pitch) * HILL_ACCELERATION * TheTimeMgr->GetDeltaTime();
@@ -127,6 +131,7 @@ void LightPathController::Move(void)
 		speed += (BASE_ACCELERATION * TheTimeMgr->GetDeltaTime());
 	}
 	*/
+
 	// Move to next piece if it's time
 	if ((abs(nextPitch - pitch) >= PITCH_THRESHOLD) ||
 		(abs(nextRoll - roll) >= ROLL_THRESHOLD) ||
@@ -149,6 +154,8 @@ void LightPathController::Move(void)
 		nextController->SetRoll(nextRoll);
 		nextController->SetYaw(nextYaw);
 		nextController->SetSpeed(speed);
+		nextController->SetHand(hand);
+		nextController->SetPlayer(player);
 
 		if (hand)
 		{
@@ -194,6 +201,16 @@ void LightPathController::SetYaw(float yaw)
 void LightPathController::SetSpeed(float speed)
 {
 	this->speed = speed;
+}
+
+void LightPathController::SetHand(HandController* hand)
+{
+	this->hand = hand;
+}
+
+void LightPathController::SetPlayer(MainPlayerController* player)
+{
+	this->player = player;
 }
 
 void LightPathController::ChangePitch(float pitch)

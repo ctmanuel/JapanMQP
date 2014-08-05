@@ -6,13 +6,14 @@
 #include "HandController.h"
 #include "Player.h"
 
-//#define START_SPEED (5.0f) // m/s
+/*
 #define MIN_SPEED (1.0f)
 #define MAX_SPEED (15.0f)
 #define BASE_SPEED (7.0f) // base acceleration happens if speed is lower than this
 #define HILL_ACCELERATION (0.001f)
 #define BASE_ACCELERATION (0.0005f)
 #define BASE_PITCH (0.2f) // pitch must be less than this for base acceleration
+*/
 #define PITCH_THRESHOLD (0.1f)
 #define ROLL_THRESHOLD (0.1f)
 #define YAW_THRESHOLD (0.1f)
@@ -47,6 +48,8 @@ namespace C4
 		HandController* hand;
 		MainPlayerController* player;
 
+		bool firstFrame;
+
 	public:
 		LightPathController();
 		~LightPathController();
@@ -64,6 +67,8 @@ namespace C4
 		void SetRoll(float roll);
 		void SetYaw(float yaw);
 		void SetSpeed(float speed);
+		void SetHand(HandController* hand);
+		void SetPlayer(MainPlayerController* player);
 
 		void ChangePitch(float pitch);
 		void ChangeRoll(float roll);

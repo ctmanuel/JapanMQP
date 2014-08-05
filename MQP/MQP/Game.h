@@ -22,6 +22,7 @@ private:
 
 	ModelRegistration				tankModelReg;
 	ModelRegistration				playerModelReg;
+	ModelRegistration				gauntletModelReg;
 	ControllerReg<TankController>	tankControllerReg;
 	ControllerReg<HandController>	handControllerReg;
 	ControllerReg<MainPlayerController>	playerControllerReg;

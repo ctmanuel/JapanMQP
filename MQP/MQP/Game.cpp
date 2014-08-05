@@ -9,11 +9,12 @@ Application* ConstructApplication(void)
 	return (new Game);
 }
 
-Game::Game() : 
+	Game::Game() :
 	Singleton<Game>(TheGame),														//register the player controller
 	handControllerReg(kControllerHand, "Hand"),										//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
+	gauntletModelReg(kModelGauntlet, "Gauntlet", "Model/gauntlet", kModelPrecache, kControllerHand),
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)

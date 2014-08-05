@@ -5,6 +5,7 @@
 #include "Leap.h"
 
 #include "LightPathController.h"
+#include "Player.h"
 
 #define Z_MID 225.0f
 #define PITCH_SENSITIVITY 1.0f
@@ -16,6 +17,10 @@ namespace C4
 	enum 
 	{
 		kControllerHand = 'hand'
+	};
+	enum
+	{
+		kModelGauntlet = 'gntl'
 	};
 
 	class LightPathController;
@@ -32,6 +37,7 @@ namespace C4
 		Controller* Replicate(void) const;
 
 		LightPathController* lightPath;
+		MainPlayerController* player;
 
 	public:
 
