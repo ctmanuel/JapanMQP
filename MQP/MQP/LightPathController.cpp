@@ -158,7 +158,7 @@ void LightPathController::Move(void)
 		//send player information 
 		if (player)
 		{
-			player->LightpathNode(GetTargetNode());
+			player->LightpathNode(next);
 		}
 
 		GetTargetNode()->GetRootNode()->AddNewSubnode(next);

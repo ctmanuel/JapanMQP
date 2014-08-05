@@ -8,6 +8,7 @@
 #include "C4Engine.h"
 #include "Leap.h"
 #include "PlayerInteractor.h"
+#include "LightPathController.h"
 #include <queue>
 
 #define START_SPEED (1.0f) // m/s
@@ -90,6 +91,7 @@ namespace C4
 
 		//queue of pointers to light path nodes
 		std::queue<Node*>	lightPathNodes;
+		Node*				currentPathNode;
 
 		//player speed
 		float speed = START_SPEED;
