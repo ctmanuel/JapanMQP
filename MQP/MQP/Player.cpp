@@ -126,20 +126,50 @@ Point3D MainPlayerController::GetDestination()
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion){
-	//This function sets the animation resource corresponding to 
-	//the current type of motion assigned to the player
+		//This function sets the animation resource corresponding to 
+			//the current type of motion assigned to the player
 		
-	Interpolator *interpolator = frameAnimator.GetFrameInterpolator();
+		Interpolator *interpolator = frameAnimator.GetFrameInterpolator();
 	
-	if (motion == kMotionStand)
-	{
+		if (motion == kMotionStand)
+		 {
 		frameAnimator.SetAnimation("player/Stand");
 		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
-	}
+		}
 	else if (motion == kMotionForward)
-	{
+		 {
 		frameAnimator.SetAnimation("player/Forward");
 		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
-	}
+		}
 	
+}
+
+Point3D MainPlayerController::GetDestination()
+{
+	if (lightPathNodes.empty())
+	{
+		// Look straight
+		if (currentPathNode)
+		{
+			// Get angles from light path
+			float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
+			float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
+			float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+
+			float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
+			float x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
+			float y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
+			float z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
+
+			return Point3D(x, y, z);
+		}
+		else // At the beginning
+		{
+			return Point3D(GetTargetNode()->GetNodePosition().x + 1.0f, 0.0f, 1.0f);
+		}
+	}
+	else
+	{
+		return lightPathNodes.front()->GetNodePosition();
+	}
 }
