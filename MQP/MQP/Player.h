@@ -152,8 +152,6 @@ namespace C4
 		void LightpathNode(Node *node);
 		void LightpathSpeed(float speed);
 
-		float linearInterpolation(float p1, float p2, float mu);
-
 		Point3D GetDestination();
 		
 		void Pack(Packer& data, unsigned long packFlags) const;

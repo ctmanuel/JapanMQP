@@ -36,18 +36,25 @@ void HandController::Preprocess(void)
 {
 	Controller::Preprocess();
 	startOrientation = GetTargetNode()->GetNodeTransform().GetMatrix3D();
+	Node* root = GetTargetNode()->GetRootNode();
+	Node* node = root;
+	do
+	{
+		if (node->GetController())
+		{
+			if (node->GetController()->GetControllerType() == kControllerPlayer)
+			{
+				player = (MainPlayerController*)(node->GetController());
+			}
+		}
+		node = root->GetNextNode(node);
+	} while (node);
 }
 
 void HandController::Move(void)
 {
 	// TODO: Set up basePosition based on player position
-	/*
-	Model *playerModel = Model::Get(kModelPlayer);
-	const Point3D& PlayerPosition = playerModel->GetNodePosition();
-	Point3D basePosition = Point3D(PlayerPosition.x + 1.1F, PlayerPosition.y + 1.1F, PlayerPosition.z);
-	*/
-	Point3D basePosition = Point3D(0.0f, 0.0f, 0.0f);
-
+	Point3D basePosition(2.0f, 0.0f, 0.5f);
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
 
 	if (leap.isConnected())
@@ -68,7 +75,7 @@ void HandController::Move(void)
 
 			if (lightPath)
 			{
-				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				//lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
 		}
 	}
@@ -79,8 +86,8 @@ void HandController::Move(void)
 	if (lightPath)
 	{
 		Point3D position = GetTargetNode()->GetNodePosition();
-		lightPath->ChangePitch(position.z * PITCH_SENSITIVITY);
-		lightPath->ChangeYaw(position.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
+		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
+		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
 }
 
