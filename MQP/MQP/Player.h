@@ -92,6 +92,7 @@ namespace C4
 		//queue of pointers to light path nodes
 		std::queue<Node*>	lightPathNodes;
 		Node*				currentPathNode;
+		Point3D				destination;
 
 		//player speed
 		float speed = START_SPEED;

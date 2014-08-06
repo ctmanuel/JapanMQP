@@ -48,7 +48,7 @@ void GameCamera::Move(void)
 		SetNodePosition(Point3D(playerpos.x, playerpos.y, playerpos.z+1.0F));
 		LookAtPoint(((MainPlayerController*)(playerNode->GetController()))->GetDestination() + 
 			Point3D(0.0f, 0.0f, 1.0f));
-		//SetNodeMatrix3D(playerNode->GetNodeTransform().GetMatrix3D());
+		//LookAtPoint(Point3D(100.0f, 0.0f, 1.0f));
 	}
 	else{
 
