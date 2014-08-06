@@ -11,8 +11,7 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
-	currentPathNode = nullptr;
-	destination = Point3D(0.0f, 0.0f, 0.0f);
+	splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 
 	modelAzimuth = azimuth;
 	modelAltitude = 0.0F;
@@ -22,8 +21,7 @@ CharacterController(kControllerPlayer),
 playerInteractor(this)
 {
 	 speed = START_SPEED;
-	 currentPathNode = nullptr;
-	 destination = Point3D(0.0f, 0.0f, 0.0f);
+	 splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -34,8 +32,7 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
-	currentPathNode = nullptr;
-	destination = Point3D(0.0f, 0.0f, 0.0f);
+	splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 
 	modelAzimuth = 0.0F;
 	modelAltitude = 0.0F;
@@ -69,127 +66,64 @@ Controller *MainPlayerController::Replicate(void) const
 
  void MainPlayerController::Preprocess(void)
 {
-		//This function is called once before the target node is ever
-			//rendered or moved. The base class PreProcess() function should
-			// always be called first, and then the subclass can do whatever 
-			//preprocessing it needs to do.
+	//This function is called once before the target node is ever
+	//rendered or moved. The base class PreProcess() function should
+	// always be called first, and then the subclass can do whatever 
+	//preprocessing it needs to do.
 		
-		Controller::Preprocess();
+	Controller::Preprocess();
 }
 
 void MainPlayerController::LightpathNode(Node *node){
-	lightPathNodes.push(node);
+	//lightPathNodes.push(node);
+
+	splinePoints.push_back(SplineVector3D(node->GetNodePosition().x, node->GetNodePosition().y, node->GetNodePosition().z));
 }
 
 void MainPlayerController::Move(void)
 {
-	float x = 0;
-	float y = 0;
-	float z = 0;
-	float distance = 1;
-	//This is called once per frame to allow the controller to 
-	//move its target node.
-	if (lightPathNodes.empty()){
-		//go straight
-		if (currentPathNode)
-		{
-			// Get angles from light path
-			float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
-			float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
-			float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+	float yaw = atan2(lightPathFront.y() - GetTargetNode()->GetNodePosition().y, lightPathFront.x() - GetTargetNode()->GetNodePosition().x);
+	Matrix3D rotation;
+	rotation.SetEulerAngles(0.0f, 0.0f, yaw);
+	GetTargetNode()->SetNodeMatrix3D(rotation);
 
-			float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
-			x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
-			y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
-			z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
-		}
-		else // At the beginning
-		{
-			x = GetTargetNode()->GetNodePosition().x + speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
-		}
-	}
-	else{
-		 
-		Point3D lpos = lightPathNodes.front()->GetNodePosition();
-		Point3D ppos = GetTargetNode()->GetNodePosition();
-		distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
-
-		float vt = (speed * TheTimeMgr->GetFloatDeltaTime()) / 1000.0F;
-		x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
-		y = ((lpos.y - ppos.y) / distance) * vt + ppos.y;
-		z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;
-
-		while (distance < 0.2f){
-			//POP
-			currentPathNode = lightPathNodes.front();
-			lightPathNodes.pop();
-			//check if empty
-			if (lightPathNodes.empty()){
-				// Get angles from light path
-				float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
-				float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
-				float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
-
-				float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
-				x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
-				y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
-				z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
-				break;
-			}
-			else {
-				lpos = lightPathNodes.front()->GetNodePosition();
-				distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
-			}
-		}
-	}
-
-	if (currentPathNode)
+	if (splinePoints.size() >= 4)
 	{
-		float xq;
-		float yq;
-		float zq;
-		currentPathNode->GetNodeTransform().GetEulerAngles(&xq, &yq, &zq);
-		zq = atan2(y - GetTargetNode()->GetNodePosition().y, x - GetTargetNode()->GetNodePosition().x);
-		Matrix3D q;
-		q.SetEulerAngles(xq, yq, zq);
-		GetTargetNode()->SetNodeMatrix3D(q);
+		std::vector<SplineVector3D> lp = splinePoints;
+		lp.push_back(lightPathFront);
+		SplineVector3D prev = lp[lp.size() - 2];
+		SplineVector3D diff = (lightPathFront - prev) / 1000.0f;
+		SplineVector3D next = lightPathFront + diff;
+		lp.push_back(next);
 
+		std::shared_ptr<Spline> spline = std::make_shared<CRSpline>(lp, 1.0F);
+		SplineLengthCalculator lengthCalc(spline);
+
+		double length = lengthCalc.findLength(0, 1, false, 1.0f);
+		length *= spline->getMaxT();
+
+		SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
+
+		GetTargetNode()->SetNodePosition(Point3D(pos.x(), pos.y(), pos.z()));
+
+		if (splinePoints.size() > MAX_SPLINE_POINTS)
+		{
+			splinePoints.erase(splinePoints.begin());
+		}
 	}
-
-	destination = Point3D(x, y, z) - GetTargetNode()->GetNodePosition();
-	GetTargetNode()->SetNodePosition(Point3D(x, y, z));
 	GetTargetNode()->Invalidate();
  }
 
- Point3D MainPlayerController::GetDestination()
- {
-	 if (lightPathNodes.empty())
-	 {
-		 // Look straight
-		 if (currentPathNode)
-		 {
-			 // Get angles from light path
-			 float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
-			 float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
-			 float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
+void MainPlayerController::ReportLightpathFront(Point3D front)
+{
+	SplineVector3D frontv(front.x, front.y, front.z);
+	lightPathFront = frontv;
+}
 
-			 float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
-			 float x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
-			 float y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
-			 float z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
-
-			 return Point3D(x, y, z);
-		 }
-		 else // At the beginning
-		 {
-			 return Point3D(GetTargetNode()->GetNodePosition().x + 1.0f, 0.0f, GetTargetNode()->GetNodePosition().z + 1.0f);
-		 }
-	 }
-	 else
-	 {
-		 return (destination + GetTargetNode()->GetNodePosition());
-	 }
- }
+Point3D MainPlayerController::GetDestination()
+{
+	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
+}
 
 void MainPlayerController::SetPlayerMotion(int32 motion){
 	//This function sets the animation resource corresponding to 

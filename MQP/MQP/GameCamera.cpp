@@ -41,8 +41,6 @@ Node *GameCamera::GetPlayerNode()
 
 void GameCamera::Move(void)
 {
-	
-	//SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
 	if (playerNode != nullptr){
 		Point3D playerpos = playerNode->GetNodePosition();
 		SetNodePosition(Point3D(playerpos.x, playerpos.y, playerpos.z+1.0F));
@@ -51,10 +49,8 @@ void GameCamera::Move(void)
 		//LookAtPoint(Point3D(100.0f, 0.0f, 1.0f));
 	}
 	else{
-
 		playerNode = GetPlayerNode();
 	}
-
 
 	// These two lines handle Rift head tracking
 	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());

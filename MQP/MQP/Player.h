@@ -6,12 +6,20 @@
 #include "C4Character.h"
 #include "C4World.h"
 #include "C4Engine.h"
+
 #include "Leap.h"
+
 #include "PlayerInteractor.h"
 #include "LightPathController.h"
-#include <queue>
+
+#include "spline_library\hermite\cubic\cr_spline.h"
+#include "spline_library\splinelengthcalculator.h"
+
+#include <vector>
 
 #define START_SPEED (1.0f) // m/s
+#define MAX_SPLINE_POINTS (50)
+#define DISTANCE_TO_PATH (2.0F)
 
 
 namespace C4
@@ -89,10 +97,9 @@ namespace C4
 		//we keep an interactor object here in the controller
 		PlayerInteractor	playerInteractor;
 
-		//queue of pointers to light path nodes
-		std::queue<Node*>	lightPathNodes;
-		Node*				currentPathNode;
-		Point3D				destination;
+		//spline stuff
+		std::vector<SplineVector3D> splinePoints;
+		SplineVector3D		lightPathFront;
 
 		//player speed
 		float speed = START_SPEED;
@@ -152,6 +159,7 @@ namespace C4
 
 		void LightpathNode(Node *node);
 		void LightpathSpeed(float speed);
+		void ReportLightpathFront(Point3D front);
 
 		Point3D GetDestination();
 		

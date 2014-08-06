@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\spline">
+      <UniqueIdentifier>{ba57e3b0-1569-4c2f-b3fa-33c6c1898aa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -70,6 +73,69 @@
     </ClCompile>
     <ClCompile Include="PlayerInteractor.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cr_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\cubic_b_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cubic_hermite_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\linear_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\linearalgebra.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cr_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\looping_cubic_b_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cubic_hermite_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\looping_linear_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\looping_natural_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_cr_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_hermite_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\natural_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\optimization.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_cr_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_hermite_spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\spline.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splineinverter.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splinelengthcalculator.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\t_calculator.cpp">
+      <Filter>Source Files\spline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\vector3d.cpp">
+      <Filter>Source Files\spline</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

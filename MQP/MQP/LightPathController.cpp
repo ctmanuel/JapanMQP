@@ -87,7 +87,6 @@ void LightPathController::Move(void)
 	{
 		distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
 	}
-	firstFrame = false;
 
 	// Scale forward
 	Matrix3D stretch;
@@ -131,6 +130,13 @@ void LightPathController::Move(void)
 		speed += (BASE_ACCELERATION * TheTimeMgr->GetDeltaTime());
 	}
 	*/
+
+	if (!firstFrame)
+	{
+		// Tell player where front is
+		player->ReportLightpathFront(GetTargetNode()->GetFirstSubnode()->GetWorldPosition());
+	}
+	firstFrame = false;
 
 	// Move to next piece if it's time
 	if ((abs(nextPitch - pitch) >= PITCH_THRESHOLD) ||
