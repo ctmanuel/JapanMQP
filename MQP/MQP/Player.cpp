@@ -67,9 +67,9 @@ Controller *MainPlayerController::Replicate(void) const
  void MainPlayerController::Preprocess(void)
 {
 		//This function is called once before the target node is ever
-			//rendered or moved. The base class PreProcess() function should
-			// always be called first, and then the subclass can do whatever 
-			//preprocessing it needs to do.
+		//rendered or moved. The base class PreProcess() function should
+		// always be called first, and then the subclass can do whatever 
+		//preprocessing it needs to do.
 		
 		Controller::Preprocess();
 }
@@ -78,14 +78,20 @@ Controller *MainPlayerController::Replicate(void) const
 	 lightPathNodes.push(node);
  }
 
+ float MainPlayerController::linearInterpolation(float p1, float p2, float mu){
+	 return (p1*(1 - mu) + p2*mu);
+ }
+
  void MainPlayerController::Move(void)
-{
+ {
+	 //This is called once per frame to allow the controller to 
+	 //move its target node.
 	 float x = 0;
 	 float y = 0;
 	 float z = 0;
 	 float distance = 1;
-	//This is called once per frame to allow the controller to 
-	//move its target node.
+
+	 //check if on a straight path; if true go straight forward
 	 if (lightPathNodes.empty()){
 		 //go straight
 		 if (currentPathNode)
@@ -103,9 +109,9 @@ Controller *MainPlayerController::Replicate(void) const
 		 else // At the beginning
 		 {
 			 x = GetTargetNode()->GetNodePosition().x + speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
-			 TheEngine->Report("made it here");
 		 }
 	 }
+
 	 else{
 		 
 		 Point3D lpos = lightPathNodes.front()->GetNodePosition();
@@ -113,15 +119,19 @@ Controller *MainPlayerController::Replicate(void) const
 		 distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
 
 		 float vt = (speed * TheTimeMgr->GetFloatDeltaTime()) / 1000.0F;
-		 x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
+		 /*x = ((lpos.x - ppos.x) / distance) * vt + ppos.x;
 		 y = ((lpos.y - ppos.y) / distance) * vt + ppos.y;
-		 z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;
+		 z = ((lpos.z - ppos.z) / distance) * vt + ppos.z;*/
+		 x = linearInterpolation(ppos.x, lpos.x, vt + 0.09F);
+		 y = linearInterpolation(ppos.y, lpos.y, vt + 0.09F);
+		 z = linearInterpolation(ppos.z, lpos.z, vt + 0.09F);
 
 		 while (distance < 0.1f){
-			 //POP
+			 //if close to destination block, pop current block from lightpath queue
 			 currentPathNode = lightPathNodes.front();
 			 lightPathNodes.pop();
-			 //check if empty
+
+			 //check if lightpath queue is empty
 			 if (lightPathNodes.empty()){
 				 // Get angles from light path
 				 float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
@@ -134,6 +144,7 @@ Controller *MainPlayerController::Replicate(void) const
 				 z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
 				 break;
 			 }
+			 
 			 else {
 				 lpos = lightPathNodes.front()->GetNodePosition();
 				 distance = std::sqrt(pow(lpos.x - ppos.x, 2) + pow(lpos.y - ppos.y, 2) + pow(lpos.z - ppos.z, 2));
@@ -142,7 +153,11 @@ Controller *MainPlayerController::Replicate(void) const
 				 float rotx = 0;
 				 float roty = 0;
 				 float rotz = 0;
+				 float protx = 0;
+				 float proty = 0;
+				 float protz = 0;
 				 lightPathNodes.front()->GetNodeTransform().GetEulerAngles(&rotx, &roty, &rotz);
+				 GetTargetNode()->GetNodeTransform().GetEulerAngles(&protx, &proty, &protz);
 				 Matrix3D rotation;
 				 rotation.SetEulerAngles(rotx, roty, rotz);
 				 GetTargetNode()->SetNodeMatrix3D(rotation);
@@ -150,9 +165,6 @@ Controller *MainPlayerController::Replicate(void) const
 		 }
 	 }
 
-	 /*GetTargetNode()->SetNodePosition(Point3D(GetTargetNode()->GetNodePosition().x + speed * (TheTimeMgr->GetFloatDeltaTime()/1000.0F)
-		 ,0
-		 ,0));*/
 	 GetTargetNode()->SetNodePosition(Point3D(x, y, z));
 }
 
