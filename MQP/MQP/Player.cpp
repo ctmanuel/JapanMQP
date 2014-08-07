@@ -11,17 +11,16 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
-	splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 
 	modelAzimuth = azimuth;
 	modelAltitude = 0.0F;
 }
- MainPlayerController::MainPlayerController() :
+
+MainPlayerController::MainPlayerController() :
 CharacterController(kControllerPlayer),
 playerInteractor(this)
 {
 	 speed = START_SPEED;
-	 splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -32,7 +31,6 @@ playerInteractor(this)
 	movementFlags = 0;
 	
 	speed = START_SPEED;
-	splinePoints.push_back(SplineVector3D(0.0F, 0.0F, 0.0F));
 
 	modelAzimuth = 0.0F;
 	modelAltitude = 0.0F;
@@ -67,11 +65,17 @@ Controller *MainPlayerController::Replicate(void) const
  void MainPlayerController::Preprocess(void)
 {
 	//This function is called once before the target node is ever
-	//rendered or moved. The base class PreProcess() function should
+	// rendered or moved. The base class PreProcess() function should
 	// always be called first, and then the subclass can do whatever 
-	//preprocessing it needs to do.
+	// preprocessing it needs to do.
 		
-	Controller::Preprocess();
+	 Controller::Preprocess();
+
+	 // Spline needs at least two points in front of the player and two points behind.
+	 // These are the points behind.
+	 Point3D position = GetTargetNode()->GetNodePosition();
+	 splinePoints.push_back(SplineVector3D(position.x - 2.0f, position.y, position.z));
+	 splinePoints.push_back(SplineVector3D(position.x - 1.0f, position.y, position.z));
 }
 
 void MainPlayerController::LightpathNode(Node *node){
@@ -82,6 +86,24 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
+	// Set up spline
+	std::vector<SplineVector3D> lp = splinePoints;
+	lp.push_back(lightPathFront);
+	SplineVector3D prev = lp[lp.size() - 2];
+	SplineVector3D diff = (lightPathFront - prev) / 1000.0f;
+	SplineVector3D next = lightPathFront + diff;
+	lp.push_back(next);
+
+	// Find distance along spline
+	std::shared_ptr<Spline> spline = std::make_shared<CRSpline>(lp, 1.0F);
+	SplineLengthCalculator lengthCalc(spline);
+	double length = lengthCalc.findLength(0, 1, false, 1.0f);
+	length *= spline->getMaxT();
+
+	// Move
+	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
+	GetTargetNode()->SetNodePosition(Point3D(pos.x(), pos.y(), pos.z()));
+
 	// Face front of path
 	Point3D position = GetTargetNode()->GetNodePosition();
 	float yaw = atan2(lightPathFront.y() - position.y, lightPathFront.x() - position.x);
@@ -91,32 +113,13 @@ void MainPlayerController::Move(void)
 	rotation.SetEulerAngles(0.0f, pitch, yaw);
 	GetTargetNode()->SetNodeMatrix3D(rotation);
 
-	if (splinePoints.size() >= 4)
+	// Keep set of points below max
+	if (splinePoints.size() > MAX_SPLINE_POINTS)
 	{
-		// Set up spline
-		std::vector<SplineVector3D> lp = splinePoints;
-		lp.push_back(lightPathFront);
-		SplineVector3D prev = lp[lp.size() - 2];
-		SplineVector3D diff = (lightPathFront - prev) / 1000.0f;
-		SplineVector3D next = lightPathFront + diff;
-		lp.push_back(next);
-
-		// Find distance along spline
-		std::shared_ptr<Spline> spline = std::make_shared<CRSpline>(lp, 1.0F);
-		SplineLengthCalculator lengthCalc(spline);
-
-		double length = lengthCalc.findLength(0, 1, false, 1.0f);
-		length *= spline->getMaxT();
-
-		SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
-
-		GetTargetNode()->SetNodePosition(Point3D(pos.x(), pos.y(), pos.z()));
-
-		if (splinePoints.size() > MAX_SPLINE_POINTS)
-		{
-			splinePoints.erase(splinePoints.begin());
-		}
+		splinePoints.erase(splinePoints.begin());
 	}
+
+	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
  }
 
@@ -131,22 +134,22 @@ Point3D MainPlayerController::GetDestination()
 	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
 }
 
-void MainPlayerController::SetPlayerMotion(int32 motion){
-		//This function sets the animation resource corresponding to 
-			//the current type of motion assigned to the player
+void MainPlayerController::SetPlayerMotion(int32 motion)
+{
+	//This function sets the animation resource corresponding to 
+	//the current type of motion assigned to the player
 		
-		Interpolator *interpolator = frameAnimator.GetFrameInterpolator();
+	Interpolator *interpolator = frameAnimator.GetFrameInterpolator();
 	
-		if (motion == kMotionStand)
-		 {
+	if (motion == kMotionStand)
+	{
 		frameAnimator.SetAnimation("player/Stand");
 		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
-		}
+	}
 	else if (motion == kMotionForward)
-		 {
+	{
 		frameAnimator.SetAnimation("player/Forward");
 		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
-		}
-	
+	}
 }
 
