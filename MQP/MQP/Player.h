@@ -160,8 +160,6 @@ namespace C4
 		void LightpathNode(Node *node);
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
-
-		Point3D GetDestination();
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);

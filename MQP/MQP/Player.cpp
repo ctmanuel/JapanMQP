@@ -86,6 +86,17 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
+
+	// Face front of path
+	Vector3D d = Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z()) - GetTargetNode()->GetNodePosition();
+	float horiz = sqrt((d.x * d.x) + (d.y * d.y));
+	float pitch = atan2(horiz, d.z) - K::pi_over_2;
+	Matrix3D pitchm, yawm;
+	pitchm.SetRotationAboutY(pitch);
+	float yaw = atan2(d.y, d.x);
+	yawm.SetRotationAboutZ(yaw);
+	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
+
 	// Set up spline
 	std::vector<SplineVector3D> lp = splinePoints;
 	lp.push_back(lightPathFront);
@@ -104,15 +115,6 @@ void MainPlayerController::Move(void)
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	GetTargetNode()->SetNodePosition(Point3D(pos.x(), pos.y(), pos.z()));
 
-	// Face front of path
-	Point3D position = GetTargetNode()->GetNodePosition();
-	float yaw = atan2(lightPathFront.y() - position.y, lightPathFront.x() - position.x);
-	float horiz = sqrt(pow(lightPathFront.x() - position.x, 2) + pow(lightPathFront.y() - position.y, 2));
-	float pitch = atan2(horiz, lightPathFront.z() - position.z) - K::pi_over_2;
-	Matrix3D rotation;
-	rotation.SetEulerAngles(0.0f, pitch, yaw);
-	GetTargetNode()->SetNodeMatrix3D(rotation);
-
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
 	{
@@ -127,11 +129,6 @@ void MainPlayerController::ReportLightpathFront(Point3D front)
 {
 	SplineVector3D frontv(front.x, front.y, front.z);
 	lightPathFront = frontv;
-}
-
-Point3D MainPlayerController::GetDestination()
-{
-	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)
