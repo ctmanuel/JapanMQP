@@ -42,7 +42,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\C4\</OutDir>
-    <IncludePath>$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\Include;..\..\SplineLibrary-master\SplineLibrary-master;$(IncludePath)</IncludePath>
+    <SourcePath>$(VC_SourcePath);..\..\SplineLibrary-master\SplineLibrary-master</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -54,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MQP_EXPORTS;C4DEBUG;C4WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\C4\EngineCode;..\..\LeapSDK\LeapSDK\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\C4\EngineCode;..\..\LeapSDK\LeapSDK\include;..\..\SplineLibrary-master\SplineLibrary-master;$(IncludePath)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -97,6 +98,27 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
     <ClInclude Include="Tank.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\cubic_b_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\looping_cubic_b_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cr_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cubic_hermite_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cr_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cubic_hermite_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_cr_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_hermite_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_cr_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_hermite_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\linear_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\looping_linear_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\looping_natural_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\natural_spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\spline.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splineinverter.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splinelengthcalculator.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\linearalgebra.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\optimization.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\t_calculator.cpp" />
+    <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\vector3d.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="GameWorld.cpp" />

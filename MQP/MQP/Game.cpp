@@ -23,6 +23,8 @@ Application* ConstructApplication(void)
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
+
+	LoadWorld("GameWorld_01");
 }
 
 Game::~Game()

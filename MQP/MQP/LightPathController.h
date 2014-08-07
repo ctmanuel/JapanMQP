@@ -6,17 +6,11 @@
 #include "HandController.h"
 #include "Player.h"
 
-/*
-#define MIN_SPEED (1.0f)
-#define MAX_SPEED (15.0f)
-#define BASE_SPEED (7.0f) // base acceleration happens if speed is lower than this
-#define HILL_ACCELERATION (0.001f)
-#define BASE_ACCELERATION (0.0005f)
-#define BASE_PITCH (0.2f) // pitch must be less than this for base acceleration
-*/
 #define PITCH_THRESHOLD (0.1f)
-#define ROLL_THRESHOLD (0.1f)
+#define ROLL_THRESHOLD (0.04f)
 #define YAW_THRESHOLD (0.1f)
+
+#define ROLL_RATE (1.0f) // radians/second
 
 namespace C4
 {
@@ -42,6 +36,7 @@ namespace C4
 		float nextPitch;
 		float nextRoll;
 		float nextYaw;
+		float targetRoll;
 		float distance;
 		float speed;
 

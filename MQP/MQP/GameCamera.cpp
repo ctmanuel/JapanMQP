@@ -31,6 +31,8 @@ Node *GameCamera::GetPlayerNode()
 		{
 			if (node->GetController()->GetControllerType() == kControllerPlayer)
 			{
+				// Make this a subnode of player
+				node->AddNewSubnode(this);
 				return node;
 			}
 		}
@@ -41,20 +43,14 @@ Node *GameCamera::GetPlayerNode()
 
 void GameCamera::Move(void)
 {
-	
-	//SetNodePosition(Point3D(-5.0f, 0.0f, 1.0f));
 	if (playerNode != nullptr){
 		Point3D playerpos = playerNode->GetNodePosition();
-		SetNodePosition(Point3D(playerpos.x, playerpos.y, playerpos.z+1.0F));
-		LookAtPoint(((MainPlayerController*)(playerNode->GetController()))->GetDestination() + 
-			Point3D(0.0f, 0.0f, 1.0f));
-		//LookAtPoint(Point3D(100.0f, 0.0f, 1.0f));
+		SetNodePosition(Point3D(0.0f, 0.0f, 1.75f));
+		LookAtPoint(Point3D(1.0f, 0.0f, 1.75f));
 	}
 	else{
-
 		playerNode = GetPlayerNode();
 	}
-
 
 	// These two lines handle Rift head tracking
 	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());

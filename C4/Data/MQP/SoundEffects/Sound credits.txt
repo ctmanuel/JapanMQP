@@ -1,0 +1,8 @@
+-http://www.leshylabs.com/apps/sfMaker/ 
+  for waveform-based sounds
+-http://soundbible.com/1107-Electricity.html
+  for electric buzz (electricity hazards)
+-http://soundbible.com/1234-Bomb.html
+  for bomb explosion (collision with mine)
+-http://www.soundjay.com/wind-sound-effect.html
+  for wind blowing (speed effect)
