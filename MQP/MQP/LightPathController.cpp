@@ -13,6 +13,7 @@ LightPathController::LightPathController() : Controller(kControllerLightPath)
 	nextPitch = 0.0f;
 	nextRoll = 0.0f;
 	nextYaw = 0.0f;
+	targetRoll = 0.0f;
 	changed = true;
 	hand = nullptr;
 	player = nullptr;
@@ -135,6 +136,16 @@ void LightPathController::Move(void)
 	{
 		// Tell player where front is
 		player->ReportLightpathFront(GetTargetNode()->GetFirstSubnode()->GetWorldPosition());
+
+		// Update next roll
+		if (nextRoll < targetRoll)
+		{
+			nextRoll += ROLL_RATE * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+		}
+		else if (nextRoll > targetRoll)
+		{
+			nextRoll -= ROLL_RATE * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+		}
 	}
 	firstFrame = false;
 
@@ -234,14 +245,14 @@ void LightPathController::ChangePitch(float pitch)
 
 void LightPathController::ChangeRoll(float roll)
 {
-	nextRoll = roll;
-	if (nextRoll > K::pi_over_2)
+	targetRoll = roll;
+	if (targetRoll > K::pi_over_2)
 	{
-		nextRoll = K::pi_over_2;
+		targetRoll = K::pi_over_2;
 	}
-	if (nextRoll < (-1.0f * K::pi_over_2))
+	if (targetRoll < (-1.0f * K::pi_over_2))
 	{
-		nextRoll = (-1.0f * K::pi_over_2);
+		targetRoll = (-1.0f * K::pi_over_2);
 	}
 }
 

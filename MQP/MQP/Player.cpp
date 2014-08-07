@@ -82,13 +82,18 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
-	float yaw = atan2(lightPathFront.y() - GetTargetNode()->GetNodePosition().y, lightPathFront.x() - GetTargetNode()->GetNodePosition().x);
+	// Face front of path
+	Point3D position = GetTargetNode()->GetNodePosition();
+	float yaw = atan2(lightPathFront.y() - position.y, lightPathFront.x() - position.x);
+	float horiz = sqrt(pow(lightPathFront.x() - position.x, 2) + pow(lightPathFront.y() - position.y, 2));
+	float pitch = atan2(horiz, lightPathFront.z() - position.z) - K::pi_over_2;
 	Matrix3D rotation;
-	rotation.SetEulerAngles(0.0f, 0.0f, yaw);
+	rotation.SetEulerAngles(0.0f, pitch, yaw);
 	GetTargetNode()->SetNodeMatrix3D(rotation);
 
 	if (splinePoints.size() >= 4)
 	{
+		// Set up spline
 		std::vector<SplineVector3D> lp = splinePoints;
 		lp.push_back(lightPathFront);
 		SplineVector3D prev = lp[lp.size() - 2];
@@ -96,6 +101,7 @@ void MainPlayerController::Move(void)
 		SplineVector3D next = lightPathFront + diff;
 		lp.push_back(next);
 
+		// Find distance along spline
 		std::shared_ptr<Spline> spline = std::make_shared<CRSpline>(lp, 1.0F);
 		SplineLengthCalculator lengthCalc(spline);
 
@@ -144,32 +150,3 @@ void MainPlayerController::SetPlayerMotion(int32 motion){
 	
 }
 
-Point3D MainPlayerController::GetDestination()
-{
-	if (lightPathNodes.empty())
-	{
-		// Look straight
-		if (currentPathNode)
-		{
-			// Get angles from light path
-			float pitch = ((LightPathController*)(currentPathNode->GetController()))->GetPitch();
-			float roll = ((LightPathController*)(currentPathNode->GetController()))->GetRoll();
-			float yaw = ((LightPathController*)(currentPathNode->GetController()))->GetYaw();
-
-			float horizDistance = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * cos(pitch);
-			float x = horizDistance * cos(yaw) + GetTargetNode()->GetNodePosition().x;
-			float y = horizDistance * sin(yaw) + GetTargetNode()->GetNodePosition().y;
-			float z = (speed * TheTimeMgr->GetFloatDeltaTime() / 1000.0f) * sin(pitch) + GetTargetNode()->GetNodePosition().z;
-
-			return Point3D(x, y, z);
-		}
-		else // At the beginning
-		{
-			return Point3D(GetTargetNode()->GetNodePosition().x + 1.0f, 0.0f, 1.0f);
-		}
-	}
-	else
-	{
-		return lightPathNodes.front()->GetNodePosition();
-	}
-}

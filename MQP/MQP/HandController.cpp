@@ -75,7 +75,7 @@ void HandController::Move(void)
 
 			if (lightPath)
 			{
-				//lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
 		}
 	}
@@ -86,6 +86,7 @@ void HandController::Move(void)
 	if (lightPath)
 	{
 		Point3D position = GetTargetNode()->GetNodePosition();
+
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
