@@ -21,6 +21,11 @@
 #define MAX_SPLINE_POINTS (50)
 #define DISTANCE_TO_PATH (2.0F)
 
+// Speed stuff
+#define MIN_SPEED (1.0f)
+#define MAX_SPEED (5.0f)
+#define HILL_ACCELERATION (0.1f)
+
 
 namespace C4
 {

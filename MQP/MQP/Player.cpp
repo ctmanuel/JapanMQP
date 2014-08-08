@@ -79,8 +79,6 @@ Controller *MainPlayerController::Replicate(void) const
 }
 
 void MainPlayerController::LightpathNode(Node *node){
-	//lightPathNodes.push(node);
-
 	splinePoints.push_back(SplineVector3D(node->GetNodePosition().x, node->GetNodePosition().y, node->GetNodePosition().z));
 }
 
@@ -99,11 +97,19 @@ void MainPlayerController::Move(void)
 
 	// Set up spline
 	std::vector<SplineVector3D> lp = splinePoints;
-	lp.push_back(lightPathFront);
-	SplineVector3D prev = lp[lp.size() - 2];
-	SplineVector3D diff = (lightPathFront - prev) / 1000.0f;
-	SplineVector3D next = lightPathFront + diff;
-	lp.push_back(next);
+	if (lightPathFront != lp.back())
+	{
+		lp.push_back(lightPathFront);
+		SplineVector3D prev = lp[lp.size() - 2];
+		SplineVector3D diff = (lightPathFront - prev) / 1000.0f;
+		SplineVector3D next = lightPathFront + diff;
+		lp.push_back(next);
+	}
+	else
+	{
+		SplineVector3D diff = (lp.back() - lp[lp.size() - 2]) / 1000.0f;
+		lp.push_back(lp.back() + diff);
+	}
 
 	// Find distance along spline
 	std::shared_ptr<Spline> spline = std::make_shared<CRSpline>(lp, 1.0F);
@@ -111,9 +117,35 @@ void MainPlayerController::Move(void)
 	double length = lengthCalc.findLength(0, 1, false, 1.0f);
 	length *= spline->getMaxT();
 
+	// Save old height to track height change
+	float oldZ = GetTargetNode()->GetNodePosition().z;
+
+	//temp
+
 	// Move
+	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
-	GetTargetNode()->SetNodePosition(Point3D(pos.x(), pos.y(), pos.z()));
+	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());
+	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
+	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
+	{
+		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
+		{
+			newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
+		}
+	}
+	GetTargetNode()->SetNodePosition(newPos);
+
+	// Change speed
+	speed += (oldZ - GetTargetNode()->GetNodePosition().z) * HILL_ACCELERATION;
+	if (speed > MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	if (speed < MIN_SPEED)
+	{
+		speed = MIN_SPEED;
+	}
 
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
