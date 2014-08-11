@@ -77,6 +77,24 @@ void HandController::Move(void)
 			{
 				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				rollTimer = 0;
+			}
+		}
+		else
+		{
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(0.0f);
+				rollTimer = 0;
+			}
 		}
 	}
 
@@ -88,10 +106,6 @@ void HandController::Move(void)
 		Point3D position = GetTargetNode()->GetNodePosition();
 
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
-
-		//temp
-		//leapMotion.y = 0.06f;
-
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
 }

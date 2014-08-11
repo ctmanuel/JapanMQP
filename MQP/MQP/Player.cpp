@@ -120,8 +120,6 @@ void MainPlayerController::Move(void)
 	// Save old height to track height change
 	float oldZ = GetTargetNode()->GetNodePosition().z;
 
-	//temp
-
 	// Move
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
@@ -136,8 +134,45 @@ void MainPlayerController::Move(void)
 	}
 	GetTargetNode()->SetNodePosition(newPos);
 
-	// Change speed
-	speed += (oldZ - GetTargetNode()->GetNodePosition().z) * HILL_ACCELERATION;
+	// Change speed based on uphill/downhill
+	float climb = oldZ - GetTargetNode()->GetNodePosition().z;
+	speed += climb * HILL_ACCELERATION;
+
+	// Slow down if turning too sharply and not banking
+	SplineVector3D bpos = spline->getPosition((((length - DISTANCE_TO_PATH) - 0.1f) / length) * spline->getMaxT());
+	SplineVector3D fpos = spline->getPosition((((length - DISTANCE_TO_PATH) + 0.1f) / length) * spline->getMaxT());
+	float curve = speed * (atan2(fpos.x() - pos.x(), fpos.y() - pos.y()) - atan2(pos.x() - bpos.x(), pos.y() - bpos.y()));
+	float roll = 0.0f;
+	if (!rollHistory.empty())
+	{
+		int index = rollHistory.size() - (int)ceil((DISTANCE_TO_PATH / speed) / ((float)ROLL_REPORT_FREQUENCY / 1000.0f));
+		if (index > 0)
+		{
+			roll = rollHistory[index];
+			std::vector<float>::iterator begin = rollHistory.begin();
+			std::vector<float>::iterator upto = begin;
+			std::advance(upto, rollHistory.size() - index);
+			rollHistory.erase(begin, begin + index);
+		}
+		else
+		{
+			roll = rollHistory.front();
+		}
+	}
+
+	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
+	if (turnSlow)
+	{
+		speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+	}
+
+	// Base acceleration
+	if ((speed < BASE_SPEED) && ((-1.0f * climb / (TheTimeMgr->GetFloatDeltaTime() / 1000.0f)) < BASE_CLIMB_THRESHOLD) && !turnSlow)
+	{
+		speed += BASE_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+	}
+
+	// Maintain speed limits
 	if (speed > MAX_SPEED)
 	{
 		speed = MAX_SPEED;
@@ -161,6 +196,11 @@ void MainPlayerController::ReportLightpathFront(Point3D front)
 {
 	SplineVector3D frontv(front.x, front.y, front.z);
 	lightPathFront = frontv;
+}
+
+void MainPlayerController::ReportRoll(float roll)
+{
+	rollHistory.push_back(roll);
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)

@@ -11,6 +11,7 @@
 #define PITCH_SENSITIVITY 1.0f
 #define ROLL_SENSITIVITY 1.0f
 #define YAW_SENSITIVITY 0.001f
+#define ROLL_REPORT_FREQUENCY 100 // milliseconds between roll reports to player
 
 namespace C4
 {
@@ -38,6 +39,8 @@ namespace C4
 
 		LightPathController* lightPath;
 		MainPlayerController* player;
+
+		int rollTimer;
 
 	public:
 
