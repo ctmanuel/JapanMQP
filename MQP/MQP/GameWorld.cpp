@@ -1,4 +1,7 @@
 #include "GameWorld.h"
+#include "Game.h"
+#include "HandController.h"
+#include "C4Controller.h"
 
 using namespace C4;
 

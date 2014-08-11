@@ -68,7 +68,7 @@ void LightPathController::Move(void)
 		{
 			if (node->GetController())
 			{
-				if (node->GetController()->GetControllerType() == kControllerHand)
+				if (node->GetController()->GetControllerType() == kControllerAnimatedHand)
 				{
 					hand = (HandController*)(node->GetController());
 					hand->SetLightPath(this);
