@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "HandController.h"
 
 using namespace C4;
 
@@ -11,20 +12,21 @@ Application* ConstructApplication(void)
 
 	Game::Game() :
 	Singleton<Game>(TheGame),														//register the player controller
-	handControllerReg(kControllerHand, "Hand"),										//register hand controller
+	handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
 	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
-	gauntletModelReg(kModelGauntlet, "Gauntlet", "Model/gauntlet", kModelPrecache, kControllerHand),
+	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
-	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer)
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
+	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet")
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
 
-	LoadWorld("GameWorld_01");
+//	LoadWorld("GameWorld_01");
 }
 
 Game::~Game()

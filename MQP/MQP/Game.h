@@ -13,6 +13,10 @@
 #include "LightPathController.h"
 
 using namespace C4;
+enum {
+
+	kLocatorAnimatedObject = 'aobj'
+};
 
 class Game : public Singleton<Game>, public Application
 {
@@ -27,6 +31,7 @@ private:
 	ControllerReg<HandController>	handControllerReg;
 	ControllerReg<MainPlayerController>	playerControllerReg;
 	ControllerReg<LightPathController>	lightPathControllerReg;
+	LocatorRegistration animatedHand;
 
 public:
 

@@ -3,14 +3,23 @@
 
 using namespace C4;
 
-HandController::HandController() : Controller(kControllerHand)
+HandController::HandController() : Controller(kControllerAnimatedHand)
 {
 	lightPath = nullptr;
+	animatedModelPath = "Model/Gauntlet_Animated";
+	backward = 0.0f;
 }
 
 HandController::HandController(const HandController& handController) : 
 	Controller(handController)
 {
+	backward = 0.0f;
+}
+
+HandController::HandController(const char* amp, bool b) : Controller(kControllerAnimatedHand)
+{
+	backward = b;
+	animatedModelPath = amp;
 }
 
 Controller* HandController::Replicate(void) const
@@ -22,19 +31,42 @@ HandController::~HandController()
 {
 }
 
+bool HandController::ValidNode(const Node *node)
+{
+	return (node->GetNodeType() == kNodeGeometry || node->GetNodeType() == kNodeModel);
+}
+
 void HandController::Pack(Packer& data, unsigned long packFlags) const
 {
 	Controller::Pack(data, packFlags);
+
+	data << animatedModelPath;
+	data << backward;
 }
 
 void HandController::Unpack(Unpacker& data, unsigned long unpackFlags)
 {
 	Controller::Unpack(data, unpackFlags);
+
+	data >> animatedModelPath;
+	data >> backward;
 }
 
 void HandController::Preprocess(void)
 {
+	//Animation setup and control:
+	//Find animation model, set interpolator loop at start frame
 	Controller::Preprocess();
+	Model *myModel = GetTargetModel();
+	frameAnimator = new FrameAnimator(myModel);
+	myModel->SetRootAnimator(frameAnimator);
+	Interpolator *interpolator = frameAnimator->GetFrameInterpolator();
+	frameAnimator->SetAnimation(animatedModelPath);
+	if (backward)
+		interpolator->SetMode(kInterpolatorBackward | kInterpolatorLoop);
+	else
+		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
+
 	startOrientation = GetTargetNode()->GetNodeTransform().GetMatrix3D();
 	Node* root = GetTargetNode()->GetRootNode();
 	Node* node = root;
@@ -53,6 +85,10 @@ void HandController::Preprocess(void)
 
 void HandController::Move(void)
 {
+	//animate model
+	Model *myModel = GetTargetModel();
+	myModel->Animate();
+
 	// TODO: Set up basePosition based on player position
 	Point3D basePosition(2.0f, 0.0f, 0.5f);
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
@@ -90,6 +126,7 @@ void HandController::Move(void)
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
+
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
