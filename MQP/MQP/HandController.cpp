@@ -89,7 +89,6 @@ void HandController::Move(void)
 	Model *myModel = GetTargetModel();
 	myModel->Animate();
 
-	// TODO: Set up basePosition based on player position
 	Point3D basePosition(2.0f, 0.0f, 0.5f);
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
 

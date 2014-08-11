@@ -159,7 +159,6 @@ void MainPlayerController::Move(void)
 			roll = rollHistory.front();
 		}
 	}
-
 	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
 	if (turnSlow)
 	{
