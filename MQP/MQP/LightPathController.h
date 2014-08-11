@@ -6,9 +6,9 @@
 #include "HandController.h"
 #include "Player.h"
 
-#define PITCH_THRESHOLD (0.1f)
-#define ROLL_THRESHOLD (0.04f)
-#define YAW_THRESHOLD (0.1f)
+#define PITCH_THRESHOLD (0.2f)
+#define ROLL_THRESHOLD (0.1f)
+#define YAW_THRESHOLD (0.2f)
 
 #define ROLL_RATE (1.0f) // radians/second
 
