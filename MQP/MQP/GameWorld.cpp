@@ -36,7 +36,7 @@ void GameWorld::Interact(void)
 	//class's Interact() function, set up the interaction probe to be in a line 
 	//segment extending two meters from the players head in the direction that the 
 	//camera is looking
-	HandController *controller = TheGame->Get
+	//HandController *controller = TheGame->Get
 }
 
 void GameWorld::Render(void)
