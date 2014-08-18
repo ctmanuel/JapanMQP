@@ -19,6 +19,7 @@ namespace C4
 		~GameWorld();
 
 		WorldResult Preprocess(void);
+		void Interact(void);
 		void Render(void);
 	};
 }

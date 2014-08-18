@@ -11,28 +11,20 @@
 
 #include "PlayerInteractor.h"
 #include "LightPathController.h"
-#include "HandController.h"
 
 #include "spline_library\hermite\cubic\cr_spline.h"
 #include "spline_library\splinelengthcalculator.h"
 
 #include <vector>
 
-// Spline stuff
+#define START_SPEED (1.0f) // m/s
 #define MAX_SPLINE_POINTS (50)
-#define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
+#define DISTANCE_TO_PATH (2.0F)
 
 // Speed stuff
-#define START_SPEED (1.0f) // m/s
-#define MIN_SPEED (1.0f) // m/s
-#define MAX_SPEED (5.0f) // m/s
-#define BASE_SPEED (2.0f) // m/s, if below this speed, player will gradually accelerate towards it
-#define BASE_ACCELERATION (0.2f) // m/s/s
-#define BASE_CLIMB_THRESHOLD (0.2f) // m/s vertical that player must be below to get base acceleration
-#define HILL_ACCELERATION (0.1f) // no useful units. just a scale
-#define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
-#define TURN_ACCELERATION (1.0f) // m/s/s
-#define ROLL_REQUIREMENT (0.6f) // roll required to not lose speed around turns
+#define MIN_SPEED (1.0f)
+#define MAX_SPEED (5.0f)
+#define HILL_ACCELERATION (0.1f)
 
 
 namespace C4
@@ -53,7 +45,7 @@ namespace C4
 	private:
 			
 		ControllerReg<MainPlayerController>		playerControllerRegistration;
-		ModelRegistration						playerModelRegistration;
+		ModelRegistration					playerModelRegistration;
 			
 		MainPlayer();
 		~MainPlayer();
@@ -106,6 +98,8 @@ namespace C4
 		//previous frame. This is used with the new center point to activate triggers
 			
 		Point3D				previousCenterOfMass;
+
+		Vector3D				direction = Vector3D(0.0f,0.0f,0.0f);
 		
 		//we keep an interactor object here in the controller
 		PlayerInteractor	playerInteractor;
@@ -116,7 +110,6 @@ namespace C4
 
 		//player speed
 		float speed = START_SPEED;
-		std::vector<float>	rollHistory;
 		
 		MainPlayerController(const MainPlayerController& playerController);				//private constructor
 		
@@ -168,13 +161,17 @@ namespace C4
 		{
 			return speed;
 		}
+
+		Vector3D GetDirection()
+		{
+			return direction;
+		}
 		
 		static bool ValidNode(const Node *node);
 
 		void LightpathNode(Node *node);
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
-		void ReportRoll(float roll);
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);

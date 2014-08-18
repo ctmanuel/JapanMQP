@@ -123,8 +123,10 @@ void MainPlayerController::Move(void)
 	// Move
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
-	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());
+	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
 	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
+	
+
 	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
 	{
 		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
@@ -132,46 +134,11 @@ void MainPlayerController::Move(void)
 			newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
 		}
 	}
+	direction = movement;
 	GetTargetNode()->SetNodePosition(newPos);
 
-	// Change speed based on uphill/downhill
-	float climb = oldZ - GetTargetNode()->GetNodePosition().z;
-	speed += climb * HILL_ACCELERATION;
-
-	// Slow down if turning too sharply and not banking
-	SplineVector3D bpos = spline->getPosition((((length - DISTANCE_TO_PATH) - 0.1f) / length) * spline->getMaxT());
-	SplineVector3D fpos = spline->getPosition((((length - DISTANCE_TO_PATH) + 0.1f) / length) * spline->getMaxT());
-	float curve = speed * (atan2(fpos.x() - pos.x(), fpos.y() - pos.y()) - atan2(pos.x() - bpos.x(), pos.y() - bpos.y()));
-	float roll = 0.0f;
-	if (!rollHistory.empty())
-	{
-		int index = rollHistory.size() - (int)ceil((DISTANCE_TO_PATH / speed) / ((float)ROLL_REPORT_FREQUENCY / 1000.0f));
-		if (index > 0)
-		{
-			roll = rollHistory[index];
-			std::vector<float>::iterator begin = rollHistory.begin();
-			std::vector<float>::iterator upto = begin;
-			std::advance(upto, rollHistory.size() - index);
-			rollHistory.erase(begin, begin + index);
-		}
-		else
-		{
-			roll = rollHistory.front();
-		}
-	}
-	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
-	if (turnSlow)
-	{
-		speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
-	}
-
-	// Base acceleration
-	if ((speed < BASE_SPEED) && ((-1.0f * climb / (TheTimeMgr->GetFloatDeltaTime() / 1000.0f)) < BASE_CLIMB_THRESHOLD) && !turnSlow)
-	{
-		speed += BASE_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
-	}
-
-	// Maintain speed limits
+	// Change speed
+	speed += (oldZ - GetTargetNode()->GetNodePosition().z) * HILL_ACCELERATION;
 	if (speed > MAX_SPEED)
 	{
 		speed = MAX_SPEED;
@@ -195,11 +162,6 @@ void MainPlayerController::ReportLightpathFront(Point3D front)
 {
 	SplineVector3D frontv(front.x, front.y, front.z);
 	lightPathFront = frontv;
-}
-
-void MainPlayerController::ReportRoll(float roll)
-{
-	rollHistory.push_back(roll);
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)

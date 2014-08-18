@@ -13,7 +13,6 @@
 #define PITCH_SENSITIVITY 1.0f
 #define ROLL_SENSITIVITY 1.0f
 #define YAW_SENSITIVITY 0.001f
-#define ROLL_REPORT_FREQUENCY 100 // milliseconds between roll reports to player
 
 namespace C4
 {
@@ -34,14 +33,33 @@ namespace C4
 	};
 
 	class LightPathController;
+	class HandController;
 
-	class HandController : public Controller
+	//The interactor class is used to track player interactions with objects in the scene.
+	class HandInteractor : public Interactor
+	{
+		private:
+
+			HandController	*handController;
+
+		public:
+
+			HandInteractor(HandController *controller);
+			HandInteractor();
+			~HandInteractor();
+
+			void HandleInteractionEvent(InteractionEventType type, Node *node, const Point3D *position) override;
+	};
+	
+	class HandController : public CharacterController
 	{
 	private:
 
 		Leap::Controller leap;
 
 		Matrix3D startOrientation;
+
+		HandInteractor handInteractor;
 
 		HandController(const HandController& handController);
 		Controller* Replicate(void) const;
@@ -58,8 +76,6 @@ namespace C4
 
 		LightPathController* lightPath;
 		MainPlayerController* player;
-
-		int rollTimer;
 
 	public:
 
@@ -85,6 +101,7 @@ namespace C4
 		//The function that udates the controller.
 		void Move(void);
 
+		//Sets the light path based on hand orientation
 		void SetLightPath(LightPathController* lightPath);
 
 		//Returns the value of the backward attribute.
@@ -112,5 +129,6 @@ namespace C4
 			return (static_cast<Model *>(Controller::GetTargetNode()));
 		}
 	};
+
 }
 
