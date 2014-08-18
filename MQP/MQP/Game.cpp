@@ -10,7 +10,7 @@ Application* ConstructApplication(void)
 	return (new Game);
 }
 
-	Game::Game() :
+Game::Game() :
 	Singleton<Game>(TheGame),														//register the player controller
 	handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
 	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
@@ -19,7 +19,8 @@ Application* ConstructApplication(void)
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
-	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet")
+	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
+	lightParticleSystemReg(kParticleSystemLight, "Light")
 {
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);

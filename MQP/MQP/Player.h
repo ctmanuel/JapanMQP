@@ -175,6 +175,7 @@ namespace C4
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
 		void ReportRoll(float roll);
+		Point3D GetLightPathFront(void);
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);

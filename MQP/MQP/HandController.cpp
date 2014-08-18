@@ -81,6 +81,13 @@ void HandController::Preprocess(void)
 		}
 		node = root->GetNextNode(node);
 	} while (node);
+
+	// Set up particle system
+	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
+	{
+		lps = new LightParticleSystem(Point3D(10.0f, -10.0f, 1.0f), Point3D(10.0f, 10.0f, 1.0f));
+		GetTargetNode()->GetRootNode()->AddNewSubnode(lps);
+	}
 }
 
 void HandController::Move(void)
@@ -89,7 +96,7 @@ void HandController::Move(void)
 	Model *myModel = GetTargetModel();
 	myModel->Animate();
 
-	Point3D basePosition(2.0f, 0.0f, 0.5f);
+	Point3D basePosition(1.0f, 0.0f, 1.0f);
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
 
 	if (leap.isConnected())
@@ -98,15 +105,15 @@ void HandController::Move(void)
 		if (!hands.isEmpty())
 		{
 			Leap::Hand hand = hands.frontmost();
-			leapMotion.x = hand.stabilizedPalmPosition()[2] * -0.005f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.005f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.005f;
+			leapMotion.x = hand.stabilizedPalmPosition()[2] * -0.002f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
 
-			Quaternion x, y, z;
+			Quaternion x;// , y, z;
 			x.SetRotationAboutX(-1 * hand.palmNormal().roll());
-			y.SetRotationAboutY(-1 * hand.direction().pitch());
-			z.SetRotationAboutZ((-1 * hand.direction().yaw()));
-			GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix() * startOrientation);
+			//y.SetRotationAboutY(-1 * hand.direction().pitch());
+			//z.SetRotationAboutZ((-1 * hand.direction().yaw()));
+			GetTargetNode()->SetNodeMatrix3D((x).GetRotationMatrix() * startOrientation);
 
 			if (lightPath)
 			{
@@ -144,6 +151,11 @@ void HandController::Move(void)
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
 
+	if (lps)
+	{
+		lps->SetStart(GetTargetNode()->GetWorldPosition());
+		lps->SetEnd(player->GetLightPathFront());
+	}
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
