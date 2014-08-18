@@ -120,13 +120,13 @@ void MainPlayerController::Move(void)
 	// Save old height to track height change
 	float oldZ = GetTargetNode()->GetNodePosition().z;
 
-	//temp
-
 	// Move
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
-	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());
+	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
 	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
+	
+
 	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
 	{
 		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
@@ -134,6 +134,7 @@ void MainPlayerController::Move(void)
 			newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
 		}
 	}
+	direction = movement;
 	GetTargetNode()->SetNodePosition(newPos);
 
 	// Change speed

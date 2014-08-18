@@ -98,6 +98,8 @@ namespace C4
 		//previous frame. This is used with the new center point to activate triggers
 			
 		Point3D				previousCenterOfMass;
+
+		Vector3D				direction = Vector3D(0.0f,0.0f,0.0f);
 		
 		//we keep an interactor object here in the controller
 		PlayerInteractor	playerInteractor;
@@ -158,6 +160,11 @@ namespace C4
 		float GetSpeed()
 		{
 			return speed;
+		}
+
+		Vector3D GetDirection()
+		{
+			return direction;
 		}
 		
 		static bool ValidNode(const Node *node);
