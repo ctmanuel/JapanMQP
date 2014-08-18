@@ -8,11 +8,14 @@
 
 #include "LightPathController.h"
 #include "Player.h"
+#include "LightParticleSystem.h"
 
 #define Z_MID 225.0f
-#define PITCH_SENSITIVITY 1.0f
+#define PITCH_SENSITIVITY 2.5f
 #define ROLL_SENSITIVITY 1.0f
-#define YAW_SENSITIVITY 0.001f
+#define YAW_SENSITIVITY 0.0025f
+#define ROLL_REPORT_FREQUENCY 100 // milliseconds between roll reports to player
+
 
 namespace C4
 {
@@ -76,6 +79,11 @@ namespace C4
 
 		LightPathController* lightPath;
 		MainPlayerController* player;
+
+		int rollTimer;
+
+		// Light particle system
+		LightParticleSystem* lps;
 
 	public:
 

@@ -84,7 +84,6 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
-
 	// Face front of path
 	Vector3D d = Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z()) - GetTargetNode()->GetNodePosition();
 	float horiz = sqrt((d.x * d.x) + (d.y * d.y));
@@ -154,6 +153,18 @@ void MainPlayerController::Move(void)
 		splinePoints.erase(splinePoints.begin());
 	}
 
+	/*
+	// Face direction of movement
+	Vector3D d = GetTargetNode()->GetNodePosition() - oldPos;
+	float horiz = sqrt((d.x * d.x) + (d.y * d.y));
+	float pitch = atan2(horiz, d.z) - K::pi_over_2;
+	Matrix3D pitchm, yawm;
+	pitchm.SetRotationAboutY(pitch);
+	float yaw = atan2(d.y, d.x);
+	yawm.SetRotationAboutZ(yaw);
+	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
+	*/
+
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
  }
@@ -162,6 +173,16 @@ void MainPlayerController::ReportLightpathFront(Point3D front)
 {
 	SplineVector3D frontv(front.x, front.y, front.z);
 	lightPathFront = frontv;
+}
+
+void MainPlayerController::ReportRoll(float roll)
+{
+	rollHistory.push_back(roll);
+}
+
+Point3D MainPlayerController::GetLightPathFront(void)
+{
+	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)

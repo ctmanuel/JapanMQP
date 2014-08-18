@@ -11,7 +11,7 @@
 #include "HandController.h"
 #include "Player.h"
 #include "LightPathController.h"
-#include "HandCollisionController.h"
+#include "LightParticleSystem.h"
 
 using namespace C4;
 enum {
@@ -23,15 +23,19 @@ class Game : public Singleton<Game>, public Application
 {
 private:
 
-	ResetAction*						resetAction;
+	ResetAction*							resetAction;
 
-	ModelRegistration				playerModelReg;
-	ModelRegistration				gauntletModelReg;
-	ControllerReg<HandController>	handControllerReg;
-	ControllerReg<MainPlayerController>	playerControllerReg;
-	ControllerReg<LightPathController>	lightPathControllerReg;
-	ControllerReg<HandCollisionController> handCollisionControllerReg;
-	LocatorRegistration animatedHand;
+	ModelRegistration						playerModelReg;
+	ModelRegistration						gauntletModelReg;
+
+	ControllerReg<HandController>			handControllerReg;
+	ControllerReg<MainPlayerController>		playerControllerReg;
+	ControllerReg<LightPathController>		lightPathControllerReg;
+
+	LocatorRegistration						animatedHand;
+
+	ParticleSystemReg<LightParticleSystem>	lightParticleSystemReg;
+
 
 public:
 

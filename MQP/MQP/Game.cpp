@@ -11,15 +11,17 @@ Application* ConstructApplication(void)
 }
 
 Game::Game() :
-Singleton<Game>(TheGame),														//register the player controller
-handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
-gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
-playerControllerReg(kControllerPlayer, "Main Player Controller"),
-lightPathControllerReg(kControllerLightPath, "Light Path"),
-handCollisionControllerReg(kControllerHandCollision, "Hand Collision Controller"),
-playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
-animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet")
-  {
+
+	Singleton<Game>(TheGame),														//register the player controller
+	handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
+	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+	playerControllerReg(kControllerPlayer, "Main Player Controller"),
+	lightPathControllerReg(kControllerLightPath, "Light Path"),
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
+	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
+	lightParticleSystemReg(kParticleSystemLight, "Light")
+{
+
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
