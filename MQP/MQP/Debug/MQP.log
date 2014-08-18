@@ -1,20 +1,8 @@
-﻿Build started 8/18/2014 5:27:58 PM.
+﻿Build started 8/19/2014 3:11:19 AM.
      1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp GameCamera.cpp GameWorld.cpp HandCollisionController.cpp HandController.cpp LightPathController.cpp Player.cpp PlayerInteractor.cpp ResetAction.cpp Tank.cpp
-         Player.cpp
-         Generating Code...
-         Compiling...
-         Tank.cpp
-         ResetAction.cpp
-         PlayerInteractor.cpp
-         LightPathController.cpp
-         HandController.cpp
-         HandCollisionController.cpp
-         GameWorld.cpp
-         GameCamera.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
          Game.cpp
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib pthreadVC2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
          Debug\looping_cubic_b_spline.obj
@@ -48,7 +36,7 @@
          Debug\PlayerInteractor.obj
          Debug\ResetAction.obj
          Debug\Tank.obj
-         LINK : ..\..\C4\MQP.dll not found or not built by the last incremental link; performing full link
+     1>cubic_b_spline.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
             Creating library ..\..\C4\MQP.lib and object ..\..\C4\MQP.exp
          MQP.vcxproj -> C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
        PostBuildEvent:
@@ -66,4 +54,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:40.73
+Time Elapsed 00:00:06.51

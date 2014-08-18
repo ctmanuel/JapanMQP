@@ -136,6 +136,12 @@ namespace C4
 		{
 			return (static_cast<Model *>(Controller::GetTargetNode()));
 		}
+
+		//Return Hand Interactor
+		HandInteractor *GetHandInteractor(void)
+		{
+			return (&handInteractor);
+		}
 	};
 
 }
