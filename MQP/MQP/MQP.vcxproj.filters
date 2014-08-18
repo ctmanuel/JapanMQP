@@ -45,9 +45,6 @@
     <ClInclude Include="PlayerInteractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HandCollisionController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -139,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\vector3d.cpp">
       <Filter>Source Files\spline</Filter>
-    </ClCompile>
-    <ClCompile Include="HandCollisionController.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

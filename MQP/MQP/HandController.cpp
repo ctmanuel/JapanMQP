@@ -1,42 +1,9 @@
 #include "HandController.h"
 #include "Game.h"
-#include "string.h"
 
 using namespace C4;
 
-HandInteractor::HandInteractor(HandController *controller)
-{
-	handController = controller;
-}
-
-HandInteractor::HandInteractor()
-{
-}
-
-HandInteractor::~HandInteractor()
-{
-}
-
-void HandInteractor::HandleInteractionEvent(InteractionEventType type, Node *node, const Point3D *position)
-{
-	//Always call the base class counterpart
-
-	Interactor::HandleInteractionEvent(type, node, position);
-
-	//if the node with which we are interacting has a controller, 
-	// then pass the event through to that controller.
-
-	Controller *controller = node->GetController();
-	if (controller)
-	{
-		controller->HandleInteractionEvent(type, position);
-		Engine::Report(node->GetNodeName());
-	}
-}
-
-HandController::HandController() : 
-		CharacterController(kControllerAnimatedHand),
-		handInteractor(this)
+HandController::HandController() : Controller(kControllerAnimatedHand)
 {
 	lightPath = nullptr;
 	animatedModelPath = "Model/Gauntlet_Animated";
@@ -44,15 +11,12 @@ HandController::HandController() :
 }
 
 HandController::HandController(const HandController& handController) : 
-		CharacterController(handController),
-		handInteractor(this)
+	Controller(handController)
 {
 	backward = 0.0f;
 }
 
-HandController::HandController(const char* amp, bool b) : 
-		CharacterController(kControllerAnimatedHand),
-		handInteractor(this)
+HandController::HandController(const char* amp, bool b) : Controller(kControllerAnimatedHand)
 {
 	backward = b;
 	animatedModelPath = amp;
@@ -90,14 +54,9 @@ void HandController::Unpack(Unpacker& data, unsigned long unpackFlags)
 
 void HandController::Preprocess(void)
 {
-	CharacterController::Preprocess();
-
-	SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
-	SetFrictionCoefficient(0.0F);
-	//Give it 0 gravity
-	SetGravityMultiplier(0.0F);
-
-	//use frame animator to play animation resources for the hand model
+	//Animation setup and control:
+	//Find animation model, set interpolator loop at start frame
+	Controller::Preprocess();
 	Model *myModel = GetTargetModel();
 	frameAnimator = new FrameAnimator(myModel);
 	myModel->SetRootAnimator(frameAnimator);
@@ -122,9 +81,6 @@ void HandController::Preprocess(void)
 		}
 		node = root->GetNextNode(node);
 	} while (node);
-
-	//Register our interactor with the World
-	myModel->GetWorld()->AddInteractor(&handInteractor);
 }
 
 void HandController::Move(void)
@@ -133,10 +89,8 @@ void HandController::Move(void)
 	Model *myModel = GetTargetModel();
 	myModel->Animate();
 
-	// TODO: Set up basePosition based on player position
-	Point3D basePosition(2.0f, 0.0f, 1.0f);
+	Point3D basePosition(2.0f, 0.0f, 0.5f);
 	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
-	Point3D newPosition = Point3D(0.0f, 0.0f, 0.0f);
 
 	if (leap.isConnected())
 	{
@@ -158,18 +112,28 @@ void HandController::Move(void)
 			{
 				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				rollTimer = 0;
+			}
+		}
+		else
+		{
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(0.0f);
+				rollTimer = 0;
+			}
 		}
 	}
 
-	newPosition = basePosition + leapMotion;
-	SetRigidBodyPosition(newPosition);
-	Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
-	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
-	Engine::Report(String<63> ("x ") += (int)player->GetDirection().x);
-	Engine::Report(String<63> ("y ") += (int)player->GetDirection().y);
-	Engine::Report(String<63> ("z ") += (int)player->GetDirection().z);*/
-	//SetExternalForce(newPosition *0.1F);
-	//SetLinearVelocity(newPosition);
+	GetTargetNode()->SetNodePosition(basePosition + leapMotion);
 	GetTargetNode()->Invalidate();
 
 	if (lightPath)
@@ -177,17 +141,9 @@ void HandController::Move(void)
 		Point3D position = GetTargetNode()->GetNodePosition();
 
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
-
-		//temp
-		//leapMotion.y = 0.06f;
-
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
-	/*
-	CollisionData data;
-	//Collision detection
-	TheWorldMgr->GetWorld()->DetectCollision(newPosition, newPosition+Point3D(0.1f,0.0f,0.0f), 1.0f, 0, &data);
-	*/
+
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)

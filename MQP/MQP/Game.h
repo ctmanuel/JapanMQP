@@ -11,7 +11,6 @@
 #include "HandController.h"
 #include "Player.h"
 #include "LightPathController.h"
-#include "HandCollisionController.h"
 
 using namespace C4;
 enum {
@@ -25,12 +24,13 @@ private:
 
 	ResetAction*						resetAction;
 
+	ModelRegistration				tankModelReg;
 	ModelRegistration				playerModelReg;
 	ModelRegistration				gauntletModelReg;
+	ControllerReg<TankController>	tankControllerReg;
 	ControllerReg<HandController>	handControllerReg;
 	ControllerReg<MainPlayerController>	playerControllerReg;
 	ControllerReg<LightPathController>	lightPathControllerReg;
-	ControllerReg<HandCollisionController> handCollisionControllerReg;
 	LocatorRegistration animatedHand;
 
 public:

@@ -11,8 +11,9 @@ PlayerInteractor::PlayerInteractor(MainPlayerController *controller)
 	}
 
 PlayerInteractor::PlayerInteractor()
-{
-}
+ {
+	
+		}
 
 PlayerInteractor::~PlayerInteractor()
  {

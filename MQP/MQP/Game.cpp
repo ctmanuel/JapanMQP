@@ -10,22 +10,23 @@ Application* ConstructApplication(void)
 	return (new Game);
 }
 
-Game::Game() :
-Singleton<Game>(TheGame),														//register the player controller
-handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
-gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
-playerControllerReg(kControllerPlayer, "Main Player Controller"),
-lightPathControllerReg(kControllerLightPath, "Light Path"),
-handCollisionControllerReg(kControllerHandCollision, "Hand Collision Controller"),
-playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
-animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet")
-  {
+	Game::Game() :
+	Singleton<Game>(TheGame),														//register the player controller
+	handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
+	tankControllerReg(kControllerTank, "Tank"),										//register the tank controller
+	tankModelReg(kModelTank, "Tank", "tank", kModelPrecache, kControllerTank),		//register the tank model
+	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+	playerControllerReg(kControllerPlayer, "Main Player Controller"),
+	lightPathControllerReg(kControllerLightPath, "Light Path"),
+	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
+	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet")
+{
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
 
-	LoadWorld("GameWorld_01");
+//	LoadWorld("GameWorld_01");
 }
 
 Game::~Game()
