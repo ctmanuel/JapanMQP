@@ -29,6 +29,7 @@ private:
 	ModelRegistration						gauntletModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
+	ControllerReg<MenuHandController>		menuHandControllerReg;
 	ControllerReg<MainPlayerController>		playerControllerReg;
 	ControllerReg<LightPathController>		lightPathControllerReg;
 

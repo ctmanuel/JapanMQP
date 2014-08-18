@@ -25,6 +25,7 @@ WorldResult GameWorld::Preprocess(void)
 		return result;
 	}
 	
+	camera.Preprocess();
 	SetCamera(&camera);
 	return kWorldOkay;
 	
@@ -37,6 +38,7 @@ void GameWorld::Interact(void)
 	//segment extending two meters from the players head in the direction that the 
 	//camera is looking
 	//HandController *controller = TheGame->Get
+	World::Interact();
 }
 
 void GameWorld::Render(void)

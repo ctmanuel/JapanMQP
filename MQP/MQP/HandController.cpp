@@ -125,6 +125,7 @@ void HandController::Preprocess(void)
 
 	//Register our interactor with the World
 	myModel->GetWorld()->AddInteractor(&handInteractor);
+
 	// Set up particle system
 	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
 	{
@@ -191,6 +192,7 @@ void HandController::Move(void)
 	TheWorldMgr->GetWorld()->DetectCollision(newPosition, newPosition+Point3D(0.1f,0.0f,0.0f), 1.0f, 0, &data);
 	*/
 
+	// Update position of light particle system
 	if (lps)
 	{
 		lps->SetStart(GetTargetNode()->GetWorldPosition());
@@ -201,4 +203,22 @@ void HandController::Move(void)
 void HandController::SetLightPath(LightPathController* lightPath)
 {
 	this->lightPath = lightPath;
+}
+
+MenuHandController::MenuHandController() :
+	Controller(kControllerMenuHand)
+{
+}
+
+MenuHandController::~MenuHandController()
+{
+}
+
+void MenuHandController::Preprocess(void)
+{
+	Controller::Preprocess();
+}
+
+void MenuHandController::Move(void)
+{
 }

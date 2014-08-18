@@ -21,8 +21,10 @@ namespace C4
 {
 	enum 
 	{
-		kControllerHand = 'hand'
+		kControllerHand = 'hand',
+		kControllerMenuHand = 'mhnd'
 	};
+
 	///Defines the type of model to be loaded.
 	enum
 	{
@@ -138,5 +140,16 @@ namespace C4
 		}
 	};
 
+	class MenuHandController : public Controller
+	{
+	private:
+
+	public:
+		MenuHandController();
+		~MenuHandController();
+
+		void Preprocess(void);
+		void Move(void);
+	};
 }
 

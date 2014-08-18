@@ -7,12 +7,14 @@ namespace C4
 {
 	class GameCamera : public FrustumCamera
 	{
-	private:
 
+	private:
 		Quaternion origin;
 		Model *playerModel;
 		Node *playerNode;
 		Node *GetPlayerNode();
+		bool lookedForPlayer;
+
 	public:
 		GameCamera();
 		~GameCamera();

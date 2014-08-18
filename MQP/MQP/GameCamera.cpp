@@ -7,8 +7,8 @@ using namespace C4;
 GameCamera::GameCamera() : FrustumCamera(2.0F, 1.0F)
 {
 	origin = TheWorldMgr->GetTrackingOrientation();
-	playerModel = Model::Get(kModelPlayer);
 	playerNode = nullptr;
+	lookedForPlayer = false;
 }
 
 GameCamera::~GameCamera()
@@ -38,6 +38,7 @@ Node *GameCamera::GetPlayerNode()
 		}
 		node = root->GetNextNode(node);
 	} while (node);
+
 	return nullptr;
 }
 
@@ -52,8 +53,16 @@ void GameCamera::Move(void)
 
 		LookAtPoint(Point3D(1.0f, 0.0f, 1.64f));
 	}
-	else{
+	else if (lookedForPlayer) // There is no player in this world. It's probably the menu
+	{
+		SetNodePosition(Point3D(0.0f, 0.0f, 1.64f));
+		LookAtPoint(Point3D(1.0f, 0.0f, 1.64f));
+	}
+	else
+	{
+		lookedForPlayer = true;
 		playerNode = GetPlayerNode();
+		//TheEngine->Report("No player node for camera :(");
 	}
 
 	// These two lines handle Rift head tracking

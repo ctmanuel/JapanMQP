@@ -14,6 +14,7 @@ Game::Game() :
 
 	Singleton<Game>(TheGame),														//register the player controller
 	handControllerReg(kControllerAnimatedHand, "Hand"),								//register hand controller
+	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
