@@ -4,6 +4,7 @@
 #include "C4Engine.h"
 #include "C4World.h"
 #include "C4Interface.h"
+#include "C4Methods.h"
 
 #include "GameWorld.h"
 #include "ResetAction.h"
@@ -12,6 +13,7 @@
 #include "Player.h"
 #include "LightPathController.h"
 #include "LightParticleSystem.h"
+#include "QuitMethod.h"
 
 using namespace C4;
 enum {
@@ -37,6 +39,7 @@ private:
 
 	ParticleSystemReg<LightParticleSystem>	lightParticleSystemReg;
 
+	MethodReg<QuitMethod>					quitMethodReg;
 
 public:
 

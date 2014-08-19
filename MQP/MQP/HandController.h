@@ -140,9 +140,30 @@ namespace C4
 		}
 	};
 
+//---------------------------Menu stuff-------------------------------------------------
+
+	class MenuHandController;
+
+	class MenuHandInteractor : public Interactor
+	{
+	private:
+		MenuHandController* controller;
+
+	public:
+		MenuHandInteractor(MenuHandController* controller);
+		~MenuHandInteractor();
+
+		void HandleInteractionEvent(InteractionEventType type, Node* node, const Point3D* position) override;
+	};
+
 	class MenuHandController : public Controller
 	{
 	private:
+		Leap::Controller leap;
+
+		bool pushed;
+
+		MenuHandInteractor interactor;
 
 	public:
 		MenuHandController();

@@ -20,7 +20,8 @@ Game::Game() :
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
 	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
-	lightParticleSystemReg(kParticleSystemLight, "Light")
+	lightParticleSystemReg(kParticleSystemLight, "Light"),
+	quitMethodReg(kMethodQuit, "Quit Game")
 {
 
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
@@ -28,7 +29,7 @@ Game::Game() :
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
 
-	LoadWorld("GameWorld_01");
+	LoadWorld("Menu");
 }
 
 Game::~Game()

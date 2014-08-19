@@ -205,9 +205,13 @@ void HandController::SetLightPath(LightPathController* lightPath)
 	this->lightPath = lightPath;
 }
 
+//---------------------------Menu stuff-------------------------------------------------
+
 MenuHandController::MenuHandController() :
-	Controller(kControllerMenuHand)
+	Controller(kControllerMenuHand),
+	interactor(this)
 {
+	pushed = false;
 }
 
 MenuHandController::~MenuHandController()
@@ -217,8 +221,95 @@ MenuHandController::~MenuHandController()
 void MenuHandController::Preprocess(void)
 {
 	Controller::Preprocess();
+
+	GetTargetNode()->GetWorld()->AddInteractor(&interactor);
 }
 
 void MenuHandController::Move(void)
 {
+	// Move back and forth
+
+	Vector3D leapMotion;
+	if (leap.isConnected())
+	{
+		Leap::HandList hands = leap.frame().hands();
+		if (!hands.isEmpty())
+		{
+			// Hand position
+			Leap::Hand hand = hands.frontmost();
+			leapMotion.x = 0.0f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
+
+			// Hand orientation
+			Quaternion x, y, z;
+			x.SetRotationAboutX(-1 * hand.palmNormal().roll());
+			y.SetRotationAboutY(K::pi_over_2);
+			z.SetRotationAboutZ(K::pi_over_2);
+			GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
+
+			// Release grip
+			if (pushed)
+			{
+				if (hand.grabStrength() < 0.2)
+				{
+					pushed = false;
+					// Send deactivate event
+					const Node* interactionNode = interactor.GetInteractionNode();
+					if (interactionNode)
+					{
+						Controller* interactionController = interactionNode->GetController();
+						if (interactionController)
+						{
+							interactionController->HandleInteractionEvent(kInteractionEventDeactivate, &(interactor.GetInteractionPosition()), GetTargetNode());
+						}
+					}
+				}
+			}
+
+			// Grip
+			if (hand.grabStrength() >= 1.0)
+			{
+				pushed = true;
+				// Send activate event
+				const Node* interactionNode = interactor.GetInteractionNode();
+				if (interactionNode)
+				{
+					Controller* interactionController = interactionNode->GetController();
+					if (interactionController)
+					{
+						interactionController->HandleInteractionEvent(kInteractionEventActivate, &(interactor.GetInteractionPosition()), GetTargetNode());
+					}
+				}
+			}
+		}
+	}
+
+	GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f) + leapMotion);
+	GetTargetNode()->Invalidate();
+
+	// Update interactor
+	Point3D pos = GetTargetNode()->GetNodePosition();
+	interactor.SetInteractionProbe(pos, pos + Point3D(5.0f, 0.0f, 0.0f));
+
+}
+
+MenuHandInteractor::MenuHandInteractor(MenuHandController* controller)
+{
+	this->controller = controller;
+}
+
+MenuHandInteractor::~MenuHandInteractor()
+{
+}
+
+void MenuHandInteractor::HandleInteractionEvent(InteractionEventType type, Node* node, const Point3D* position)
+{
+	Interactor::HandleInteractionEvent(type, node, position);
+
+	Controller* controller = node->GetController();
+	if (controller)
+	{
+		controller->HandleInteractionEvent(type, position);
+	}
 }

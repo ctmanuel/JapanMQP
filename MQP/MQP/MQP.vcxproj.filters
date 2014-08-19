@@ -48,6 +48,9 @@
     <ClInclude Include="LightParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="QuitMethod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -141,6 +144,9 @@
       <Filter>Source Files\spline</Filter>
     </ClCompile>
     <ClCompile Include="LightParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QuitMethod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
