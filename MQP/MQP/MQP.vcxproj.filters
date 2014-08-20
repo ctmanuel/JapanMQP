@@ -48,7 +48,7 @@
     <ClInclude Include="LightParticleSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QuitMethod.h">
+    <ClInclude Include="ScriptMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,7 +146,7 @@
     <ClCompile Include="LightParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QuitMethod.cpp">
+    <ClCompile Include="ScriptMethods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

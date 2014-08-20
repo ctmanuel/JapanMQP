@@ -21,7 +21,8 @@ Game::Game() :
 	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
 	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
 	lightParticleSystemReg(kParticleSystemLight, "Light"),
-	quitMethodReg(kMethodQuit, "Quit Game")
+	quitMethodReg(kMethodQuit, "Quit Game"),
+	loadWorldMethodReg(kMethodLoadWorld, "Load World")
 {
 
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
@@ -42,4 +43,16 @@ Game::~Game()
 World* Game::ConstructWorld(const char* name, void* cookie)
 {
 	return (new GameWorld(name));
+}
+
+void Game::StartLevel()// const char* name)
+{
+	DeferredTask* task = new DeferredTask(&LoadLevel, this);
+	task->SetTaskFlags(kTaskNonpersistent);
+	TheTimeMgr->AddTask(task);
+}
+
+void Game::LoadLevel(DeferredTask* task, void* cookie)
+{
+	TheWorldMgr->LoadWorld("gameworld_01");
 }

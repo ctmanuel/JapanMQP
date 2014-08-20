@@ -13,7 +13,7 @@
 #include "Player.h"
 #include "LightPathController.h"
 #include "LightParticleSystem.h"
-#include "QuitMethod.h"
+#include "ScriptMethods.h"
 
 using namespace C4;
 enum {
@@ -40,6 +40,7 @@ private:
 	ParticleSystemReg<LightParticleSystem>	lightParticleSystemReg;
 
 	MethodReg<QuitMethod>					quitMethodReg;
+	MethodReg<LoadWorldMethod>				loadWorldMethodReg;
 
 public:
 
@@ -47,6 +48,9 @@ public:
 	~Game(void);
 
 	static World* ConstructWorld(const char* name, void* cookie);
+
+	void StartLevel();// const char* name);
+	static void LoadLevel(DeferredTask* task, void* cookie);
 };
 
 extern "C"
