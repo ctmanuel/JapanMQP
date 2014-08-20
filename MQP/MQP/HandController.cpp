@@ -225,21 +225,19 @@ void HandController::Move(void)
 
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
+	/*
 	Engine::Report("Made it here");
 	Geometry *geometry = contact->GetContactGeometry();
 	GetPhysicsController()->PurgeGeometryContacts(geometry);
 	delete geometry;
 	return (kRigidBodyContactsBroken);
+	*/
+	return kRigidBodyUnchanged;
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
 {
 	this->lightPath = lightPath;
-}
-
-RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact* contact)
-{
-	return kRigidBodyUnchanged;
 }
 
 //---------------------------Menu stuff-------------------------------------------------
