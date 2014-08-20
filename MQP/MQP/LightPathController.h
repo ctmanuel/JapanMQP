@@ -45,6 +45,8 @@ namespace C4
 
 		bool firstFrame;
 
+		Sound *music;
+
 	public:
 		LightPathController();
 		~LightPathController();
