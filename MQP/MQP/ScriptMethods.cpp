@@ -116,6 +116,6 @@ void LoadWorldMethod::SetSetting(const Setting* setting)
 
 void LoadWorldMethod::Execute(const ScriptState* state)
 {
-	TheGame->StartLevel();
+	TheGame->StartLevel(name);
 	CallCompletionProc();
 }

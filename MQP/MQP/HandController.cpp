@@ -167,11 +167,35 @@ void HandController::Move(void)
 			{
 				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				rollTimer = 0;
+			}
+		}
+		else // Hand not in range of Leap
+		{
+			// Go to default position
+			Matrix3D i;
+			i.SetIdentity();
+			SetRigidBodyMatrix3D(i * startOrientation);
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(0.0f);
+				rollTimer = 0;
+			}
 		}
 	}
 
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
+	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
 	//SetRigidBodyTransform
 	//Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
 	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
@@ -201,12 +225,15 @@ void HandController::Move(void)
 
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
+	/*
 	Engine::Report("Made it here");
 	Geometry *geometry = contact->GetContactGeometry();
 	Engine::Report(String<64> ("Node Name ") += geometry->GetNodeName());
 	GetPhysicsController()->PurgeGeometryContacts(geometry);
 	delete geometry;
 	return (kRigidBodyContactsBroken);
+	*/
+	return kRigidBodyUnchanged;
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)

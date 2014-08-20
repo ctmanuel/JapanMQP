@@ -28,7 +28,7 @@ Game::Game() :
 
 	//Model Registrations
 	//Player model registration, Hand Model Registration, 
-	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
+	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
 	
 	//Animated Object Registration
@@ -51,6 +51,8 @@ Game::Game() :
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
+
+	loadLevel = "";
 
 	LoadWorld("Menu");
 	handController = nullptr;
@@ -79,16 +81,17 @@ World* Game::ConstructWorld(const char* name, void* cookie)
 	return (new GameWorld(name));
 }
 
-void Game::StartLevel()// const char* name)
+void Game::StartLevel(const char* name)
 {
-	DeferredTask* task = new DeferredTask(&LoadLevel, this);
+	loadLevel = name;
+	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
 	task->SetTaskFlags(kTaskNonpersistent);
 	TheTimeMgr->AddTask(task);
 }
 
 void Game::LoadLevel(DeferredTask* task, void* cookie)
 {
-	TheWorldMgr->LoadWorld("gameworld_01");
+	TheWorldMgr->LoadWorld(*((String<128>*)cookie));
 }
 
 EngineResult Game::LoadWorld(const char *name)

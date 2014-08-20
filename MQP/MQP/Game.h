@@ -5,10 +5,10 @@
 #include "C4World.h"
 #include "C4Interface.h"
 #include "C4Methods.h"
+#include "C4Files.h"
 
 #include "GameWorld.h"
 #include "ResetAction.h"
-#include "Tank.h"
 #include "HandController.h"
 #include "Player.h"
 #include "LightPathController.h"
@@ -25,7 +25,7 @@ class Game : public Singleton<Game>, public Application
 {
 private:
 
-	DisplayEventHandler				displayEventHandler;
+	DisplayEventHandler						displayEventHandler;
 	ResetAction*							resetAction;
 
 	ModelRegistration						playerModelReg;
@@ -47,6 +47,8 @@ private:
 
 	static void HandleDisplayEvent(const DisplayEventData *eventData, void *cookie);
 
+	String<128>	loadLevel;
+
 public:
 
 	Game(void);
@@ -54,7 +56,7 @@ public:
 
 	static World* ConstructWorld(const char* name, void* cookie);
 
-	void StartLevel();// const char* name);
+	void StartLevel(const char* name);
 	static void LoadLevel(DeferredTask* task, void* cookie);
 
 	HandController *GetHandController(void) const

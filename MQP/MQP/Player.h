@@ -17,14 +17,26 @@
 
 #include <vector>
 
-#define START_SPEED (1.0f) // m/s
+// Spline stuff
 #define MAX_SPLINE_POINTS (50)
 #define DISTANCE_TO_PATH (2.0F)
+#define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
 
 // Speed stuff
+#define START_SPEED (1.0f) // m/s
 #define MIN_SPEED (1.0f)
 #define MAX_SPEED (5.0f)
 #define HILL_ACCELERATION (0.1f)
+#define START_SPEED (1.0f) // m/s
+#define MIN_SPEED (1.0f) // m/s
+#define MAX_SPEED (5.0f) // m/s
+#define BASE_SPEED (2.0f) // m/s, if below this speed, player will gradually accelerate towards it
+#define BASE_ACCELERATION (0.2f) // m/s/s
+#define BASE_CLIMB_THRESHOLD (0.2f) // m/s vertical that player must be below to get base acceleration
+#define HILL_ACCELERATION (0.1f) // no useful units. just a scale
+#define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
+#define TURN_ACCELERATION (1.0f) // m/s/s
+#define ROLL_REQUIREMENT (0.6f) // roll required to not lose speed around turns
 
 
 namespace C4
@@ -45,7 +57,7 @@ namespace C4
 	private:
 			
 		ControllerReg<MainPlayerController>		playerControllerRegistration;
-		ModelRegistration					playerModelRegistration;
+		ModelRegistration						playerModelRegistration;
 			
 		MainPlayer();
 		~MainPlayer();
@@ -119,6 +131,8 @@ namespace C4
 		
 		void SetPlayerMotion(int32 motion);
 
+		long levelTime;
+
 	public:
 
 		//public constructor
@@ -174,7 +188,6 @@ namespace C4
 		void LightpathNode(Node *node);
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
-
 		void ReportRoll(float roll);
 		Point3D GetLightPathFront(void);
 		
@@ -183,6 +196,9 @@ namespace C4
 		
 		void Preprocess(void);
 		void Move(void);
+
+		RigidBodyStatus HandleNewGeometryContact(const GeometryContact* contact);
+		RigidBodyStatus HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody);
 	};
 }
 

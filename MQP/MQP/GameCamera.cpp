@@ -32,7 +32,6 @@ Node *GameCamera::GetPlayerNode()
 			if (node->GetController()->GetControllerType() == kControllerPlayer)
 			{
 				// Make this a subnode of player
-				node->AddNewSubnode(this);
 				return node;
 			}
 		}
@@ -52,6 +51,8 @@ void GameCamera::Move(void)
 		SetNodePosition(Point3D(-10.0f, 0.0f, 3.0f));
 
 		LookAtPoint(Point3D(1.0f, 0.0f, 1.64f));
+
+		SetNodeTransform(playerNode->GetNodeTransform() * GetNodeTransform());
 	}
 	else if (lookedForPlayer) // There is no player in this world. It's probably the menu
 	{
@@ -66,7 +67,6 @@ void GameCamera::Move(void)
 	{
 		lookedForPlayer = true;
 		playerNode = GetPlayerNode();
-		//TheEngine->Report("No player node for camera :(");
 	}
 
 	// These two lines handle Rift head tracking

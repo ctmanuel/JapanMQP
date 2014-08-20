@@ -14,13 +14,17 @@ playerInteractor(this)
 
 	modelAzimuth = azimuth;
 	modelAltitude = 0.0F;
+
+	levelTime = 0;
 }
 
 MainPlayerController::MainPlayerController() :
 CharacterController(kControllerPlayer),
 playerInteractor(this)
 {
-	 speed = START_SPEED;
+	speed = START_SPEED;
+
+	levelTime = 0;
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -34,6 +38,8 @@ playerInteractor(this)
 
 	modelAzimuth = 0.0F;
 	modelAltitude = 0.0F;
+
+	levelTime = 0;
 }
 
  MainPlayerController::~MainPlayerController()
@@ -76,6 +82,9 @@ Controller *MainPlayerController::Replicate(void) const
 	 Point3D position = GetTargetNode()->GetNodePosition();
 	 splinePoints.push_back(SplineVector3D(position.x - 2.0f, position.y, position.z));
 	 splinePoints.push_back(SplineVector3D(position.x - 1.0f, position.y, position.z));
+
+	 // Start level time at 0
+	 levelTime = 0;
 }
 
 void MainPlayerController::LightpathNode(Node *node){
@@ -84,6 +93,9 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
+	// Update time
+	levelTime += TheTimeMgr->GetDeltaTime();
+
 	// Face front of path
 	Vector3D d = Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z()) - GetTargetNode()->GetNodePosition();
 	float horiz = sqrt((d.x * d.x) + (d.y * d.y));
@@ -92,7 +104,7 @@ void MainPlayerController::Move(void)
 	pitchm.SetRotationAboutY(pitch);
 	float yaw = atan2(d.y, d.x);
 	yawm.SetRotationAboutZ(yaw);
-	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
+	SetRigidBodyMatrix3D(yawm * pitchm);
 
 	// Set up spline
 	std::vector<SplineVector3D> lp = splinePoints;
@@ -124,7 +136,6 @@ void MainPlayerController::Move(void)
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
 	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
-	
 
 	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
 	{
@@ -134,10 +145,47 @@ void MainPlayerController::Move(void)
 		}
 	}
 	direction = movement;
-	GetTargetNode()->SetNodePosition(newPos);
+	SetRigidBodyPosition(newPos);
 
-	// Change speed
-	speed += (oldZ - GetTargetNode()->GetNodePosition().z) * HILL_ACCELERATION;
+	// Change speed based on uphill/downhill
+	float climb = oldZ - GetTargetNode()->GetNodePosition().z;
+	speed += climb * HILL_ACCELERATION;
+
+	// Slow down if turning too sharply and not banking
+	SplineVector3D bpos = spline->getPosition((((length - DISTANCE_TO_PATH) - 0.1f) / length) * spline->getMaxT());
+	SplineVector3D fpos = spline->getPosition((((length - DISTANCE_TO_PATH) + 0.1f) / length) * spline->getMaxT());
+	float curve = speed * (atan2(fpos.x() - pos.x(), fpos.y() - pos.y()) - atan2(pos.x() - bpos.x(), pos.y() - bpos.y()));
+	float roll = 0.0f;
+	if (!rollHistory.empty())
+	{
+		int index = rollHistory.size() - (int)ceil((DISTANCE_TO_PATH / speed) / ((float)ROLL_REPORT_FREQUENCY / 1000.0f));
+		if (index > 0)
+		{
+			roll = rollHistory[index];
+			std::vector<float>::iterator begin = rollHistory.begin();
+			std::vector<float>::iterator upto = begin;
+			std::advance(upto, rollHistory.size() - index);
+			rollHistory.erase(begin, begin + index);
+		}
+		else
+		{
+			roll = rollHistory.front();
+		}
+	}
+
+	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
+	if (turnSlow)
+	{
+		speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+	}
+
+	// Base acceleration
+	if ((speed < BASE_SPEED) && ((-1.0f * climb / (TheTimeMgr->GetFloatDeltaTime() / 1000.0f)) < BASE_CLIMB_THRESHOLD) && !turnSlow)
+	{
+		speed += BASE_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+	}
+
+	// Maintain speed limits
 	if (speed > MAX_SPEED)
 	{
 		speed = MAX_SPEED;
@@ -153,6 +201,9 @@ void MainPlayerController::Move(void)
 		splinePoints.erase(splinePoints.begin());
 	}
 
+	// Always call this after moving a node
+	GetTargetNode()->Invalidate();
+
 	/*
 	// Face direction of movement
 	Vector3D d = GetTargetNode()->GetNodePosition() - oldPos;
@@ -165,8 +216,8 @@ void MainPlayerController::Move(void)
 	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
 	*/
 
-	// Always call this after moving a node
-	GetTargetNode()->Invalidate();
+	// Potentially set off triggers
+	GetTargetNode()->GetWorld()->ActivateTriggers(oldPos, newPos, 0.0f);
  }
 
 void MainPlayerController::ReportLightpathFront(Point3D front)
@@ -204,3 +255,14 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 	}
 }
 
+RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
+{
+	TheEngine->Report("made it here");
+	return kRigidBodyUnchanged;
+}
+
+RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
+{
+	TheEngine->Report("handling rigid body contact");
+	return kRigidBodyUnchanged;
+}

@@ -45,6 +45,8 @@ namespace C4
 
 		bool firstFrame;
 
+		
+
 	public:
 		LightPathController();
 		~LightPathController();
