@@ -145,7 +145,8 @@ namespace C4
 			return (&handInteractor);
 		}
 
-		RigidBodyStatus HandleNewGeometryContact(const GeometryContact* contact);
+		//Is called whenever node interacts with a geometry node
+		RigidBodyStatus HandleNewGeometryContact(const GeometryContact *contact);
 	};
 
 //---------------------------Menu stuff-------------------------------------------------
