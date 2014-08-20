@@ -8,7 +8,6 @@
 
 #include "GameWorld.h"
 #include "ResetAction.h"
-#include "Tank.h"
 #include "HandController.h"
 #include "Player.h"
 #include "LightPathController.h"
@@ -25,7 +24,7 @@ class Game : public Singleton<Game>, public Application
 {
 private:
 
-	DisplayEventHandler				displayEventHandler;
+	DisplayEventHandler						displayEventHandler;
 	ResetAction*							resetAction;
 
 	ModelRegistration						playerModelReg;
