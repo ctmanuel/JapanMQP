@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 8/20/2014 2:15:04 PM.
      1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -47,10 +48,16 @@
          Debug\Tank.obj
             Creating library ..\..\C4\MQP.lib and object ..\..\C4\MQP.exp
          MQP.vcxproj -> C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
+=======
+﻿Build started 8/20/2014 9:48:51 PM.
+     1>Project "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         MQP.vcxproj -> C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
+>>>>>>> 7dbf7c7ecdf1f55dc98ec9142ae934ba18d3e3f6
        PostBuildEvent:
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
          :VCEnd
          ..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll
          1 File(s) copied
@@ -58,8 +65,12 @@
          1 File(s) copied
          ..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll
          1 File(s) copied
-     1>Done Building Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
 Time Elapsed 00:00:07.60
+=======
+Time Elapsed 00:00:00.20
+>>>>>>> 7dbf7c7ecdf1f55dc98ec9142ae934ba18d3e3f6
