@@ -98,11 +98,13 @@ EngineResult Game::LoadWorld(const char *name)
 	WorldResult result = TheWorldMgr->LoadWorld(name);
 	if (result == kWorldOkay)
 	{
+		/*
 		GameWorld *world = static_cast<GameWorld *>(TheWorldMgr->GetWorld());
 		Model *model = Model::Get(kModelAnimatedHand);
 		HandController *controller = new HandController();
 		model->SetController(controller);
 		TheGame->handController = controller;
+		*/
 		//const LocatorMarker *locator = world->GetSpawnLocator();
 		/*if (locator)
 		{

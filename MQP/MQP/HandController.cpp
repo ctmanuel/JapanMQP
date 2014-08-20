@@ -203,6 +203,7 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 {
 	Engine::Report("Made it here");
 	Geometry *geometry = contact->GetContactGeometry();
+	Engine::Report(String<64> ("Node Name ") += geometry->GetNodeName());
 	GetPhysicsController()->PurgeGeometryContacts(geometry);
 	delete geometry;
 	return (kRigidBodyContactsBroken);
