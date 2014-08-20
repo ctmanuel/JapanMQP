@@ -144,6 +144,8 @@ namespace C4
 		{
 			return (&handInteractor);
 		}
+
+		RigidBodyStatus HandleNewGeometryContact(const GeometryContact* contact);
 	};
 
 //---------------------------Menu stuff-------------------------------------------------

@@ -5,6 +5,7 @@
 #include "C4World.h"
 #include "C4Interface.h"
 #include "C4Methods.h"
+#include "C4Files.h"
 
 #include "GameWorld.h"
 #include "ResetAction.h"

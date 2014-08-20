@@ -166,13 +166,37 @@ void HandController::Move(void)
 			{
 				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 			}
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
+				rollTimer = 0;
+			}
+		}
+		else // Hand not in range of Leap
+		{
+			// Go to default position
+			Matrix3D i;
+			i.SetIdentity();
+			SetRigidBodyMatrix3D(i * startOrientation);
+
+			// Report roll to player if it's time
+			rollTimer += TheTimeMgr->GetDeltaTime();
+			if (rollTimer >= ROLL_REPORT_FREQUENCY)
+			{
+				player->ReportRoll(0.0f);
+				rollTimer = 0;
+			}
 		}
 	}
 
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
+	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
 	//SetRigidBodyTransform
-	Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
+	//Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
 	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
 	//SetExternalForce(newPosition *0.1F);
 	//SetLinearVelocity(newPosition);*/
@@ -206,6 +230,11 @@ void HandController::Move(void)
 void HandController::SetLightPath(LightPathController* lightPath)
 {
 	this->lightPath = lightPath;
+}
+
+RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact* contact)
+{
+	return kRigidBodyUnchanged;
 }
 
 //---------------------------Menu stuff-------------------------------------------------

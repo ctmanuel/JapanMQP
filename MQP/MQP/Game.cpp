@@ -28,7 +28,7 @@ Game::Game() :
 
 	//Model Registrations
 	//Player model registration, Hand Model Registration, 
-	playerModelReg(kModelPlayer, "Player", "player", kModelPrecache, kControllerPlayer),
+	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
 	
 	//Animated Object Registration

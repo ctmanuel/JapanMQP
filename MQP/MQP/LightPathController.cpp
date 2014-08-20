@@ -84,6 +84,7 @@ void LightPathController::Move(void)
 	}
 
 	speed = 5.0F * player->GetSpeed();
+
 	if (!firstFrame)
 	{
 		distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
@@ -114,23 +115,6 @@ void LightPathController::Move(void)
 
 	GetTargetNode()->SetNodeMatrix3D(rotation * stretch);
 	GetTargetNode()->Invalidate();
-
-	/*
-	// Gain or lose speed depending on pitch
-	speed += (-1.0f * pitch) * HILL_ACCELERATION * TheTimeMgr->GetDeltaTime();
-	if (speed < MIN_SPEED)
-	{
-		speed = MIN_SPEED;
-	}
-	if (speed > MAX_SPEED)
-	{
-		speed = MAX_SPEED;
-	}
-	if ((speed < BASE_SPEED) && (pitch < BASE_PITCH))
-	{
-		speed += (BASE_ACCELERATION * TheTimeMgr->GetDeltaTime());
-	}
-	*/
 
 	if (!firstFrame)
 	{
