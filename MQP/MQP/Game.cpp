@@ -21,7 +21,8 @@ Game::Game() :
 
 	//Controller Registrations
 	//Hand Controller registration, player controller registration, lightpath controller registration
-	handControllerReg(kControllerAnimatedHand, "Hand"),								
+	handControllerReg(kControllerAnimatedHand, "Hand"),
+	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
 
@@ -34,8 +35,12 @@ Game::Game() :
 	//Animated Hand Registration
 	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
 
-	//Particle system registration
-	lightParticleSystemReg(kParticleSystemLight, "Light")
+	//Particle System Registration
+	lightParticleSystemReg(kParticleSystemLight, "Light"),
+
+	//Script Method Registration
+	quitMethodReg(kMethodQuit, "Quit Game"),
+	loadWorldMethodReg(kMethodLoadWorld, "Load World")
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -47,9 +52,8 @@ Game::Game() :
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
 
+	LoadWorld("Menu");
 	handController = nullptr;
-
-	//LoadWorld("GameWorld_01");
 }
 
 Game::~Game()
@@ -73,6 +77,18 @@ void Game::HandleDisplayEvent(const DisplayEventData *eventData, void *cookie)
 World* Game::ConstructWorld(const char* name, void* cookie)
 {
 	return (new GameWorld(name));
+}
+
+void Game::StartLevel()// const char* name)
+{
+	DeferredTask* task = new DeferredTask(&LoadLevel, this);
+	task->SetTaskFlags(kTaskNonpersistent);
+	TheTimeMgr->AddTask(task);
+}
+
+void Game::LoadLevel(DeferredTask* task, void* cookie)
+{
+	TheWorldMgr->LoadWorld("gameworld_01");
 }
 
 EngineResult Game::LoadWorld(const char *name)

@@ -21,8 +21,10 @@ namespace C4
 {
 	enum 
 	{
-		kControllerHand = 'hand'
+		kControllerHand = 'hand',
+		kControllerMenuHand = 'mhnd'
 	};
+
 	///Defines the type of model to be loaded.
 	enum
 	{
@@ -146,5 +148,37 @@ namespace C4
 		RigidBodyStatus HandleNewGeometryContact(const GeometryContact *contact);
 	};
 
+//---------------------------Menu stuff-------------------------------------------------
+
+	class MenuHandController;
+
+	class MenuHandInteractor : public Interactor
+	{
+	private:
+		MenuHandController* controller;
+
+	public:
+		MenuHandInteractor(MenuHandController* controller);
+		~MenuHandInteractor();
+
+		void HandleInteractionEvent(InteractionEventType type, Node* node, const Point3D* position) override;
+	};
+
+	class MenuHandController : public Controller
+	{
+	private:
+		Leap::Controller leap;
+
+		bool pushed;
+
+		MenuHandInteractor interactor;
+
+	public:
+		MenuHandController();
+		~MenuHandController();
+
+		void Preprocess(void);
+		void Move(void);
+	};
 }
 

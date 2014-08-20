@@ -25,6 +25,7 @@ WorldResult GameWorld::Preprocess(void)
 		return result;
 	}
 	
+	camera.Preprocess();
 	SetCamera(&camera);
 	return kWorldOkay;
 	
@@ -36,6 +37,7 @@ void GameWorld::Interact(void)
 	//class's Interact() function, set up the interaction probe to be in a line 
 	//segment extending two meters from the players head in the direction that the 
 	//camera is looking
+
 	HandController *controller = TheGame->GetHandController();
 	if (controller)
 	{
@@ -45,6 +47,7 @@ void GameWorld::Interact(void)
 		//const Vector3D& direction = chaseCamera.GetWorldTransform()[2];
 		controller->GetHandInteractor()->SetInteractionProbe(position, position * 1.0F);
 	}
+
 	World::Interact();
 }
 

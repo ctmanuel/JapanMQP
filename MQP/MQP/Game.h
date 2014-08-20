@@ -4,6 +4,7 @@
 #include "C4Engine.h"
 #include "C4World.h"
 #include "C4Interface.h"
+#include "C4Methods.h"
 
 #include "GameWorld.h"
 #include "ResetAction.h"
@@ -12,6 +13,7 @@
 #include "Player.h"
 #include "LightPathController.h"
 #include "LightParticleSystem.h"
+#include "ScriptMethods.h"
 
 using namespace C4;
 enum {
@@ -30,12 +32,16 @@ private:
 	ModelRegistration						gauntletModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
+	ControllerReg<MenuHandController>		menuHandControllerReg;
 	ControllerReg<MainPlayerController>		playerControllerReg;
 	ControllerReg<LightPathController>		lightPathControllerReg;
 
 	LocatorRegistration						animatedHand;
 
 	ParticleSystemReg<LightParticleSystem>	lightParticleSystemReg;
+
+	MethodReg<QuitMethod>					quitMethodReg;
+	MethodReg<LoadWorldMethod>				loadWorldMethodReg;
 
 	HandController							*handController;
 
@@ -47,6 +53,10 @@ public:
 	~Game(void);
 
 	static World* ConstructWorld(const char* name, void* cookie);
+
+	void StartLevel();// const char* name);
+	static void LoadLevel(DeferredTask* task, void* cookie);
+
 	HandController *GetHandController(void) const
 	{
 		return (handController);
