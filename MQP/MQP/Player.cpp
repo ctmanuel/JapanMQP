@@ -165,6 +165,9 @@ void MainPlayerController::Move(void)
 	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
 	*/
 
+	// Potentially set off triggers
+	GetTargetNode()->GetWorld()->ActivateTriggers(oldPos, newPos, 0.0f);
+
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
  }

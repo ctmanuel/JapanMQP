@@ -52,6 +52,8 @@ Game::Game() :
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
 
+	loadLevel = "";
+
 	LoadWorld("Menu");
 	handController = nullptr;
 }
@@ -79,16 +81,17 @@ World* Game::ConstructWorld(const char* name, void* cookie)
 	return (new GameWorld(name));
 }
 
-void Game::StartLevel()// const char* name)
+void Game::StartLevel(const char* name)
 {
-	DeferredTask* task = new DeferredTask(&LoadLevel, this);
+	loadLevel = name;
+	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
 	task->SetTaskFlags(kTaskNonpersistent);
 	TheTimeMgr->AddTask(task);
 }
 
 void Game::LoadLevel(DeferredTask* task, void* cookie)
 {
-	TheWorldMgr->LoadWorld("gameworld_01");
+	TheWorldMgr->LoadWorld(*((String<128>*)cookie));
 }
 
 EngineResult Game::LoadWorld(const char *name)
@@ -98,11 +101,13 @@ EngineResult Game::LoadWorld(const char *name)
 	WorldResult result = TheWorldMgr->LoadWorld(name);
 	if (result == kWorldOkay)
 	{
+		/*
 		GameWorld *world = static_cast<GameWorld *>(TheWorldMgr->GetWorld());
 		Model *model = Model::Get(kModelAnimatedHand);
 		HandController *controller = new HandController();
 		model->SetController(controller);
 		TheGame->handController = controller;
+		*/
 		//const LocatorMarker *locator = world->GetSpawnLocator();
 		/*if (locator)
 		{

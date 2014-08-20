@@ -47,6 +47,8 @@ private:
 
 	static void HandleDisplayEvent(const DisplayEventData *eventData, void *cookie);
 
+	String<128>	loadLevel;
+
 public:
 
 	Game(void);
@@ -54,7 +56,7 @@ public:
 
 	static World* ConstructWorld(const char* name, void* cookie);
 
-	void StartLevel();// const char* name);
+	void StartLevel(const char* name);
 	static void LoadLevel(DeferredTask* task, void* cookie);
 
 	HandController *GetHandController(void) const
