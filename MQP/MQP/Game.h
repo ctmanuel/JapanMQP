@@ -25,6 +25,7 @@ class Game : public Singleton<Game>, public Application
 {
 private:
 
+	DisplayEventHandler				displayEventHandler;
 	ResetAction*							resetAction;
 
 	ModelRegistration						playerModelReg;
@@ -42,6 +43,10 @@ private:
 	MethodReg<QuitMethod>					quitMethodReg;
 	MethodReg<LoadWorldMethod>				loadWorldMethodReg;
 
+	HandController							*handController;
+
+	static void HandleDisplayEvent(const DisplayEventData *eventData, void *cookie);
+
 public:
 
 	Game(void);
@@ -51,9 +56,18 @@ public:
 
 	void StartLevel();// const char* name);
 	static void LoadLevel(DeferredTask* task, void* cookie);
+
+	HandController *GetHandController(void) const
+	{
+		return (handController);
+	}
+	EngineResult LoadWorld(const char *name) override;
+	void UnloadWorld(void) override;
 };
 
 extern "C"
 {
 	C4MODULEEXPORT Application* ConstructApplication(void);
 }
+
+extern Game *TheGame;
