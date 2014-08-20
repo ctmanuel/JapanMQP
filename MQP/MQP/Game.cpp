@@ -129,4 +129,6 @@ void Game::UnloadWorld(void)
 {
 	TheWorldMgr->UnloadWorld();
 	TheGame->handController = nullptr;
+	TheGame = nullptr;
 }
+

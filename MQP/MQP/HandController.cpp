@@ -22,7 +22,7 @@ void HandInteractor::HandleInteractionEvent(InteractionEventType type, Node *nod
 	//Always call the base class counterpart
 
 	Interactor::HandleInteractionEvent(type, node, position);
-	Engine::Report("Made it here");
+	Engine::Report("HandInteractor Interaction Event");
 	//if the node with which we are interacting has a controller, 
 	// then pass the event through to that controller.
 
@@ -125,7 +125,9 @@ void HandController::Preprocess(void)
 	} while (node);
 
 	//Register our interactor with the World
+	//handInteractor.SetOwner
 	myModel->GetWorld()->AddInteractor(&handInteractor);
+
 	// Set up particle system
 	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
 	{
@@ -171,7 +173,7 @@ void HandController::Move(void)
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
 	//SetRigidBodyTransform
-	Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
+	//Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
 	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
 	//SetExternalForce(newPosition *0.1F);
 	//SetLinearVelocity(newPosition);*/
@@ -188,17 +190,21 @@ void HandController::Move(void)
 
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
-	/*
-	CollisionData data;
-	//Collision detection
-	TheWorldMgr->GetWorld()->DetectCollision(newPosition, newPosition+Point3D(0.1f,0.0f,0.0f), 1.0f, 0, &data);
-	*/
 
 	if (lps)
 	{
 		lps->SetStart(GetTargetNode()->GetWorldPosition());
 		lps->SetEnd(player->GetLightPathFront());
 	}
+}
+
+RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
+{
+	Engine::Report("Made it here");
+	Geometry *geometry = contact->GetContactGeometry();
+	GetPhysicsController()->PurgeGeometryContacts(geometry);
+	delete geometry;
+	return (kRigidBodyContactsBroken);
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
