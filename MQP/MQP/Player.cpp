@@ -75,7 +75,9 @@ Controller *MainPlayerController::Replicate(void) const
 	// always be called first, and then the subclass can do whatever 
 	// preprocessing it needs to do.
 		
-	 Controller::Preprocess();
+	 CharacterController::Preprocess();
+
+	 SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
 
 	 // Spline needs at least two points in front of the player and two points behind.
 	 // These are the points behind.
