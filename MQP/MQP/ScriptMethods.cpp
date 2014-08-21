@@ -116,6 +116,71 @@ void LoadWorldMethod::SetSetting(const Setting* setting)
 
 void LoadWorldMethod::Execute(const ScriptState* state)
 {
+	if (!Text::CompareText(name, "Menu"))
+	{
+		TheGame->SetLevelEndState(levelEndComplete);
+	}
 	TheGame->StartLevel(name);
+	CallCompletionProc();
+}
+
+// Get Level Result method
+GetLevelResultMethod::GetLevelResultMethod() : Method(kMethodGetLevelResult)
+{
+}
+
+GetLevelResultMethod::~GetLevelResultMethod()
+{
+}
+
+GetLevelResultMethod::GetLevelResultMethod(const GetLevelResultMethod& getLevelResultMethod) : Method(getLevelResultMethod)
+{
+}
+
+Method* GetLevelResultMethod::Replicate(void) const
+{
+	return (new GetLevelResultMethod(*this));
+}
+
+void GetLevelResultMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void GetLevelResultMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 GetLevelResultMethod::GetSettingCount(void) const
+{
+	return (1);
+}
+
+Setting* GetLevelResultMethod::GetSetting(int32 index) const
+{
+	return nullptr;
+}
+
+void GetLevelResultMethod::SetSetting(const Setting* setting)
+{
+}
+
+void GetLevelResultMethod::Execute(const ScriptState* state)
+{
+	int result = 0;
+	switch (TheGame->GetLevelEndState())
+	{
+	case levelEndNone:
+		result = 0;
+		break;
+	case levelEndComplete:
+		result = 1;
+		break;
+	case levelEndFailed:
+		result = 2;
+		break;
+	}
+	SetOutputValue(state, result);
 	CallCompletionProc();
 }

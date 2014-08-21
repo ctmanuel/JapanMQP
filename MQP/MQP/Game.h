@@ -16,9 +16,17 @@
 #include "ScriptMethods.h"
 
 using namespace C4;
-enum {
 
+enum
+{
 	kLocatorAnimatedObject = 'aobj'
+};
+
+enum LevelEndState
+{
+	levelEndNone = 'none',
+	levelEndComplete = 'comp',
+	levelEndFailed = 'fail'
 };
 
 class Game : public Singleton<Game>, public Application
@@ -42,12 +50,14 @@ private:
 
 	MethodReg<QuitMethod>					quitMethodReg;
 	MethodReg<LoadWorldMethod>				loadWorldMethodReg;
+	MethodReg<GetLevelResultMethod>			getLevelResultMethodReg;
 
 	HandController							*handController;
 
 	static void HandleDisplayEvent(const DisplayEventData *eventData, void *cookie);
 
 	String<128>	loadLevel;
+	LevelEndState levelEndState;
 
 public:
 
@@ -66,6 +76,9 @@ public:
 	
 	EngineResult LoadWorld(const char *name) override;
 	void UnloadWorld(void) override;
+
+	void SetLevelEndState(LevelEndState levelEndState);
+	LevelEndState GetLevelEndState(void);
 };
 
 extern "C"

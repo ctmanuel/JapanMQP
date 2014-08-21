@@ -171,6 +171,7 @@ namespace C4
 		Leap::Controller leap;
 
 		bool pushed;
+		int firstFrame;
 
 		MenuHandInteractor interactor;
 

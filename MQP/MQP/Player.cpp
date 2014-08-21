@@ -261,12 +261,14 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
+	TheGame->SetLevelEndState(levelEndFailed);
 	TheGame->StartLevel("Menu");
 	return kRigidBodyUnchanged;
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
 {
+	TheGame->SetLevelEndState(levelEndFailed);
 	TheGame->StartLevel("Menu");
 	return kRigidBodyUnchanged;
 }

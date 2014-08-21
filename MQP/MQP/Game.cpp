@@ -40,7 +40,8 @@ Game::Game() :
 
 	//Script Method Registration
 	quitMethodReg(kMethodQuit, "Quit Game"),
-	loadWorldMethodReg(kMethodLoadWorld, "Load World")
+	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
+	getLevelResultMethodReg(kMethodGetLevelResult, "GetLevelResult", kMethodOutputValue)
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -56,6 +57,7 @@ Game::Game() :
 
 	LoadWorld("Menu");
 	handController = nullptr;
+	levelEndState = levelEndNone;
 }
 
 Game::~Game()
@@ -101,6 +103,9 @@ EngineResult Game::LoadWorld(const char *name)
 	WorldResult result = TheWorldMgr->LoadWorld(name);
 	if (result == kWorldOkay)
 	{
+
+		TheMessageMgr->BeginSinglePlayerGame();
+
 		/*
 		GameWorld *world = static_cast<GameWorld *>(TheWorldMgr->GetWorld());
 		Model *model = Model::Get(kModelAnimatedHand);
@@ -114,8 +119,6 @@ EngineResult Game::LoadWorld(const char *name)
 			// If a spawn locator was found in the world, put a soldier character there.
 
 			// The BeginSinglePlayerGame() function puts the Message Manager in single player mode.
-
-			TheMessageMgr->BeginSinglePlayerGame();
 
 			// Calculate the angle corresponding to the direction the character is initially facing.
 
@@ -153,3 +156,12 @@ void Game::UnloadWorld(void)
 	//TheGame = nullptr;
 }
 
+void Game::SetLevelEndState(LevelEndState levelEndState)
+{
+	this->levelEndState = levelEndState;
+}
+
+LevelEndState Game::GetLevelEndState(void)
+{
+	return levelEndState;
+}

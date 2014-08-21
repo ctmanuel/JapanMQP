@@ -247,6 +247,7 @@ MenuHandController::MenuHandController() :
 	interactor(this)
 {
 	pushed = false;
+	firstFrame = 3;
 }
 
 MenuHandController::~MenuHandController()
@@ -264,7 +265,7 @@ void MenuHandController::Move(void)
 {
 	// Move back and forth
 
-	Vector3D leapMotion;
+	Vector3D leapMotion = Vector3D(0.0f, 0.0f, 0.0f);
 	if (leap.isConnected())
 	{
 		Leap::HandList hands = leap.frame().hands();
@@ -321,13 +322,20 @@ void MenuHandController::Move(void)
 		}
 	}
 
-	GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f) + leapMotion);
+	if (firstFrame)
+	{
+		GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f));
+		firstFrame--;
+	}
+	else
+	{
+		GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f) + leapMotion);
+	}
 	GetTargetNode()->Invalidate();
 
 	// Update interactor
 	Point3D pos = GetTargetNode()->GetNodePosition();
 	interactor.SetInteractionProbe(pos, pos + Point3D(5.0f, 0.0f, 0.0f));
-
 }
 
 MenuHandInteractor::MenuHandInteractor(MenuHandController* controller)
