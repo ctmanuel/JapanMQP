@@ -34,14 +34,7 @@ Controller* LightPathController::Replicate(void) const
 
 LightPathController::~LightPathController()
 {
-	/*
-	// stop playing music when light path destroyed (i.e. level cleared, world unloaded, player defeated)
-	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
-	{
-		music->Stop();
-		music->Release();
-	}
-	*/
+	
 }
 
 bool LightPathController::ValidNode(const Node* node)
@@ -62,21 +55,7 @@ void LightPathController::Unpack(Unpacker& data, unsigned long unpackFlags)
 //Find hand node and set controller
 void LightPathController::Preprocess(void)
 {
-	Controller::Preprocess();
-
-	/*
-	// Play main game music
-	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
-	{
-		music = new Sound;
-		WaveStreamer *streamer = new WaveStreamer;
-		streamer->AddComponent("A_Light_Groove");
-		music->Stream(streamer);
-		music->SetLoopCount(kSoundLoopInfinite);
-		music->Play();
-	}
-	*/
-	
+	Controller::Preprocess();	
 }
 
 void LightPathController::Move(void)
