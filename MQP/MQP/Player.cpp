@@ -1,7 +1,9 @@
 #include "Player.h"
+#include "Game.h"
 
 using namespace C4;
 
+extern Game* TheGame;
 
 MainPlayerController::MainPlayerController(float azimuth) :
 CharacterController(kControllerPlayer),
@@ -259,12 +261,12 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
-	TheEngine->Report("made it here");
+	TheGame->StartLevel("Menu");
 	return kRigidBodyUnchanged;
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
 {
-	TheEngine->Report("handling rigid body contact");
+	TheGame->StartLevel("Menu");
 	return kRigidBodyUnchanged;
 }

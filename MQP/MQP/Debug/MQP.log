@@ -1,8 +1,10 @@
-﻿Build started 8/21/2014 11:17:34.
+﻿Build started 8/21/2014 15:07:44.
      1>Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Player.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt LightPathController.cpp Player.cpp
          Player.cpp
+         LightPathController.cpp
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
          Debug\looping_cubic_b_spline.obj
@@ -51,4 +53,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.01
+Time Elapsed 00:00:05.72

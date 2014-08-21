@@ -12,6 +12,8 @@
 
 #define ROLL_RATE (1.0f) // radians/second
 
+#define SOLIDIFY_TIME (2500) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
+
 namespace C4
 {
 	enum
@@ -45,7 +47,9 @@ namespace C4
 
 		bool firstFrame;
 
-		
+		bool lead;
+		GenericGeometryObject* switchObject;
+		int switchTimer;
 
 	public:
 		LightPathController();
@@ -66,6 +70,7 @@ namespace C4
 		void SetSpeed(float speed);
 		void SetHand(HandController* hand);
 		void SetPlayer(MainPlayerController* player);
+		void SetSwitchObject(GenericGeometryObject* switchObject);
 
 		void ChangePitch(float pitch);
 		void ChangeRoll(float roll);
