@@ -12,7 +12,7 @@
 
 #define ROLL_RATE (1.0f) // radians/second
 
-#define SOLIDIFY_TIME (2500) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
+#define SOLIDIFY_TIME (4000) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
 
 namespace C4
 {
@@ -22,7 +22,6 @@ namespace C4
 	};
 
 	class HandController;
-
 	class LightPathController : public Controller
 	{
 	private:
