@@ -77,7 +77,7 @@ Controller *MainPlayerController::Replicate(void) const
 		
 	 CharacterController::Preprocess();
 
-	 SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
+	 SetRigidBodyFlags(kRigidBodyFixedOrientation);
 
 	 // Spline needs at least two points in front of the player and two points behind.
 	 // These are the points behind.
