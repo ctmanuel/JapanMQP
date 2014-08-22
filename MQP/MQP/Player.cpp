@@ -99,6 +99,7 @@ void MainPlayerController::Move(void)
 {
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
+	TheGame->SetLastLevelTime(levelTime);
 
 	// Face front of path
 	Vector3D d = Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z()) - GetTargetNode()->GetNodePosition();

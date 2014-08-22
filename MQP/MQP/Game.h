@@ -15,6 +15,9 @@
 #include "LightParticleSystem.h"
 #include "ScriptMethods.h"
 
+#define NUM_BEST_TIMES 6
+#define TIME_FILE_PATH "Save/times"
+
 using namespace C4;
 
 enum
@@ -27,6 +30,13 @@ enum LevelEndState
 	levelEndNone = 'none',
 	levelEndComplete = 'comp',
 	levelEndFailed = 'fail'
+};
+
+enum Level
+{
+	levelMenu = 'menu',
+	levelOne = 'lone',
+	levelTwo = 'ltwo'
 };
 
 class Game : public Singleton<Game>, public Application
@@ -51,6 +61,8 @@ private:
 	MethodReg<QuitMethod>					quitMethodReg;
 	MethodReg<LoadWorldMethod>				loadWorldMethodReg;
 	MethodReg<GetLevelResultMethod>			getLevelResultMethodReg;
+	MethodReg<GetTimeStringMethod>			getTimeStringMethodReg;
+	MethodReg<GetBestTimeStringMethod>		getBestTimeStringMethodReg;
 
 	HandController							*handController;
 
@@ -58,6 +70,9 @@ private:
 
 	String<128>	loadLevel;
 	LevelEndState levelEndState;
+	Level lastLevel;
+	int lastLevelTime;
+	int bestTimes[NUM_BEST_TIMES];
 
 public:
 
@@ -79,6 +94,10 @@ public:
 
 	void SetLevelEndState(LevelEndState levelEndState);
 	LevelEndState GetLevelEndState(void);
+	Level GetLastLevel(void);
+	void SetLastLevelTime(int lastLevelTime);
+	String<> GetTimeString(void);
+	String<> GetBestTimeString(Level level);
 };
 
 extern "C"

@@ -41,7 +41,9 @@ Game::Game() :
 	//Script Method Registration
 	quitMethodReg(kMethodQuit, "Quit Game"),
 	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
-	getLevelResultMethodReg(kMethodGetLevelResult, "GetLevelResult", kMethodOutputValue)
+	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
+	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
+	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue)
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -58,6 +60,27 @@ Game::Game() :
 	LoadWorld("Menu");
 	handController = nullptr;
 	levelEndState = levelEndNone;
+	lastLevel = levelMenu;
+	lastLevelTime = -1;
+
+	File file;
+
+	if (file.Open(TIME_FILE_PATH) != kFileOpenFailed)
+	{
+		file.Read(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Close();
+	}
+	else // file couldn't be openned, probably because it isn't there
+	{
+		file.Open(TIME_FILE_PATH, kFileCreate);
+		for (int i = 0; i < NUM_BEST_TIMES; i++)
+		{
+			bestTimes[i] = -1;
+		}
+		file.Write(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Close();
+	}
+
 }
 
 Game::~Game()
@@ -86,6 +109,44 @@ World* Game::ConstructWorld(const char* name, void* cookie)
 void Game::StartLevel(const char* name)
 {
 	loadLevel = name;
+
+	if (Text::CompareTextCaseless(name, "menu") && (lastLevelTime != -1))
+	{
+		// Going to the menu
+		// Check if player just got best time on a level
+		int i = -1;
+		switch (lastLevel)
+		{
+		case levelMenu: // Game just started
+			break; 
+		case levelOne:
+			i = 0;
+			break;
+		case levelTwo:
+			i = 1;
+			break;
+		}
+		if (i != -1)
+		{
+			if ((bestTimes[i] == -1) || (lastLevelTime < bestTimes[i]))
+			{
+				bestTimes[i] = lastLevelTime;
+				File file;
+				file.Open(TIME_FILE_PATH, kFileReadWrite);
+				file.Write(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+				file.Close();
+			}
+		}
+	}
+	else if (Text::CompareTextCaseless(name, "gameworld_01"))
+	{
+		lastLevel = levelOne;
+	}
+	else
+	{
+		lastLevel = levelTwo;
+	}
+
 	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
 	task->SetTaskFlags(kTaskNonpersistent);
 	TheTimeMgr->AddTask(task);
@@ -159,9 +220,100 @@ void Game::UnloadWorld(void)
 void Game::SetLevelEndState(LevelEndState levelEndState)
 {
 	this->levelEndState = levelEndState;
+	if (levelEndState == levelEndFailed)
+	{
+		lastLevelTime = -1;
+	}
 }
 
 LevelEndState Game::GetLevelEndState(void)
 {
 	return levelEndState;
+}
+
+Level Game::GetLastLevel(void)
+{
+	return lastLevel;
+}
+
+void Game::SetLastLevelTime(int lastLevelTime)
+{
+	this->lastLevelTime = lastLevelTime;
+}
+
+String<> Game::GetTimeString(void)
+{
+	int minutes = floor(lastLevelTime / 60000);
+	int seconds = floor((lastLevelTime % 60000) / 1000);
+	int centiseconds = floor((lastLevelTime % 1000) / 10);
+	String<> s = "Your time: ";
+	if (minutes < 10)
+	{
+		s += "0";
+	}
+	s += minutes;
+	s += ":";
+	if (seconds < 10)
+	{
+		s += "0";
+	}
+	s += seconds;
+	s += ":";
+	if (centiseconds < 10)
+	{
+		s += "0";
+	}
+	s += centiseconds;
+
+	return s;
+}
+
+String<> Game::GetBestTimeString(Level level)
+{
+	int bestTime;
+	int i;
+
+	switch (level)
+	{
+	case levelOne:
+		i = 0;
+		break;
+	case levelTwo:
+		i = 1;
+		break;
+	}
+
+	bestTime = bestTimes[i];
+	String<> s = "Best Time: ";
+
+	if (bestTime == -1)
+	{
+		s += "--:--:--";
+		return s;
+	}
+	else
+	{
+		int minutes = floor(bestTime / 60000);
+		int seconds = floor((bestTime % 60000) / 1000);
+		int centiseconds = floor((bestTime % 1000) / 10);
+		if (minutes < 10)
+		{
+			s += "0";
+		}
+		s += minutes;
+		s += ":";
+		if (seconds < 10)
+		{
+			s += "0";
+		}
+		s += seconds;
+		s += ":";
+		if (centiseconds < 10)
+		{
+			s += "0";
+		}
+		s += centiseconds;
+
+		return s;
+	}
 }

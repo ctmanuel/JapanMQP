@@ -154,7 +154,7 @@ void GetLevelResultMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
 
 int32 GetLevelResultMethod::GetSettingCount(void) const
 {
-	return (1);
+	return (0);
 }
 
 Setting* GetLevelResultMethod::GetSetting(int32 index) const
@@ -168,19 +168,160 @@ void GetLevelResultMethod::SetSetting(const Setting* setting)
 
 void GetLevelResultMethod::Execute(const ScriptState* state)
 {
-	int result = 0;
+	Vector3D result = Vector3D(0.0f, 0.0f, 0.0f);
+
 	switch (TheGame->GetLevelEndState())
 	{
 	case levelEndNone:
-		result = 0;
+		result.x = 0.0f;
 		break;
 	case levelEndComplete:
-		result = 1;
+		result.x = 1.0f;
 		break;
 	case levelEndFailed:
-		result = 2;
+		result.x = 2.0f;
 		break;
 	}
+
+	switch (TheGame->GetLastLevel())
+	{
+	case levelMenu:
+		result.y = 0.0f;
+		break;
+	case levelOne:
+		result.y = 1.0f;
+		break;
+	case levelTwo:
+		result.y = 2.0f;
+		break;
+	}
+
 	SetOutputValue(state, result);
+	CallCompletionProc();
+}
+
+// Get Time String method
+GetTimeStringMethod::GetTimeStringMethod() : Method(kMethodGetTimeString)
+{
+}
+
+GetTimeStringMethod::~GetTimeStringMethod()
+{
+}
+
+GetTimeStringMethod::GetTimeStringMethod(const GetTimeStringMethod& getTimeStringMethod) : Method(getTimeStringMethod)
+{
+}
+
+Method* GetTimeStringMethod::Replicate(void) const
+{
+	return (new GetTimeStringMethod(*this));
+}
+
+void GetTimeStringMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void GetTimeStringMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 GetTimeStringMethod::GetSettingCount(void) const
+{
+	return (0);
+}
+
+Setting* GetTimeStringMethod::GetSetting(int32 index) const
+{
+	return nullptr;
+}
+
+void GetTimeStringMethod::SetSetting(const Setting* setting)
+{
+}
+
+void GetTimeStringMethod::Execute(const ScriptState* state)
+{
+	String<> s = TheGame->GetTimeString();
+
+	SetOutputValue(state, s);
+	CallCompletionProc();
+}
+
+// Get Best Time String method
+GetBestTimeStringMethod::GetBestTimeStringMethod() : Method(kMethodGetBestTimeString)
+{
+	level = 0;
+}
+
+GetBestTimeStringMethod::~GetBestTimeStringMethod()
+{
+}
+
+GetBestTimeStringMethod::GetBestTimeStringMethod(const GetBestTimeStringMethod& getBestTimeStringMethod) : Method(getBestTimeStringMethod)
+{
+	level = getBestTimeStringMethod.level;
+}
+
+Method* GetBestTimeStringMethod::Replicate(void) const
+{
+	return (new GetBestTimeStringMethod(*this));
+}
+
+void GetBestTimeStringMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+
+	data << level;
+}
+
+void GetBestTimeStringMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+
+	data >> level;
+}
+
+int32 GetBestTimeStringMethod::GetSettingCount(void) const
+{
+	return (1);
+}
+
+Setting* GetBestTimeStringMethod::GetSetting(int32 index) const
+{
+	if (index == 0)
+	{
+		return (new IntegerSetting('levl', level, "Level", 0, 6, 1));
+	}
+	return nullptr;
+}
+
+void GetBestTimeStringMethod::SetSetting(const Setting* setting)
+{
+	if (setting->GetSettingIdentifier() == 'levl')
+	{
+		level = ((IntegerSetting*)setting)->GetIntegerValue();
+	}
+}
+
+void GetBestTimeStringMethod::Execute(const ScriptState* state)
+{
+	String<> s = "Didn't get a string";
+	switch (level)
+	{
+	case 0:
+		s = "The menu doesn't have a best time, silly!";
+		break;
+	case 1:
+		s = TheGame->GetBestTimeString(levelOne);
+		break;
+	case 2:
+		s = TheGame->GetBestTimeString(levelTwo);
+		break;
+	}
+
+	SetOutputValue(state, s);
 	CallCompletionProc();
 }

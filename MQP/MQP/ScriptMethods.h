@@ -10,7 +10,9 @@ namespace C4
 	{
 		kMethodQuit = 'quit',
 		kMethodLoadWorld = 'load',
-		kMethodGetLevelResult = 'levl'
+		kMethodGetLevelResult = 'levl',
+		kMethodGetTimeString = 'time',
+		kMethodGetBestTimeString = 'best'
 	};
 
 	class QuitMethod : public Method
@@ -71,6 +73,52 @@ namespace C4
 
 		GetLevelResultMethod();
 		~GetLevelResultMethod();
+
+		void Pack(Packer& data, unsigned_int32 packFlags) const;
+		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class GetTimeStringMethod : public Method
+	{
+	private:
+
+		GetTimeStringMethod(const GetTimeStringMethod& getTimeStringMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		GetTimeStringMethod();
+		~GetTimeStringMethod();
+
+		void Pack(Packer& data, unsigned_int32 packFlags) const;
+		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class GetBestTimeStringMethod : public Method
+	{
+	private:
+
+		int level;
+
+		GetBestTimeStringMethod(const GetBestTimeStringMethod& getBestTimeStringMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		GetBestTimeStringMethod();
+		~GetBestTimeStringMethod();
 
 		void Pack(Packer& data, unsigned_int32 packFlags) const;
 		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
