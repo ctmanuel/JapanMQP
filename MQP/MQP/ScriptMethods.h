@@ -12,7 +12,8 @@ namespace C4
 		kMethodLoadWorld = 'load',
 		kMethodGetLevelResult = 'levl',
 		kMethodGetTimeString = 'time',
-		kMethodGetBestTimeString = 'best'
+		kMethodGetBestTimeString = 'best',
+		kMethodClearScores = 'cler'
 	};
 
 	class QuitMethod : public Method
@@ -125,6 +126,28 @@ namespace C4
 
 		int32 GetSettingCount(void) const;
 		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class ClearScoresMethod : public Method
+	{
+	private:
+
+		ClearScoresMethod(const ClearScoresMethod& clearScoresMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		ClearScoresMethod();
+		~ClearScoresMethod();
+
+		void Pack(Packer& data, unsigned long packFlags) const;
+		void Unpack(Unpacker& data, unsigned long upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(long index) const;
 		void SetSetting(const Setting* setting);
 
 		void Execute(const ScriptState* state);

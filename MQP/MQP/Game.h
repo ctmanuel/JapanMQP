@@ -63,6 +63,7 @@ private:
 	MethodReg<GetLevelResultMethod>			getLevelResultMethodReg;
 	MethodReg<GetTimeStringMethod>			getTimeStringMethodReg;
 	MethodReg<GetBestTimeStringMethod>		getBestTimeStringMethodReg;
+	MethodReg<ClearScoresMethod>			clearScoresMethodReg;
 
 	HandController							*handController;
 
@@ -98,6 +99,7 @@ public:
 	void SetLastLevelTime(int lastLevelTime);
 	String<> GetTimeString(void);
 	String<> GetBestTimeString(Level level);
+	void ClearScores(void);
 };
 
 extern "C"

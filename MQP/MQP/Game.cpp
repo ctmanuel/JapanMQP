@@ -43,7 +43,8 @@ Game::Game() :
 	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
 	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
 	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
-	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue)
+	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
+	clearScoresMethodReg(kMethodClearScores, "Clear Scores")
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -316,4 +317,17 @@ String<> Game::GetBestTimeString(Level level)
 
 		return s;
 	}
+}
+
+void Game::ClearScores(void)
+{
+	for (int i = 0; i < NUM_BEST_TIMES; i++)
+	{
+		bestTimes[i] = -1;
+	}
+
+	File file;
+	file.Open(TIME_FILE_PATH, kFileReadWrite);
+	file.Write(bestTimes, sizeof(int)* NUM_BEST_TIMES);
+	file.Close();
 }

@@ -52,6 +52,7 @@ void QuitMethod::Execute(const ScriptState* state)
 	TheEngine->Quit();
 }
 
+
 // Load World method
 LoadWorldMethod::LoadWorldMethod() : Method(kMethodLoadWorld)
 {
@@ -123,6 +124,7 @@ void LoadWorldMethod::Execute(const ScriptState* state)
 	TheGame->StartLevel(name);
 	CallCompletionProc();
 }
+
 
 // Get Level Result method
 GetLevelResultMethod::GetLevelResultMethod() : Method(kMethodGetLevelResult)
@@ -200,6 +202,7 @@ void GetLevelResultMethod::Execute(const ScriptState* state)
 	CallCompletionProc();
 }
 
+
 // Get Time String method
 GetTimeStringMethod::GetTimeStringMethod() : Method(kMethodGetTimeString)
 {
@@ -249,6 +252,7 @@ void GetTimeStringMethod::Execute(const ScriptState* state)
 	SetOutputValue(state, s);
 	CallCompletionProc();
 }
+
 
 // Get Best Time String method
 GetBestTimeStringMethod::GetBestTimeStringMethod() : Method(kMethodGetBestTimeString)
@@ -323,5 +327,54 @@ void GetBestTimeStringMethod::Execute(const ScriptState* state)
 	}
 
 	SetOutputValue(state, s);
+	CallCompletionProc();
+}
+
+
+// Quit method
+ClearScoresMethod::ClearScoresMethod() : Method(kMethodClearScores)
+{
+}
+
+ClearScoresMethod::ClearScoresMethod(const ClearScoresMethod& clearScoresMethod) : Method(clearScoresMethod)
+{
+}
+
+ClearScoresMethod::~ClearScoresMethod()
+{
+}
+
+Method* ClearScoresMethod::Replicate(void) const
+{
+	return (new ClearScoresMethod(*this));
+}
+
+void ClearScoresMethod::Pack(Packer& data, unsigned long packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void ClearScoresMethod::Unpack(Unpacker& data, unsigned long unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 ClearScoresMethod::GetSettingCount(void) const
+{
+	return 0;
+}
+
+Setting* ClearScoresMethod::GetSetting(long index) const
+{
+	return nullptr;
+}
+
+void ClearScoresMethod::SetSetting(const Setting* setting)
+{
+}
+
+void ClearScoresMethod::Execute(const ScriptState* state)
+{
+	TheGame->ClearScores();
 	CallCompletionProc();
 }
