@@ -13,7 +13,9 @@ namespace C4
 		kMethodGetLevelResult = 'levl',
 		kMethodGetTimeString = 'time',
 		kMethodGetBestTimeString = 'best',
-		kMethodClearScores = 'cler'
+		kMethodClearScores = 'cler',
+		kMethodSetGameSettings = 'sset',
+		kMethodGetGameSettings = 'gset'
 	};
 
 	class QuitMethod : public Method
@@ -148,6 +150,52 @@ namespace C4
 
 		int32 GetSettingCount(void) const;
 		Setting* GetSetting(long index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class SetGameSettingsMethod : public Method
+	{
+	private:
+
+		int musicVolume, soundVolume, turnSensitivity, riftSensitivity;
+
+		SetGameSettingsMethod(const SetGameSettingsMethod& setGameSettingsMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		SetGameSettingsMethod();
+		~SetGameSettingsMethod();
+
+		void Pack(Packer& data, unsigned_int32 packFlags) const;
+		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class GetGameSettingsMethod : public Method
+	{
+	private:
+
+		GetGameSettingsMethod(const GetGameSettingsMethod& getGameSettingsMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		GetGameSettingsMethod();
+		~GetGameSettingsMethod();
+
+		void Pack(Packer& data, unsigned_int32 packFlags) const;
+		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(int32 index) const;
 		void SetSetting(const Setting* setting);
 
 		void Execute(const ScriptState* state);

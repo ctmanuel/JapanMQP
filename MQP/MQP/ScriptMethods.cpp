@@ -331,7 +331,7 @@ void GetBestTimeStringMethod::Execute(const ScriptState* state)
 }
 
 
-// Quit method
+// Clear Scores method
 ClearScoresMethod::ClearScoresMethod() : Method(kMethodClearScores)
 {
 }
@@ -376,5 +376,161 @@ void ClearScoresMethod::SetSetting(const Setting* setting)
 void ClearScoresMethod::Execute(const ScriptState* state)
 {
 	TheGame->ClearScores();
+	CallCompletionProc();
+}
+
+
+// Set Game Settings method
+SetGameSettingsMethod::SetGameSettingsMethod() : Method(kMethodSetGameSettings)
+{
+	musicVolume = 100;
+	soundVolume = 100;
+	turnSensitivity = 50;
+	riftSensitivity = 50;
+}
+
+SetGameSettingsMethod::~SetGameSettingsMethod()
+{
+}
+
+SetGameSettingsMethod::SetGameSettingsMethod(const SetGameSettingsMethod& setGameSettingsMethod) : Method(setGameSettingsMethod)
+{
+	musicVolume = setGameSettingsMethod.musicVolume;
+	soundVolume = setGameSettingsMethod.soundVolume;
+	turnSensitivity = setGameSettingsMethod.turnSensitivity;
+	riftSensitivity = setGameSettingsMethod.riftSensitivity;
+}
+
+Method* SetGameSettingsMethod::Replicate(void) const
+{
+	return (new SetGameSettingsMethod(*this));
+}
+
+void SetGameSettingsMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+
+	data << musicVolume;
+	data << soundVolume;
+	data << turnSensitivity;
+	data << riftSensitivity;
+}
+
+void SetGameSettingsMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+
+	data >> musicVolume;
+	data >> soundVolume;
+	data >> turnSensitivity;
+	data >> riftSensitivity;
+}
+
+int32 SetGameSettingsMethod::GetSettingCount(void) const
+{
+	return (4);
+}
+
+Setting* SetGameSettingsMethod::GetSetting(int32 index) const
+{
+	switch (index)
+	{
+	case 0:
+		return (new IntegerSetting('musc', musicVolume, "Music Volume", 0, 100, 1));
+		break;
+	case 1:
+		return (new IntegerSetting('sond', soundVolume, "Sound Volume", 0, 100, 1));
+		break;
+	case 2:
+		return (new IntegerSetting('turn', turnSensitivity, "Turn Sensitivity", 0, 100, 1));
+		break;
+	case 3:
+		return (new IntegerSetting('rift', riftSensitivity, "Rift Sensitivity", 0, 100, 1));
+		break;
+	}
+	return nullptr;
+}
+
+void SetGameSettingsMethod::SetSetting(const Setting* setting)
+{
+	switch (setting->GetSettingIdentifier())
+	{
+	case 'musc':
+		musicVolume = ((IntegerSetting*)setting)->GetIntegerValue();
+		break;
+	case 'sond':
+		soundVolume = ((IntegerSetting*)setting)->GetIntegerValue();
+		break;
+	case 'turn':
+		turnSensitivity = ((IntegerSetting*)setting)->GetIntegerValue();
+		break;
+	case 'rift':
+		riftSensitivity = ((IntegerSetting*)setting)->GetIntegerValue();
+		break;
+	}
+}
+
+void SetGameSettingsMethod::Execute(const ScriptState* state)
+{
+	TheGame->SetMusicVolume(musicVolume);
+	TheGame->SetSoundVolume(soundVolume);
+	TheGame->SetTurnSensitivity(turnSensitivity);
+	TheGame->SetRiftSensitivity(riftSensitivity);
+	TheGame->SaveSettings();
+	CallCompletionProc();
+}
+
+
+// Get Game Settings method
+GetGameSettingsMethod::GetGameSettingsMethod() : Method(kMethodGetGameSettings)
+{
+}
+
+GetGameSettingsMethod::~GetGameSettingsMethod()
+{
+}
+
+GetGameSettingsMethod::GetGameSettingsMethod(const GetGameSettingsMethod& getGameSettingsMethod) : Method(getGameSettingsMethod)
+{
+}
+
+Method* GetGameSettingsMethod::Replicate(void) const
+{
+	return (new GetGameSettingsMethod(*this));
+}
+
+void GetGameSettingsMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void GetGameSettingsMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 GetGameSettingsMethod::GetSettingCount(void) const
+{
+	return (0);
+}
+
+Setting* GetGameSettingsMethod::GetSetting(int32 index) const
+{
+	return nullptr;
+}
+
+void GetGameSettingsMethod::SetSetting(const Setting* setting)
+{
+}
+
+void GetGameSettingsMethod::Execute(const ScriptState* state)
+{
+	ColorRGBA settings;
+	settings.red = TheGame->GetMusicVolume();
+	settings.green = TheGame->GetSoundVolume();
+	settings.blue = TheGame->GetTurnSensitivity();
+	settings.alpha = TheGame->GetRiftSensitivity();
+
+	SetOutputValue(state, settings);
 	CallCompletionProc();
 }

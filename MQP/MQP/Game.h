@@ -17,6 +17,7 @@
 
 #define NUM_BEST_TIMES 6
 #define TIME_FILE_PATH "Save/times"
+#define SETTING_FILE_PATH "Save/settings"
 
 using namespace C4;
 
@@ -64,6 +65,8 @@ private:
 	MethodReg<GetTimeStringMethod>			getTimeStringMethodReg;
 	MethodReg<GetBestTimeStringMethod>		getBestTimeStringMethodReg;
 	MethodReg<ClearScoresMethod>			clearScoresMethodReg;
+	MethodReg<SetGameSettingsMethod>		setGameSettingsMethodReg;
+	MethodReg<GetGameSettingsMethod>		getGameSettingsMethodReg;
 
 	HandController							*handController;
 
@@ -74,6 +77,7 @@ private:
 	Level lastLevel;
 	int lastLevelTime;
 	int bestTimes[NUM_BEST_TIMES];
+	int settings[4];
 
 public:
 
@@ -100,6 +104,15 @@ public:
 	String<> GetTimeString(void);
 	String<> GetBestTimeString(Level level);
 	void ClearScores(void);
+	int GetMusicVolume(void);
+	int GetSoundVolume(void);
+	int GetTurnSensitivity(void);
+	int GetRiftSensitivity(void);
+	void SetMusicVolume(int musicVolume);
+	void SetSoundVolume(int soundVolume);
+	void SetTurnSensitivity(int turnSensitivity);
+	void SetRiftSensitivity(int riftSensitivity);
+	void SaveSettings(void);
 };
 
 extern "C"

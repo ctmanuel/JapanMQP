@@ -44,7 +44,9 @@ Game::Game() :
 	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
 	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
 	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
-	clearScoresMethodReg(kMethodClearScores, "Clear Scores")
+	clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
+	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
+	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue)
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -66,6 +68,7 @@ Game::Game() :
 
 	File file;
 
+	// Load times
 	if (file.Open(TIME_FILE_PATH) != kFileOpenFailed)
 	{
 		file.Read(bestTimes, sizeof(int) * NUM_BEST_TIMES);
@@ -73,15 +76,31 @@ Game::Game() :
 	}
 	else // file couldn't be openned, probably because it isn't there
 	{
-		file.Open(TIME_FILE_PATH, kFileCreate);
 		for (int i = 0; i < NUM_BEST_TIMES; i++)
 		{
 			bestTimes[i] = -1;
 		}
+		file.Open(TIME_FILE_PATH, kFileCreate);
 		file.Write(bestTimes, sizeof(int) * NUM_BEST_TIMES);
 		file.Close();
 	}
 
+	// Load settings
+	if (file.Open(SETTING_FILE_PATH) != kFileOpenFailed)
+	{
+		file.Read(settings, sizeof(int) * 4);
+		file.Close();
+	}
+	else
+	{
+		settings[0] = 100;
+		settings[1] = 100;
+		settings[2] = 50;
+		settings[3] = 50;
+		file.Open(SETTING_FILE_PATH, kFileCreate);
+		file.Write(settings, sizeof(int) * 4);
+		file.Close();
+	}
 }
 
 Game::~Game()
@@ -330,4 +349,54 @@ void Game::ClearScores(void)
 	file.Open(TIME_FILE_PATH, kFileReadWrite);
 	file.Write(bestTimes, sizeof(int)* NUM_BEST_TIMES);
 	file.Close();
+}
+
+int Game::GetMusicVolume(void)
+{
+	return settings[0];
+}
+
+int Game::GetSoundVolume(void)
+{
+	return settings[1];
+}
+
+int Game::GetTurnSensitivity(void)
+{
+	return settings[2];
+}
+
+int Game::GetRiftSensitivity(void)
+{
+	return settings[3];
+}
+
+void Game::SetMusicVolume(int musicVolume)
+{
+	settings[0] = musicVolume;
+}
+
+void Game::SetSoundVolume(int soundVolume)
+{
+	settings[1] = soundVolume;
+}
+
+void Game::SetTurnSensitivity(int turnSensitivity)
+{
+	settings[2] = turnSensitivity;
+}
+
+void Game::SetRiftSensitivity(int riftSensitivity)
+{
+	settings[3] = riftSensitivity;
+}
+
+void Game::SaveSettings(void)
+{
+	File file;
+	if (file.Open(SETTING_FILE_PATH, kFileReadWrite) != kFileOpenFailed)
+	{
+		file.Write(settings, sizeof(int) * 4);
+		file.Close();
+	}
 }
