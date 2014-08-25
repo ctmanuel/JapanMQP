@@ -30,6 +30,9 @@ Game::Game() :
 	//Player model registration, Hand Model Registration, 
 	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
+	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
+	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
 	
 	//Animated Object Registration
 	//Animated Hand Registration
@@ -46,7 +49,8 @@ Game::Game() :
 	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
 	clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
 	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
-	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue)
+	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
+	addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -101,6 +105,8 @@ Game::Game() :
 		file.Write(settings, sizeof(int) * 4);
 		file.Close();
 	}
+
+	playerController = nullptr;
 }
 
 Game::~Game()
@@ -262,6 +268,7 @@ void Game::UnloadWorld(void)
 {
 	TheWorldMgr->UnloadWorld();
 	TheGame->handController = nullptr;
+	playerController = nullptr;
 	//TheGame = nullptr;
 }
 
@@ -439,4 +446,14 @@ void Game::SaveSettings(void)
 		file.Write(settings, sizeof(int) * 4);
 		file.Close();
 	}
+}
+
+void Game::SetPlayerController(MainPlayerController* playerController)
+{
+	this->playerController = playerController;
+}
+
+MainPlayerController* Game::GetPlayerController(void)
+{
+	return playerController;
 }

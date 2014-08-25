@@ -558,3 +558,71 @@ void GetGameSettingsMethod::Execute(const ScriptState* state)
 	SetOutputValue(state, settings);
 	CallCompletionProc();
 }
+
+
+// Add Speed method
+AddSpeedMethod::AddSpeedMethod() : Method(kMethodAddSpeed)
+{
+	speedChange = 0.0;
+}
+
+AddSpeedMethod::~AddSpeedMethod()
+{
+}
+
+AddSpeedMethod::AddSpeedMethod(const AddSpeedMethod& addSpeedMethod) : Method(addSpeedMethod)
+{
+	speedChange = addSpeedMethod.speedChange;
+}
+
+Method* AddSpeedMethod::Replicate(void) const
+{
+	return (new AddSpeedMethod(*this));
+}
+
+void AddSpeedMethod::Pack(Packer& data, unsigned_int32 packFlags) const
+{
+	Method::Pack(data, packFlags);
+
+	data << speedChange;
+}
+
+void AddSpeedMethod::Unpack(Unpacker& data, unsigned_int32 unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+
+	data >> speedChange;
+}
+
+int32 AddSpeedMethod::GetSettingCount(void) const
+{
+	return (1);
+}
+
+Setting* AddSpeedMethod::GetSetting(int32 index) const
+{
+	if (index == 0)
+	{
+		return (new FloatSetting('spch', speedChange, "Speed Change", -100.0f, 100.0f, 0.01f));
+	}
+
+	return nullptr;
+}
+
+void AddSpeedMethod::SetSetting(const Setting* setting)
+{
+	if (setting->GetSettingIdentifier() == 'spch')
+	{
+		speedChange = ((FloatSetting*)setting)->GetFloatValue();
+	}
+}
+
+void AddSpeedMethod::Execute(const ScriptState* state)
+{
+	MainPlayerController* player = TheGame->GetPlayerController();
+	if (player)
+	{
+		player->AddSpeed(speedChange);
+	}
+	CallCompletionProc();
+}

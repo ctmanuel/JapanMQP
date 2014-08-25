@@ -14,6 +14,7 @@
 #include "LightPathController.h"
 #include "LightParticleSystem.h"
 #include "ScriptMethods.h"
+#include "Ring.h"
 
 #define NUM_BEST_TIMES 6
 #define TIME_FILE_PATH "Save/times"
@@ -53,6 +54,9 @@ private:
 
 	ModelRegistration						playerModelReg;
 	ModelRegistration						gauntletModelReg;
+	ModelRegistration						ringSmallModelReg;
+	ModelRegistration						ringMediumModelReg;
+	ModelRegistration						ringLargeModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;
@@ -71,6 +75,7 @@ private:
 	MethodReg<ClearScoresMethod>			clearScoresMethodReg;
 	MethodReg<SetGameSettingsMethod>		setGameSettingsMethodReg;
 	MethodReg<GetGameSettingsMethod>		getGameSettingsMethodReg;
+	MethodReg<AddSpeedMethod>				addSpeedMethodReg;
 
 	HandController							*handController;
 
@@ -82,6 +87,8 @@ private:
 	int lastLevelTime;
 	int bestTimes[NUM_BEST_TIMES];
 	int settings[4];
+
+	MainPlayerController* playerController;
 
 public:
 
@@ -117,6 +124,8 @@ public:
 	void SetTurnSensitivity(int turnSensitivity);
 	void SetRiftSensitivity(int riftSensitivity);
 	void SaveSettings(void);
+	void SetPlayerController(MainPlayerController* playerController);
+	MainPlayerController* GetPlayerController(void);
 };
 
 extern "C"

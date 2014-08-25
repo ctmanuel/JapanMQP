@@ -18,6 +18,8 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+
+	TheGame->SetPlayerController(this);
 }
 
 MainPlayerController::MainPlayerController() :
@@ -27,6 +29,8 @@ playerInteractor(this)
 	speed = START_SPEED;
 
 	levelTime = 0;
+
+	TheGame->SetPlayerController(this);
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -42,6 +46,8 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+
+	TheGame->SetPlayerController(this);
 }
 
  MainPlayerController::~MainPlayerController()
@@ -97,6 +103,11 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
+	// temp
+	char s[64];
+	sprintf(s, "Speed: %f", speed);
+	//TheEngine->Report(s);
+
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -220,9 +231,6 @@ void MainPlayerController::Move(void)
 	yawm.SetRotationAboutZ(yaw);
 	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
 	*/
-
-	// Potentially set off triggers
-	GetTargetNode()->GetWorld()->ActivateTriggers(oldPos, newPos, 0.0f);
  }
 
 void MainPlayerController::ReportLightpathFront(Point3D front)
@@ -239,6 +247,20 @@ void MainPlayerController::ReportRoll(float roll)
 Point3D MainPlayerController::GetLightPathFront(void)
 {
 	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
+}
+
+void MainPlayerController::AddSpeed(float speedChange)
+{
+	speed += speedChange;
+
+	if (speed > MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	if (speed < MIN_SPEED)
+	{
+		speed = MIN_SPEED;
+	}
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)

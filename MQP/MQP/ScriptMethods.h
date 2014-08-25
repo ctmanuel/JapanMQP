@@ -15,7 +15,8 @@ namespace C4
 		kMethodGetBestTimeString = 'best',
 		kMethodClearScores = 'cler',
 		kMethodSetGameSettings = 'sset',
-		kMethodGetGameSettings = 'gset'
+		kMethodGetGameSettings = 'gset',
+		kMethodAddSpeed = 'aspd'
 	};
 
 	class QuitMethod : public Method
@@ -190,6 +191,31 @@ namespace C4
 
 		GetGameSettingsMethod();
 		~GetGameSettingsMethod();
+
+		void Pack(Packer& data, unsigned_int32 packFlags) const;
+		void Unpack(Unpacker& data, unsigned_int32 upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class AddSpeedMethod : public Method
+	{
+	private:
+
+		float speedChange;
+
+		AddSpeedMethod(const AddSpeedMethod& AddSpeedMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		AddSpeedMethod();
+		AddSpeedMethod(const char* name);
+		~AddSpeedMethod();
 
 		void Pack(Packer& data, unsigned_int32 packFlags) const;
 		void Unpack(Unpacker& data, unsigned_int32 upackFlags);

@@ -190,6 +190,7 @@ namespace C4
 		void ReportLightpathFront(Point3D front);
 		void ReportRoll(float roll);
 		Point3D GetLightPathFront(void);
+		void AddSpeed(float speedChange);
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);
