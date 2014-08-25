@@ -130,7 +130,7 @@ void Game::StartLevel(const char* name)
 {
 	loadLevel = name;
 
-	if (Text::CompareTextCaseless(name, "menu") && (lastLevelTime != -1))
+	if (Text::CompareTextCaseless(name, "menu"))
 	{
 		// Going to the menu
 		// Check if player just got best time on a level
@@ -145,10 +145,22 @@ void Game::StartLevel(const char* name)
 		case levelTwo:
 			i = 1;
 			break;
+		case levelThree:
+			i = 2;
+			break;
+		case levelFour:
+			i = 3;
+			break;
+		case levelFive:
+			i = 4;
+			break;
+		case levelSix:
+			i = 5;
+			break;
 		}
 		if (i != -1)
 		{
-			if ((bestTimes[i] == -1) || (lastLevelTime < bestTimes[i]))
+			if (((bestTimes[i] == -1) || (lastLevelTime < bestTimes[i])) && (lastLevelTime != -1))
 			{
 				bestTimes[i] = lastLevelTime;
 				File file;
@@ -158,13 +170,29 @@ void Game::StartLevel(const char* name)
 			}
 		}
 	}
-	else if (Text::CompareTextCaseless(name, "gameworld_01"))
+	else if (Text::CompareTextCaseless(name, "level1"))
 	{
 		lastLevel = levelOne;
 	}
-	else
+	else if (Text::CompareTextCaseless(name, "level2"))
 	{
 		lastLevel = levelTwo;
+	}
+	else if (Text::CompareTextCaseless(name, "level3"))
+	{
+		lastLevel = levelThree;
+	}
+	else if (Text::CompareTextCaseless(name, "level4"))
+	{
+		lastLevel = levelFour;
+	}
+	else if (Text::CompareTextCaseless(name, "level5"))
+	{
+		lastLevel = levelFive;
+	}
+	else
+	{
+		lastLevel = levelSix;
 	}
 
 	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
@@ -300,6 +328,18 @@ String<> Game::GetBestTimeString(Level level)
 		break;
 	case levelTwo:
 		i = 1;
+		break;
+	case levelThree:
+		i = 2;
+		break;
+	case levelFour:
+		i = 3;
+		break;
+	case levelFive:
+		i = 4;
+		break;
+	case levelSix:
+		i = 5;
 		break;
 	}
 

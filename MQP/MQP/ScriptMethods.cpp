@@ -196,6 +196,18 @@ void GetLevelResultMethod::Execute(const ScriptState* state)
 	case levelTwo:
 		result.y = 2.0f;
 		break;
+	case levelThree:
+		result.y = 3.0f;
+		break;
+	case levelFour:
+		result.y = 4.0f;
+		break;
+	case levelFive:
+		result.y = 5.0f;
+		break;
+	case levelSix:
+		result.y = 6.0f;
+		break;
 	}
 
 	SetOutputValue(state, result);
@@ -323,6 +335,18 @@ void GetBestTimeStringMethod::Execute(const ScriptState* state)
 		break;
 	case 2:
 		s = TheGame->GetBestTimeString(levelTwo);
+		break;
+	case 3:
+		s = TheGame->GetBestTimeString(levelThree);
+		break;
+	case 4:
+		s = TheGame->GetBestTimeString(levelFour);
+		break;
+	case 5:
+		s = TheGame->GetBestTimeString(levelFive);
+		break;
+	case 6:
+		s = TheGame->GetBestTimeString(levelSix);
 		break;
 	}
 

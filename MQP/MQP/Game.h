@@ -37,7 +37,11 @@ enum Level
 {
 	levelMenu = 'menu',
 	levelOne = 'lone',
-	levelTwo = 'ltwo'
+	levelTwo = 'ltwo',
+	levelThree = 'ltre',
+	levelFour = 'lfor',
+	levelFive = 'lfiv',
+	levelSix = 'lsix'
 };
 
 class Game : public Singleton<Game>, public Application

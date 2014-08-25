@@ -61,6 +61,7 @@ void LightPathController::Preprocess(void)
 	Controller::Preprocess();
 
 	// Start with collision detection off
+	//((GeometryObject*)GetTargetNode()->GetObject())->BuildCollisionData();
 	((GeometryObject*)GetTargetNode()->GetObject())->SetCollisionExclusionMask(kCollisionExcludeAll);
 }
 
