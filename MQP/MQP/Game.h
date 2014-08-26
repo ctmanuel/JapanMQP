@@ -45,6 +45,11 @@ enum Level
 	levelSix = 'lsix'
 };
 
+enum
+{
+	kModelDowner = 'down'
+};
+
 class Game : public Singleton<Game>, public Application
 {
 private:
@@ -57,6 +62,7 @@ private:
 	ModelRegistration						ringSmallModelReg;
 	ModelRegistration						ringMediumModelReg;
 	ModelRegistration						ringLargeModelReg;
+	ModelRegistration						downerModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;

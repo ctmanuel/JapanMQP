@@ -34,6 +34,7 @@ Game::Game() :
 	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
 	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
 	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
+	downerModelReg(kModelDowner, "Downer", "Model/downer"),
 	
 	//Animated Object Registration
 	//Animated Hand Registration

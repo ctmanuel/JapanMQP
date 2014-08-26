@@ -103,11 +103,6 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
-	// temp
-	char s[64];
-	sprintf(s, "Speed: %f", speed);
-	//TheEngine->Report(s);
-
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -284,9 +279,22 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
-	TheGame->SetLevelEndState(levelEndFailed);
-	TheGame->StartLevel("Menu");
-	return kRigidBodyUnchanged;
+	Geometry* geometry = contact->GetContactGeometry();
+	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
+	{
+		SetLinearVelocity(GetOriginalLinearVelocity());
+		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+		AddSpeed(-2.0f);
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		return (kRigidBodyContactsBroken);
+	}
+	else
+	{
+		TheGame->SetLevelEndState(levelEndFailed);
+		TheGame->StartLevel("Menu");
+		return kRigidBodyUnchanged;
+	}
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
