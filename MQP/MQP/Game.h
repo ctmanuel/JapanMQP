@@ -62,6 +62,7 @@ private:
 	ControllerReg<MenuHandController>		menuHandControllerReg;
 	ControllerReg<MainPlayerController>		playerControllerReg;
 	ControllerReg<LightPathController>		lightPathControllerReg;
+	ControllerReg<RingController>			ringControllerReg;
 
 	LocatorRegistration						animatedHand;
 

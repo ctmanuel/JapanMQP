@@ -25,6 +25,7 @@ Game::Game() :
 	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
 	playerControllerReg(kControllerPlayer, "Main Player Controller"),
 	lightPathControllerReg(kControllerLightPath, "Light Path"),
+	ringControllerReg(kControllerRing, "Ring"),
 
 	//Model Registrations
 	//Player model registration, Hand Model Registration, 

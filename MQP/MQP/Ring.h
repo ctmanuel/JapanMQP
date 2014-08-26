@@ -1,7 +1,13 @@
 #pragma once
 
+#include "C4Controller.h"
+
 namespace C4
 {
+	enum
+	{
+		kControllerRing = 'ring'
+	};
 
 	enum
 	{
@@ -10,12 +16,21 @@ namespace C4
 		kModelRingLarge = 'rngl'
 	};
 
-	class RingController
+	class RingController : public Controller
 	{
+
+	private:
+		RingController(const RingController& ringController);
+		Controller* Replicate(void) const;
 
 	public:
 		RingController();
 		~RingController();
-	};
 
+		void Pack(Packer& data, unsigned long packFlags) const;
+		void Unpack(Unpacker& data, unsigned long unpackFlags);
+
+		void Preprocess(void);
+		void Move(void);
+	};
 }
