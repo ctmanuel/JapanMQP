@@ -35,6 +35,10 @@ Game::Game() :
 	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
 	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
 	downerModelReg(kModelDowner, "Downer", "Model/downer"),
+	speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
+	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
+	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
+	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
 	
 	//Animated Object Registration
 	//Animated Hand Registration

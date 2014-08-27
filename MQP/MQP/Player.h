@@ -45,9 +45,17 @@ namespace C4
 	{
 		 kControllerPlayer = 'plr'
 	};
+
 	enum
 	{
 		 kModelPlayer = 'plr'
+	};
+
+	enum PowerUp
+	{
+		powerUpNone,
+		powerUpSpeedBoost,
+		powerUpRingExpander
 	};
 
 	class MainPlayerController;
@@ -111,7 +119,7 @@ namespace C4
 			
 		Point3D				previousCenterOfMass;
 
-		Vector3D				direction = Vector3D(0.0f,0.0f,0.0f);
+		Vector3D			direction = Vector3D(0.0f,0.0f,0.0f);
 		
 		//we keep an interactor object here in the controller
 		PlayerInteractor	playerInteractor;
@@ -132,6 +140,13 @@ namespace C4
 		void SetPlayerMotion(int32 motion);
 
 		long levelTime;
+
+		PowerUp powerUp;
+
+		Sound* pathSound;
+		Sound* bankSound;
+
+		bool banking;
 
 	public:
 
@@ -191,6 +206,9 @@ namespace C4
 		void ReportRoll(float roll);
 		Point3D GetLightPathFront(void);
 		void AddSpeed(float speedChange);
+		PowerUp GetPowerUp(void);
+		void SetPowerUp(PowerUp powerUp);
+		void UsePowerUp(void);
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);

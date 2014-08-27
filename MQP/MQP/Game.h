@@ -47,7 +47,11 @@ enum Level
 
 enum
 {
-	kModelDowner = 'down'
+	kModelDowner = 'down',
+	kModelSpeedBoost = 'sbst',
+	kModelRingExpander = 'rexp',
+	kModelHandHeldSpeedBoost = 'hhsb',
+	kModelHandHeldRingExpander = 'hhrx'
 };
 
 class Game : public Singleton<Game>, public Application
@@ -63,6 +67,10 @@ private:
 	ModelRegistration						ringMediumModelReg;
 	ModelRegistration						ringLargeModelReg;
 	ModelRegistration						downerModelReg;
+	ModelRegistration						speedBoostModelReg;
+	ModelRegistration						ringExpanderModelReg;
+	ModelRegistration						handHeldSpeedBoostModelReg;
+	ModelRegistration						handHeldRingExpanderModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;

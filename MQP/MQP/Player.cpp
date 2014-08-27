@@ -18,6 +18,7 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
 
 	TheGame->SetPlayerController(this);
 }
@@ -29,6 +30,7 @@ playerInteractor(this)
 	speed = START_SPEED;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
 
 	TheGame->SetPlayerController(this);
 }
@@ -46,13 +48,20 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
 
 	TheGame->SetPlayerController(this);
 }
 
  MainPlayerController::~MainPlayerController()
 {
-	
+	 pathSound->Stop();
+	 pathSound->Release();
+
+	 if (banking)
+	 {
+		 bankSound->VaryVolume(0.0f, 500, true);
+	 }
 }
 
 //make duplicate of controller with pointer to current controller
@@ -95,6 +104,17 @@ Controller *MainPlayerController::Replicate(void) const
 
 	 // Start level time at 0
 	 levelTime = 0;
+
+	 // Play path sound effect
+	 pathSound = new Sound;
+	 WaveStreamer* streamer = new WaveStreamer;
+	// streamer->AddComponent("SoundEffects/path");
+	// pathSound->Stream(streamer);
+	 pathSound->Load("SoundEffects/path-looping");
+	 pathSound->SetLoopCount(kSoundLoopInfinite);
+	 pathSound->Play();
+
+	 banking = false;
 }
 
 void MainPlayerController::LightpathNode(Node *node){
@@ -103,6 +123,20 @@ void MainPlayerController::LightpathNode(Node *node){
 
 void MainPlayerController::Move(void)
 {
+	// temp
+	switch (powerUp)
+	{
+	case powerUpNone:
+		TheEngine->Report("You have no power up");
+		break;
+	case powerUpSpeedBoost:
+		TheEngine->Report("You have speed boost");
+		break;
+	case powerUpRingExpander:
+		TheEngine->Report("You have ring expander");
+		break;
+	}
+
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -184,10 +218,48 @@ void MainPlayerController::Move(void)
 		}
 	}
 
-	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
+	bool turnSlow = false;// = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
+	bool bankingPrev = banking;
+	if ((abs(curve) > TURN_SLOW_THRESHOLD))
+	{
+		if ((((curve / abs(curve)) * roll) < ROLL_REQUIREMENT))
+		{
+			speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+			turnSlow = true;
+			banking = false;
+		}
+		else
+		{
+			if (!banking)
+			{
+				banking = true;
+				bankSound = new Sound;
+				bankSound->Load("SoundEffects/bank-looping");
+				bankSound->SetLoopCount(kSoundLoopInfinite);
+				bankSound->Delay(10);
+				bankSound->VaryVolume(0.0f, 0);
+				bankSound->VaryVolume(0.5f, 500);
+			}
+		}
+	}
+	else
+	{
+		banking = false;
+	}
+	// If banking is ending this frame, stop sound
+	if (bankingPrev && !banking)
+	{
+		bankSound->VaryVolume(0.0f, 500, true);
+	}
+
+	// temp
+	if (banking)
+	{
+		TheEngine->Report("banking");
+	}
 	if (turnSlow)
 	{
-		speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+		TheEngine->Report("turn slow");
 	}
 
 	// Base acceleration
@@ -211,6 +283,9 @@ void MainPlayerController::Move(void)
 	{
 		splinePoints.erase(splinePoints.begin());
 	}
+
+	// Adjust path sound frequency based on speed
+	pathSound->VaryFrequency(speed / START_SPEED, 0);
 
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
@@ -258,6 +333,39 @@ void MainPlayerController::AddSpeed(float speedChange)
 	}
 }
 
+PowerUp MainPlayerController::GetPowerUp(void)
+{
+	return powerUp;
+}
+
+void MainPlayerController::SetPowerUp(PowerUp powerUp)
+{
+	this->powerUp = powerUp;
+}
+
+void MainPlayerController::UsePowerUp(void)
+{
+	switch (powerUp)
+	{
+	case powerUpSpeedBoost:
+		// do something
+
+		// temp
+		TheEngine->Report("Using speed boost!");
+
+		break;
+	case powerUpRingExpander:
+		// do someting
+
+		// temp
+		TheEngine->Report("Using ring expander!");
+
+		break;
+	}
+
+	powerUp = powerUpNone;
+}
+
 void MainPlayerController::SetPlayerMotion(int32 motion)
 {
 	//This function sets the animation resource corresponding to 
@@ -282,6 +390,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	Geometry* geometry = contact->GetContactGeometry();
 	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
 	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/downer");
+		sound->Play();
 		SetLinearVelocity(GetOriginalLinearVelocity());
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		AddSpeed(-2.0f);
@@ -289,16 +400,36 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		delete geometry;
 		return (kRigidBodyContactsBroken);
 	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		powerUp = powerUpSpeedBoost;
+		return (kRigidBodyContactsBroken);
+	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		powerUp = powerUpRingExpander;
+		return (kRigidBodyContactsBroken);
+	}
 	else
 	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/crash");
+		sound->Play();
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
-		return kRigidBodyUnchanged;
+		return (kRigidBodyUnchanged);
 	}
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
 {
+	Sound* sound = new Sound;
+	sound->Load("SoundEffects/crash");
+	sound->Play();
 	TheGame->SetLevelEndState(levelEndFailed);
 	TheGame->StartLevel("Menu");
 	return kRigidBodyUnchanged;
