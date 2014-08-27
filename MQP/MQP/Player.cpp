@@ -101,10 +101,11 @@ Controller *MainPlayerController::Replicate(void) const
 	 SetRigidBodyFlags(kRigidBodyFixedOrientation);
 
 	 // Spline needs at least two points in front of the player and two points behind.
-	 // These are the points behind.
 	 Point3D position = GetTargetNode()->GetNodePosition();
 	 splinePoints.push_back(SplineVector3D(position.x - 2.0f, position.y, position.z));
 	 splinePoints.push_back(SplineVector3D(position.x - 1.0f, position.y, position.z));
+	 splinePoints.push_back(SplineVector3D(position.x + 0.01f, position.y, position.z));
+	 splinePoints.push_back(SplineVector3D(position.x + 0.02f, position.y, position.z));
 
 	 // Start level time at 0
 	 levelTime = 0;
@@ -114,8 +115,6 @@ Controller *MainPlayerController::Replicate(void) const
 		 // Play path sound effect
 		 pathSound = new Sound;
 		 WaveStreamer* streamer = new WaveStreamer;
-		 // streamer->AddComponent("SoundEffects/path");
-		 // pathSound->Stream(streamer);
 		 pathSound->Load("SoundEffects/path-looping");
 		 pathSound->SetLoopCount(kSoundLoopInfinite);
 		 pathSound->Play();
@@ -174,19 +173,6 @@ void MainPlayerController::Move(void)
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
-	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
-
-	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
-	{
-		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
-		{
-			// temp
-			//newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
-			newPos = (oldPos + ((movement * TheTimeMgr->GetFloatDeltaTime()) / (30.0f * speed)));
-			TheEngine->Report("made it here");
-		}
-	}
-	direction = movement;
 	SetRigidBodyPosition(newPos);
 
 	// Change speed based on uphill/downhill
@@ -215,7 +201,7 @@ void MainPlayerController::Move(void)
 		}
 	}
 
-	bool turnSlow = false;// = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
+	bool turnSlow = false;
 	bool bankingPrev = banking;
 	if ((abs(curve) > TURN_SLOW_THRESHOLD))
 	{
