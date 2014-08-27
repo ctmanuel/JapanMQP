@@ -11,8 +11,6 @@ GameWorld::GameWorld(const char* name) : World(name)
 
 GameWorld::~GameWorld()
 {
-	music->Stop();
-	music->Release();
 }
 
 WorldResult GameWorld::Preprocess(void)
@@ -29,16 +27,6 @@ WorldResult GameWorld::Preprocess(void)
 	
 	camera.Preprocess();
 	SetCamera(&camera);
-
-	// Play main game music
-	music = new Sound;
-	WaveStreamer *streamer = new WaveStreamer;
-	//branch here for differing music by world
-	streamer->AddComponent("A_Light_Groove");
-	music->Stream(streamer);
-	music->SetLoopCount(kSoundLoopInfinite);
-	music->Play();
-
 
 	return kWorldOkay;
 	

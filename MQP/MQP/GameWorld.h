@@ -12,7 +12,6 @@ namespace C4
 	private:
 
 		GameCamera camera;
-		Sound *music;
 
 	public:
 

@@ -105,6 +105,9 @@ private:
 
 	MainPlayerController* playerController;
 
+	Sound* menuMusic;
+	Sound* levelMusic;
+
 public:
 
 	Game(void);
