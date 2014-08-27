@@ -147,6 +147,7 @@ namespace C4
 
 		//Is called whenever node interacts with a geometry node
 		RigidBodyStatus HandleNewGeometryContact(const GeometryContact *contact);
+		RigidBodyStatus HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody);
 	};
 
 //---------------------------Menu stuff-------------------------------------------------

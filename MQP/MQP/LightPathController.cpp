@@ -23,6 +23,7 @@ LightPathController::LightPathController() : Controller(kControllerLightPath)
 	switchObject = nullptr;
 	lead = true;
 	switchTimer = 0;
+	splineTimer = 0.0f;
 }
 
 LightPathController::LightPathController(const LightPathController& lightPathController) :
@@ -61,7 +62,6 @@ void LightPathController::Preprocess(void)
 	Controller::Preprocess();
 
 	// Start with collision detection off
-	//((GeometryObject*)GetTargetNode()->GetObject())->BuildCollisionData();
 	((GeometryObject*)GetTargetNode()->GetObject())->SetCollisionExclusionMask(kCollisionExcludeAll);
 }
 
@@ -93,21 +93,18 @@ void LightPathController::Move(void)
 			} while (node);
 		}
 
+		// Get speed
 		speed = 5.0F * player->GetSpeed();
 
+		// Scale forward
 		if (!firstFrame)
 		{
 			distance += speed * (TheTimeMgr->GetFloatDeltaTime() / 1000.0f);
 		}
-
-		// Scale forward
 		Matrix3D stretch;
 		stretch.Set(Vector3D(distance, 0.0f, 0.0f),
 			Vector3D(0.0f, 1.0f, 0.0f),
 			Vector3D(0.0f, 0.0f, 1.0f));
-
-		Matrix3D identity;
-		identity.SetIdentity();
 
 		// Rotation
 		if (changed)
@@ -139,6 +136,17 @@ void LightPathController::Move(void)
 			else if (nextRoll > targetRoll)
 			{
 				nextRoll -= ROLL_RATE * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+			}
+
+			// Add position to player spline if it's time
+			splineTimer += TheTimeMgr->GetFloatDeltaTime();
+			if (splineTimer >= SPLINE_FREQUENCY)
+			{
+				if (player)
+				{
+					player->SplinePoint(GetTargetNode()->GetFirstSubnode()->GetWorldPosition());
+					splineTimer = 0.0f;
+				}
 			}
 		}
 		firstFrame = false;
@@ -187,7 +195,10 @@ void LightPathController::Move(void)
 			//send player information 
 			if (player)
 			{
-				player->LightpathNode(next);
+				if (splineTimer != 0.0f)
+				{
+					player->SplinePoint(GetTargetNode()->GetFirstSubnode()->GetWorldPosition());
+				}
 			}
 
 			GetTargetNode()->GetRootNode()->AddNewSubnode(next);

@@ -23,17 +23,14 @@
 #define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
 
 // Speed stuff
-#define START_SPEED (1.0f) // m/s
-#define MIN_SPEED (1.0f)
-#define MAX_SPEED (5.0f)
-#define HILL_ACCELERATION (0.1f)
-#define START_SPEED (1.0f) // m/s
-#define MIN_SPEED (1.0f) // m/s
-#define MAX_SPEED (5.0f) // m/s
-#define BASE_SPEED (2.0f) // m/s, if below this speed, player will gradually accelerate towards it
-#define BASE_ACCELERATION (0.2f) // m/s/s
-#define BASE_CLIMB_THRESHOLD (0.2f) // m/s vertical that player must be below to get base acceleration
-#define HILL_ACCELERATION (0.1f) // no useful units. just a scale
+#define HILL_ACCELERATION (1.0f)
+#define START_SPEED (10.0f) // m/s
+#define MIN_SPEED (10.0f) // m/s
+#define MAX_SPEED (50.0f) // m/s
+#define BASE_SPEED (20.0f) // m/s, if below this speed, player will gradually accelerate towards it
+#define BASE_ACCELERATION (2.0f) // m/s/s
+#define BASE_CLIMB_THRESHOLD (2.0f) // m/s vertical that player must be below to get base acceleration
+#define HILL_ACCELERATION (1.0f) // no useful units. just a scale
 #define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
 #define TURN_ACCELERATION (1.0f) // m/s/s
 #define ROLL_REQUIREMENT (0.6f) // roll required to not lose speed around turns
@@ -200,7 +197,7 @@ namespace C4
 		
 		static bool ValidNode(const Node *node);
 
-		void LightpathNode(Node *node);
+		void SplinePoint(Point3D position);
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
 		void ReportRoll(float roll);

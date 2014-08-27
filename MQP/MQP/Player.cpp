@@ -54,13 +54,17 @@ playerInteractor(this)
 }
 
  MainPlayerController::~MainPlayerController()
-{
-	 pathSound->Stop();
-	 pathSound->Release();
+ {
 
-	 if (banking)
+	 if (!(GetTargetNode()->GetManipulator()))
 	 {
-		 bankSound->VaryVolume(0.0f, 500, true);
+		 pathSound->Stop();
+		 pathSound->Release();
+
+		 if (banking)
+		 {
+			 bankSound->VaryVolume(0.0f, 500, true);
+		 }
 	 }
 }
 
@@ -105,38 +109,28 @@ Controller *MainPlayerController::Replicate(void) const
 	 // Start level time at 0
 	 levelTime = 0;
 
-	 // Play path sound effect
-	 pathSound = new Sound;
-	 WaveStreamer* streamer = new WaveStreamer;
-	// streamer->AddComponent("SoundEffects/path");
-	// pathSound->Stream(streamer);
-	 pathSound->Load("SoundEffects/path-looping");
-	 pathSound->SetLoopCount(kSoundLoopInfinite);
-	 pathSound->Play();
+	 if (!(GetTargetNode()->GetManipulator()))
+	 {
+		 // Play path sound effect
+		 pathSound = new Sound;
+		 WaveStreamer* streamer = new WaveStreamer;
+		 // streamer->AddComponent("SoundEffects/path");
+		 // pathSound->Stream(streamer);
+		 pathSound->Load("SoundEffects/path-looping");
+		 pathSound->SetLoopCount(kSoundLoopInfinite);
+		 pathSound->Play();
+	 }
 
 	 banking = false;
 }
 
-void MainPlayerController::LightpathNode(Node *node){
-	splinePoints.push_back(SplineVector3D(node->GetNodePosition().x, node->GetNodePosition().y, node->GetNodePosition().z));
+void MainPlayerController::SplinePoint(Point3D position)
+{
+	splinePoints.push_back(SplineVector3D(position.x, position.y, position.z));
 }
 
 void MainPlayerController::Move(void)
 {
-	// temp
-	switch (powerUp)
-	{
-	case powerUpNone:
-		TheEngine->Report("You have no power up");
-		break;
-	case powerUpSpeedBoost:
-		TheEngine->Report("You have speed boost");
-		break;
-	case powerUpRingExpander:
-		TheEngine->Report("You have ring expander");
-		break;
-	}
-
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -186,7 +180,10 @@ void MainPlayerController::Move(void)
 	{
 		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
 		{
-			newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
+			// temp
+			//newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
+			newPos = (oldPos + ((movement * TheTimeMgr->GetFloatDeltaTime()) / (30.0f * speed)));
+			TheEngine->Report("made it here");
 		}
 	}
 	direction = movement;
@@ -250,16 +247,6 @@ void MainPlayerController::Move(void)
 	if (bankingPrev && !banking)
 	{
 		bankSound->VaryVolume(0.0f, 500, true);
-	}
-
-	// temp
-	if (banking)
-	{
-		TheEngine->Report("banking");
-	}
-	if (turnSlow)
-	{
-		TheEngine->Report("turn slow");
 	}
 
 	// Base acceleration
@@ -427,10 +414,19 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
 {
-	Sound* sound = new Sound;
-	sound->Load("SoundEffects/crash");
-	sound->Play();
-	TheGame->SetLevelEndState(levelEndFailed);
-	TheGame->StartLevel("Menu");
-	return kRigidBodyUnchanged;
+	if (contactBody->GetControllerType() == kControllerAnimatedHand)
+	{
+		SetLinearVelocity(Vector3D(0.0f, 0.0f, 0.0f));
+		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+		return kRigidBodyUnchanged;
+	}
+	else
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/crash");
+		sound->Play();
+		TheGame->SetLevelEndState(levelEndFailed);
+		TheGame->StartLevel("Menu");
+		return kRigidBodyUnchanged;
+	}
 }

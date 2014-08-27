@@ -14,6 +14,8 @@
 
 #define SOLIDIFY_TIME (4000) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
 
+#define SPLINE_FREQUENCY (8.0f) // msec before adding front of path to player spline
+
 namespace C4
 {
 	enum
@@ -40,6 +42,7 @@ namespace C4
 		float targetRoll;
 		float distance;
 		float speed;
+		float splineTimer;
 
 		HandController* hand;
 		MainPlayerController* player;

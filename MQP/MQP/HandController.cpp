@@ -269,6 +269,13 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 	}
 }
 
+RigidBodyStatus HandController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
+{
+	SetLinearVelocity(Vector3D(0.0f, 0.0f, 0.0f));
+	SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+	return (kRigidBodyUnchanged);
+}
+
 void HandController::SetLightPath(LightPathController* lightPath)
 {
 	this->lightPath = lightPath;
