@@ -202,11 +202,6 @@ void HandController::Move(void)
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
 	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
-	//SetRigidBodyTransform
-	//Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
-	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
-	//SetExternalForce(newPosition *0.1F);
-	//SetLinearVelocity(newPosition);*/
 	GetTargetNode()->Invalidate();
 
 	if (lightPath)
@@ -231,17 +226,6 @@ void HandController::Move(void)
 
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
-<<<<<<< HEAD
-	/*
-	Engine::Report("Made it here");
-	Geometry *geometry = contact->GetContactGeometry();
-	Engine::Report(String<64> ("Node Name ") += geometry->GetNodeName());
-	GetPhysicsController()->PurgeGeometryContacts(geometry);
-	delete geometry;
-	return (kRigidBodyContactsBroken);
-	*/
-	return kRigidBodyUnchanged;
-=======
 	Geometry* geometry = contact->GetContactGeometry();
 	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
 	{
@@ -285,7 +269,6 @@ RigidBodyStatus HandController::HandleNewRigidBodyContact(const RigidBodyContact
 	SetLinearVelocity(Vector3D(0.0f, 0.0f, 0.0f));
 	SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 	return (kRigidBodyUnchanged);
->>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
@@ -328,8 +311,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.01f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.01f;
 
 			// Hand orientation
 			Quaternion x, y, z;

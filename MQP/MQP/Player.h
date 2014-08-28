@@ -23,11 +23,11 @@
 #define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
 
 // Speed stuff
-#define START_SPEED (10.0f) // m/s
+#define START_SPEED (1.0f) // m/s
 #define MIN_SPEED (10.0f) // m/s
 #define MAX_SPEED (50.0f) // m/s
 #define BASE_SPEED (20.0f) // m/s, if below this speed, player will gradually accelerate towards it
-#define BASE_ACCELERATION (2.0f) // m/s/s
+#define BASE_ACCELERATION (0.5f) // m/s/s
 #define BASE_CLIMB_THRESHOLD (2.0f) // m/s vertical that player must be below to get base acceleration
 #define HILL_ACCELERATION (0.1f) // no useful units. just a scale
 #define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
@@ -135,6 +135,7 @@ namespace C4
 		void SetPlayerMotion(int32 motion);
 
 		long levelTime;
+		float speedTime = 0;				//duration of the spped item
 
 		PowerUp powerUp;
 
