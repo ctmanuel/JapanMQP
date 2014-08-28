@@ -243,7 +243,9 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		player->AddSpeed(-2.0f);
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
@@ -265,6 +267,9 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
 		sound->Play();
+		Sound* sound2 = new Sound;
+		sound2->Load("SoundEffects/derez");
+		sound2->Play();
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);

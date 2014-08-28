@@ -130,11 +130,6 @@ void MainPlayerController::SplinePoint(Point3D position)
 
 void MainPlayerController::Move(void)
 {
-	// temp
-	char s[64];
-	sprintf(s, "Speed: %f", speed);
-	TheEngine->Report(s);
-
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -319,6 +314,13 @@ PowerUp MainPlayerController::GetPowerUp(void)
 void MainPlayerController::SetPowerUp(PowerUp powerUp)
 {
 	this->powerUp = powerUp;
+
+	if (powerUp != powerUpNone)
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/pickup");
+		sound->Play();
+	}
 }
 
 void MainPlayerController::UsePowerUp(void)
@@ -375,7 +377,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		AddSpeed(-2.0f);
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
@@ -397,6 +401,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
 		sound->Play();
+		Sound* sound2 = new Sound;
+		sound2->Load("SoundEffects/derez");
+		sound2->Play();
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);
