@@ -1,5 +1,6 @@
 #include "HandController.h"
 #include "Game.h"
+
 #include "string.h"
 
 using namespace C4;
@@ -131,7 +132,7 @@ void HandController::Preprocess(void)
 	// Set up particle system
 	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
 	{
-		lps = new LightParticleSystem(Point3D(10.0f, -10.0f, 1.0f), Point3D(10.0f, 10.0f, 1.0f));
+		lps = new LightParticleSystem();
 		GetTargetNode()->GetRootNode()->AddNewSubnode(lps);
 	}
 }
@@ -225,7 +226,8 @@ void HandController::Move(void)
 	if (lps)
 	{
 		lps->SetStart(GetTargetNode()->GetWorldPosition());
-		lps->SetEnd(player->GetLightPathFront());
+		lps->SetEndLeft(lightPath->GetFrontLeft());
+		lps->SetEndRight(lightPath->GetFrontRight());
 	}
 }
 

@@ -130,6 +130,11 @@ void MainPlayerController::SplinePoint(Point3D position)
 
 void MainPlayerController::Move(void)
 {
+	// temp
+	char s[64];
+	sprintf(s, "Speed: %f", speed);
+	TheEngine->Report(s);
+
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
 	TheGame->SetLastLevelTime(levelTime);
@@ -258,7 +263,7 @@ void MainPlayerController::Move(void)
 	}
 
 	// Adjust path sound frequency based on speed
-	pathSound->VaryFrequency(speed / START_SPEED, 0);
+	pathSound->VaryFrequency(speed / BASE_SPEED, 0);
 
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();

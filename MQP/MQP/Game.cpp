@@ -112,6 +112,9 @@ Game::Game() :
 		file.Close();
 	}
 
+	// temp
+	settings[0] = 0;
+
 	// Load music and play menu music
 	levelMusic = nullptr;
 	WaveStreamer* menuStreamer = new WaveStreamer;
@@ -157,8 +160,11 @@ void Game::StartLevel(const char* name)
 		// Going to the menu
 
 		// Play music
-		levelMusic->Stop();
-		levelMusic->Release();
+		if (levelMusic)
+		{
+			levelMusic->Stop();
+			levelMusic->Release();
+		}
 		WaveStreamer* menuStreamer = new WaveStreamer;
 		menuStreamer->AddComponent("Hikarimichi");
 		menuMusic = new Sound;
