@@ -261,7 +261,8 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
-		sound->Play();
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		Sound* sound2 = new Sound;
 		sound2->Load("SoundEffects/derez");
 		sound2->Play();

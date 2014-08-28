@@ -56,7 +56,6 @@ playerInteractor(this)
 
  MainPlayerController::~MainPlayerController()
  {
-
 	 if (!(GetTargetNode()->GetManipulator()))
 	 {
 		 pathSound->Stop();
@@ -118,7 +117,8 @@ Controller *MainPlayerController::Replicate(void) const
 		 WaveStreamer* streamer = new WaveStreamer;
 		 pathSound->Load("SoundEffects/path-looping");
 		 pathSound->SetLoopCount(kSoundLoopInfinite);
-		 pathSound->Play();
+		 pathSound->Delay(1);
+		 pathSound->VaryVolume((float)TheGame->GetSoundVolume() / 100.0f, 0);
 	 }
 
 	 banking = false;
@@ -222,7 +222,7 @@ void MainPlayerController::Move(void)
 				bankSound->SetLoopCount(kSoundLoopInfinite);
 				bankSound->Delay(10);
 				bankSound->VaryVolume(0.0f, 0);
-				bankSound->VaryVolume(0.5f, 500);
+				bankSound->VaryVolume(0.5f * ((float)(TheGame->GetSoundVolume()) / 100.0f), 500);
 			}
 		}
 	}
@@ -407,7 +407,8 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
-		sound->Play();
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		Sound* sound2 = new Sound;
 		sound2->Load("SoundEffects/derez");
 		sound2->Play();
@@ -429,7 +430,12 @@ RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyC
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
-		sound->Play();
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+		Sound* sound2 = new Sound;
+		sound2->Load("SoundEffects/derez");
+		sound2->Play();
+		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return kRigidBodyUnchanged;
