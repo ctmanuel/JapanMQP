@@ -252,13 +252,15 @@ void MainPlayerController::Move(void)
 		speed = MIN_SPEED;
 	}
 
+	/*
 	if (speedTime <= 0){
-		AddSpeed(-(speed-prevSpeed));
-		prevSpeed = speed;
+		AddSpeed(-5);
 	}
 	else if (speedTime > 0){
 		speedTime--;
 	}
+	*/
+
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
 	{
@@ -266,7 +268,7 @@ void MainPlayerController::Move(void)
 	}
 
 	// Adjust path sound frequency based on speed
-	pathSound->VaryFrequency(speed / START_SPEED, 0);
+	pathSound->VaryFrequency(speed / BASE_SPEED, 0);
 
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
@@ -303,7 +305,6 @@ Point3D MainPlayerController::GetLightPathFront(void)
 void MainPlayerController::AddSpeed(float speedChange)
 {
 	speed += speedChange;
-	prevSpeed += speedChange;
 
 	if (speed > MAX_SPEED)
 	{
@@ -323,6 +324,13 @@ PowerUp MainPlayerController::GetPowerUp(void)
 void MainPlayerController::SetPowerUp(PowerUp powerUp)
 {
 	this->powerUp = powerUp;
+
+	if (powerUp != powerUpNone)
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/pickup");
+		sound->Play();
+	}
 }
 
 void MainPlayerController::UsePowerUp(void)
@@ -330,9 +338,8 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		prevSpeed = speed;
-		speed = MAX_SPEED;
-		speedTime = 300;		//roughly 3 seconds
+		//AddSpeed(5);
+		//speedTime = 600;		//roughly 5 seconds
 		break;
 	case powerUpRingExpander:
 		// do someting
@@ -377,7 +384,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		AddSpeed(-2.0f);
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
@@ -399,6 +408,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
 		sound->Play();
+		Sound* sound2 = new Sound;
+		sound2->Load("SoundEffects/derez");
+		sound2->Play();
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);
