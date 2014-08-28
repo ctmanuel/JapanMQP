@@ -318,8 +318,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.01f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.01f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.005f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.005f;
 
 			// Hand orientation
 			Quaternion x, y, z;
@@ -328,16 +328,14 @@ void MenuHandController::Move(void)
 			z.SetRotationAboutZ(K::pi_over_2);
 			GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
 
-			if (pushed) // This is true on the frame LoadWorld is called
+			if (pushed)
 			{
-				if (hand.grabStrength() < 0.2) // So is this
+				if (hand.grabStrength() < 0.2)
 				{
 					pushed = false;
-					// This returns a non-null but still invalid pointer. interactor is a member of the controller.
 					const Node* interactionNode = interactor.GetInteractionNode(); 
 					if (interactionNode)
 					{
-						// I try to call GetController on the invalid pointer and bad things happen
 						Controller* interactionController = interactionNode->GetController(); 
 						if (interactionController)
 						{
