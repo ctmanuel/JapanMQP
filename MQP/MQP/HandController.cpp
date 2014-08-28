@@ -175,6 +175,12 @@ void HandController::Move(void)
 				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
 				rollTimer = 0;
 			}
+
+			// Check for power up use
+			if (hand.grabStrength() >= 1.0f)
+			{
+				player->UsePowerUp();
+			}
 		}
 		else // Hand not in range of Leap
 		{
@@ -225,6 +231,7 @@ void HandController::Move(void)
 
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
+<<<<<<< HEAD
 	/*
 	Engine::Report("Made it here");
 	Geometry *geometry = contact->GetContactGeometry();
@@ -234,6 +241,51 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 	return (kRigidBodyContactsBroken);
 	*/
 	return kRigidBodyUnchanged;
+=======
+	Geometry* geometry = contact->GetContactGeometry();
+	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/downer");
+		sound->Play();
+		SetLinearVelocity(GetOriginalLinearVelocity());
+		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+		player->AddSpeed(-2.0f);
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		return (kRigidBodyContactsBroken);
+	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		player->SetPowerUp(powerUpSpeedBoost);
+		return (kRigidBodyContactsBroken);
+	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		player->SetPowerUp(powerUpRingExpander);
+		return (kRigidBodyContactsBroken);
+	}
+	else
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/crash");
+		sound->Play();
+		TheGame->SetLevelEndState(levelEndFailed);
+		TheGame->StartLevel("Menu");
+		return (kRigidBodyUnchanged);
+	}
+}
+
+RigidBodyStatus HandController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
+{
+	SetLinearVelocity(Vector3D(0.0f, 0.0f, 0.0f));
+	SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+	return (kRigidBodyUnchanged);
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
 }
 
 void HandController::SetLightPath(LightPathController* lightPath)
@@ -248,6 +300,7 @@ MenuHandController::MenuHandController() :
 	interactor(this)
 {
 	pushed = false;
+	firstFrame = 3;
 }
 
 MenuHandController::~MenuHandController()
@@ -265,7 +318,7 @@ void MenuHandController::Move(void)
 {
 	// Move back and forth
 
-	Vector3D leapMotion;
+	Vector3D leapMotion = Vector3D(0.0f, 0.0f, 0.0f);
 	if (leap.isConnected())
 	{
 		Leap::HandList hands = leap.frame().hands();
@@ -322,13 +375,20 @@ void MenuHandController::Move(void)
 		}
 	}
 
-	GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f) + leapMotion);
+	if (firstFrame)
+	{
+		GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f));
+		firstFrame--;
+	}
+	else
+	{
+		GetTargetNode()->SetNodePosition(Point3D(1.0f, 0.0f, 1.0f) + leapMotion);
+	}
 	GetTargetNode()->Invalidate();
 
 	// Update interactor
 	Point3D pos = GetTargetNode()->GetNodePosition();
 	interactor.SetInteractionProbe(pos, pos + Point3D(5.0f, 0.0f, 0.0f));
-
 }
 
 MenuHandInteractor::MenuHandInteractor(MenuHandController* controller)

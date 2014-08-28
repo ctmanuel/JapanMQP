@@ -11,8 +11,6 @@ GameWorld::GameWorld(const char* name) : World(name)
 
 GameWorld::~GameWorld()
 {
-	music->Stop();
-	music->Release();
 }
 
 WorldResult GameWorld::Preprocess(void)
@@ -30,16 +28,6 @@ WorldResult GameWorld::Preprocess(void)
 	camera.Preprocess();
 	SetCamera(&camera);
 
-	// Play main game music
-	music = new Sound;
-	WaveStreamer *streamer = new WaveStreamer;
-	//branch here for differing music by world
-	streamer->AddComponent("A_Light_Groove");
-	music->Stream(streamer);
-	music->SetLoopCount(kSoundLoopInfinite);
-	music->Play();
-
-
 	return kWorldOkay;
 	
 }
@@ -51,8 +39,13 @@ void GameWorld::Interact(void)
 	//segment extending two meters from the players head in the direction that the 
 	//camera is looking
 
+<<<<<<< HEAD
 	//HandController *controller = TheGame->GetHandController();
 	/*
+=======
+	/*
+	HandController *controller = TheGame->GetHandController();
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
 	if (controller)
 	{
 		const Point3D& p = controller->GetTargetNode()->GetWorldPosition();
@@ -62,6 +55,10 @@ void GameWorld::Interact(void)
 		controller->GetHandInteractor()->SetInteractionProbe(position, position * 1.0F);
 	}
 	*/
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
 	World::Interact();
 }
 

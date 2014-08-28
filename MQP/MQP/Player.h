@@ -23,16 +23,12 @@
 #define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
 
 // Speed stuff
-#define START_SPEED (1.0f) // m/s
-#define MIN_SPEED (1.0f)
-#define MAX_SPEED (5.0f)
-#define HILL_ACCELERATION (0.1f)
-#define START_SPEED (1.0f) // m/s
-#define MIN_SPEED (1.0f) // m/s
-#define MAX_SPEED (5.0f) // m/s
-#define BASE_SPEED (2.0f) // m/s, if below this speed, player will gradually accelerate towards it
-#define BASE_ACCELERATION (0.2f) // m/s/s
-#define BASE_CLIMB_THRESHOLD (0.2f) // m/s vertical that player must be below to get base acceleration
+#define START_SPEED (10.0f) // m/s
+#define MIN_SPEED (10.0f) // m/s
+#define MAX_SPEED (50.0f) // m/s
+#define BASE_SPEED (20.0f) // m/s, if below this speed, player will gradually accelerate towards it
+#define BASE_ACCELERATION (2.0f) // m/s/s
+#define BASE_CLIMB_THRESHOLD (2.0f) // m/s vertical that player must be below to get base acceleration
 #define HILL_ACCELERATION (0.1f) // no useful units. just a scale
 #define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
 #define TURN_ACCELERATION (1.0f) // m/s/s
@@ -45,9 +41,17 @@ namespace C4
 	{
 		 kControllerPlayer = 'plr'
 	};
+
 	enum
 	{
 		 kModelPlayer = 'plr'
+	};
+
+	enum PowerUp
+	{
+		powerUpNone,
+		powerUpSpeedBoost,
+		powerUpRingExpander
 	};
 
 	class MainPlayerController;
@@ -111,7 +115,7 @@ namespace C4
 			
 		Point3D				previousCenterOfMass;
 
-		Vector3D				direction = Vector3D(0.0f,0.0f,0.0f);
+		Vector3D			direction = Vector3D(0.0f,0.0f,0.0f);
 		
 		//we keep an interactor object here in the controller
 		PlayerInteractor	playerInteractor;
@@ -123,7 +127,6 @@ namespace C4
 		//player speed
 		float speed = START_SPEED;
 		std::vector<float>	rollHistory;
-		//
 
 		MainPlayerController(const MainPlayerController& playerController);				//private constructor
 		
@@ -132,6 +135,13 @@ namespace C4
 		void SetPlayerMotion(int32 motion);
 
 		long levelTime;
+
+		PowerUp powerUp;
+
+		Sound* pathSound;
+		Sound* bankSound;
+
+		bool banking;
 
 	public:
 
@@ -185,11 +195,15 @@ namespace C4
 		
 		static bool ValidNode(const Node *node);
 
-		void LightpathNode(Node *node);
+		void SplinePoint(Point3D position);
 		void LightpathSpeed(float speed);
 		void ReportLightpathFront(Point3D front);
 		void ReportRoll(float roll);
 		Point3D GetLightPathFront(void);
+		void AddSpeed(float speedChange);
+		PowerUp GetPowerUp(void);
+		void SetPowerUp(PowerUp powerUp);
+		void UsePowerUp(void);
 		
 		void Pack(Packer& data, unsigned long packFlags) const;
 		void Unpack(Unpacker& data, unsigned long unpackFlags);

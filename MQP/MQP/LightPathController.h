@@ -6,11 +6,15 @@
 #include "HandController.h"
 #include "Player.h"
 
-#define PITCH_THRESHOLD (0.2f)
+#define PITCH_THRESHOLD (0.05f)
 #define ROLL_THRESHOLD (0.1f)
-#define YAW_THRESHOLD (0.2f)
+#define YAW_THRESHOLD (0.05f)
 
 #define ROLL_RATE (1.0f) // radians/second
+
+#define SOLIDIFY_TIME (4000) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
+
+#define SPLINE_FREQUENCY (8.0f) // msec before adding front of path to player spline
 
 namespace C4
 {
@@ -20,7 +24,6 @@ namespace C4
 	};
 
 	class HandController;
-
 	class LightPathController : public Controller
 	{
 	private:
@@ -39,13 +42,16 @@ namespace C4
 		float targetRoll;
 		float distance;
 		float speed;
+		float splineTimer;
 
 		HandController* hand;
 		MainPlayerController* player;
 
 		bool firstFrame;
 
-		
+		bool lead;
+		GenericGeometryObject* switchObject;
+		int switchTimer;
 
 	public:
 		LightPathController();
@@ -66,6 +72,7 @@ namespace C4
 		void SetSpeed(float speed);
 		void SetHand(HandController* hand);
 		void SetPlayer(MainPlayerController* player);
+		void SetSwitchObject(GenericGeometryObject* switchObject);
 
 		void ChangePitch(float pitch);
 		void ChangeRoll(float roll);

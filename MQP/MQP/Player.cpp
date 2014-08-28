@@ -1,7 +1,9 @@
 #include "Player.h"
+#include "Game.h"
 
 using namespace C4;
 
+extern Game* TheGame;
 
 MainPlayerController::MainPlayerController(float azimuth) :
 CharacterController(kControllerPlayer),
@@ -16,6 +18,9 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
+
+	TheGame->SetPlayerController(this);
 }
 
 MainPlayerController::MainPlayerController() :
@@ -25,6 +30,9 @@ playerInteractor(this)
 	speed = START_SPEED;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
+
+	TheGame->SetPlayerController(this);
 }
 
  MainPlayerController::MainPlayerController(const MainPlayerController& playerController) :
@@ -40,11 +48,24 @@ playerInteractor(this)
 	modelAltitude = 0.0F;
 
 	levelTime = 0;
+	powerUp = powerUpNone;
+
+	TheGame->SetPlayerController(this);
 }
 
  MainPlayerController::~MainPlayerController()
-{
-	
+ {
+
+	 if (!(GetTargetNode()->GetManipulator()))
+	 {
+		 pathSound->Stop();
+		 pathSound->Release();
+
+		 if (banking)
+		 {
+			 bankSound->VaryVolume(0.0f, 500, true);
+		 }
+	 }
 }
 
 //make duplicate of controller with pointer to current controller
@@ -75,26 +96,43 @@ Controller *MainPlayerController::Replicate(void) const
 	// always be called first, and then the subclass can do whatever 
 	// preprocessing it needs to do.
 		
-	 Controller::Preprocess();
+	 CharacterController::Preprocess();
+
+	 SetRigidBodyFlags(kRigidBodyFixedOrientation);
 
 	 // Spline needs at least two points in front of the player and two points behind.
-	 // These are the points behind.
 	 Point3D position = GetTargetNode()->GetNodePosition();
 	 splinePoints.push_back(SplineVector3D(position.x - 2.0f, position.y, position.z));
 	 splinePoints.push_back(SplineVector3D(position.x - 1.0f, position.y, position.z));
+	 splinePoints.push_back(SplineVector3D(position.x + 0.01f, position.y, position.z));
+	 splinePoints.push_back(SplineVector3D(position.x + 0.02f, position.y, position.z));
 
 	 // Start level time at 0
 	 levelTime = 0;
+
+	 if (!(GetTargetNode()->GetManipulator()))
+	 {
+		 // Play path sound effect
+		 pathSound = new Sound;
+		 WaveStreamer* streamer = new WaveStreamer;
+		 pathSound->Load("SoundEffects/path-looping");
+		 pathSound->SetLoopCount(kSoundLoopInfinite);
+		 pathSound->Play();
+	 }
+
+	 banking = false;
 }
 
-void MainPlayerController::LightpathNode(Node *node){
-	splinePoints.push_back(SplineVector3D(node->GetNodePosition().x, node->GetNodePosition().y, node->GetNodePosition().z));
+void MainPlayerController::SplinePoint(Point3D position)
+{
+	splinePoints.push_back(SplineVector3D(position.x, position.y, position.z));
 }
 
 void MainPlayerController::Move(void)
 {
 	// Update time
 	levelTime += TheTimeMgr->GetDeltaTime();
+	TheGame->SetLastLevelTime(levelTime);
 
 	// Face front of path
 	Vector3D d = Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z()) - GetTargetNode()->GetNodePosition();
@@ -135,16 +173,6 @@ void MainPlayerController::Move(void)
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
-	Vector3D movement = (newPos - oldPos) / (speed * TheTimeMgr->GetFloatDeltaTime());
-
-	if (!isnan(movement.x) && !isnan(movement.y) && !isnan(movement.z))
-	{
-		if (abs(movement.x) > 0.01f || abs(movement.y) > 0.01f || abs(movement.z) > 0.01f)
-		{
-			newPos = (oldPos + (movement * speed * TheTimeMgr->GetFloatDeltaTime() / 30.0f));
-		}
-	}
-	direction = movement;
 	SetRigidBodyPosition(newPos);
 
 	// Change speed based on uphill/downhill
@@ -173,10 +201,38 @@ void MainPlayerController::Move(void)
 		}
 	}
 
-	bool turnSlow = (abs(curve) > TURN_SLOW_THRESHOLD) && (((curve / abs(curve)) * roll) < ROLL_REQUIREMENT);
-	if (turnSlow)
+	bool turnSlow = false;
+	bool bankingPrev = banking;
+	if ((abs(curve) > TURN_SLOW_THRESHOLD))
 	{
-		speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+		if ((((curve / abs(curve)) * roll) < ROLL_REQUIREMENT))
+		{
+			speed -= TURN_ACCELERATION * TheTimeMgr->GetFloatDeltaTime() / 1000.0f;
+			turnSlow = true;
+			banking = false;
+		}
+		else
+		{
+			if (!banking)
+			{
+				banking = true;
+				bankSound = new Sound;
+				bankSound->Load("SoundEffects/bank-looping");
+				bankSound->SetLoopCount(kSoundLoopInfinite);
+				bankSound->Delay(10);
+				bankSound->VaryVolume(0.0f, 0);
+				bankSound->VaryVolume(0.5f, 500);
+			}
+		}
+	}
+	else
+	{
+		banking = false;
+	}
+	// If banking is ending this frame, stop sound
+	if (bankingPrev && !banking)
+	{
+		bankSound->VaryVolume(0.0f, 500, true);
 	}
 
 	// Base acceleration
@@ -201,6 +257,9 @@ void MainPlayerController::Move(void)
 		splinePoints.erase(splinePoints.begin());
 	}
 
+	// Adjust path sound frequency based on speed
+	pathSound->VaryFrequency(speed / START_SPEED, 0);
+
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
 
@@ -215,9 +274,6 @@ void MainPlayerController::Move(void)
 	yawm.SetRotationAboutZ(yaw);
 	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
 	*/
-
-	// Potentially set off triggers
-	GetTargetNode()->GetWorld()->ActivateTriggers(oldPos, newPos, 0.0f);
  }
 
 void MainPlayerController::ReportLightpathFront(Point3D front)
@@ -234,6 +290,53 @@ void MainPlayerController::ReportRoll(float roll)
 Point3D MainPlayerController::GetLightPathFront(void)
 {
 	return Point3D(lightPathFront.x(), lightPathFront.y(), lightPathFront.z());
+}
+
+void MainPlayerController::AddSpeed(float speedChange)
+{
+	speed += speedChange;
+
+	if (speed > MAX_SPEED)
+	{
+		speed = MAX_SPEED;
+	}
+	if (speed < MIN_SPEED)
+	{
+		speed = MIN_SPEED;
+	}
+}
+
+PowerUp MainPlayerController::GetPowerUp(void)
+{
+	return powerUp;
+}
+
+void MainPlayerController::SetPowerUp(PowerUp powerUp)
+{
+	this->powerUp = powerUp;
+}
+
+void MainPlayerController::UsePowerUp(void)
+{
+	switch (powerUp)
+	{
+	case powerUpSpeedBoost:
+		// do something
+
+		// temp
+		TheEngine->Report("Using speed boost!");
+
+		break;
+	case powerUpRingExpander:
+		// do someting
+
+		// temp
+		TheEngine->Report("Using ring expander!");
+
+		break;
+	}
+
+	powerUp = powerUpNone;
 }
 
 void MainPlayerController::SetPlayerMotion(int32 motion)
@@ -257,12 +360,59 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
-	TheEngine->Report("made it here");
-	return kRigidBodyUnchanged;
+	Geometry* geometry = contact->GetContactGeometry();
+	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/downer");
+		sound->Play();
+		SetLinearVelocity(GetOriginalLinearVelocity());
+		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+		AddSpeed(-2.0f);
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		return (kRigidBodyContactsBroken);
+	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		powerUp = powerUpSpeedBoost;
+		return (kRigidBodyContactsBroken);
+	}
+	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
+	{
+		GetPhysicsController()->PurgeGeometryContacts(geometry);
+		delete geometry;
+		powerUp = powerUpRingExpander;
+		return (kRigidBodyContactsBroken);
+	}
+	else
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/crash");
+		sound->Play();
+		TheGame->SetLevelEndState(levelEndFailed);
+		TheGame->StartLevel("Menu");
+		return (kRigidBodyUnchanged);
+	}
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
 {
-	TheEngine->Report("handling rigid body contact");
-	return kRigidBodyUnchanged;
+	if (contactBody->GetControllerType() == kControllerAnimatedHand)
+	{
+		SetLinearVelocity(Vector3D(0.0f, 0.0f, 0.0f));
+		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+		return kRigidBodyUnchanged;
+	}
+	else
+	{
+		Sound* sound = new Sound;
+		sound->Load("SoundEffects/crash");
+		sound->Play();
+		TheGame->SetLevelEndState(levelEndFailed);
+		TheGame->StartLevel("Menu");
+		return kRigidBodyUnchanged;
+	}
 }

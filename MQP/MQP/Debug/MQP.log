@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿Build started 8/20/2014 2:15:04 PM.
      1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -15,6 +16,15 @@
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib pthreadVC2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
+=======
+﻿Build started 8/27/2014 21:01:37.
+     1>Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
+         Game.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
          Debug\looping_cubic_b_spline.obj
          Debug\cr_spline.obj
          Debug\cubic_hermite_spline.obj
@@ -43,6 +53,7 @@
          Debug\LightPathController.obj
          Debug\Player.obj
          Debug\PlayerInteractor.obj
+<<<<<<< HEAD
          Debug\ScriptMethods.obj
          Debug\ResetAction.obj
          Debug\Tank.obj
@@ -54,10 +65,16 @@
      1>Link:
          MQP.vcxproj -> C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
 >>>>>>> 7dbf7c7ecdf1f55dc98ec9142ae934ba18d3e3f6
+=======
+         Debug\Ring.obj
+         Debug\ScriptMethods.obj
+         Debug\ResetAction.obj
+         MQP.vcxproj -> C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
        PostBuildEvent:
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
          :VCEnd
          ..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll
          1 File(s) copied
@@ -65,12 +82,16 @@
          1 File(s) copied
          ..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll
          1 File(s) copied
-     1>Done Building Project "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
 
 Build succeeded.
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 Time Elapsed 00:00:07.60
 =======
 Time Elapsed 00:00:00.20
 >>>>>>> 7dbf7c7ecdf1f55dc98ec9142ae934ba18d3e3f6
+=======
+Time Elapsed 00:00:03.21
+>>>>>>> 30d414e3bfe5dad1a4aef85eb100051deb1bd3c5
