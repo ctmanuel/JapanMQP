@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Game.h"
+#include <ctime>
 
 using namespace C4;
 
@@ -251,6 +252,12 @@ void MainPlayerController::Move(void)
 		speed = MIN_SPEED;
 	}
 
+	if (speedTime <= 0){
+		AddSpeed(-5);
+	}
+	else if (speedTime > 0){
+		speedTime--;
+	}
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
 	{
@@ -328,11 +335,8 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		// do something
-
-		// temp
-		TheEngine->Report("Using speed boost!");
-
+		AddSpeed(5);
+		speedTime = 600;		//roughly 5 seconds
 		break;
 	case powerUpRingExpander:
 		// do someting

@@ -134,6 +134,7 @@ namespace C4
 		void SetPlayerMotion(int32 motion);
 
 		long levelTime;
+		float speedTime = 0;				//duration of the spped item
 
 		PowerUp powerUp;
 

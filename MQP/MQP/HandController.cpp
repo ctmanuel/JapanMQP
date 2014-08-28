@@ -203,11 +203,6 @@ void HandController::Move(void)
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
 	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
-	//SetRigidBodyTransform
-	//Vector3D propel = GetTargetNode()->GetNodeTransform()[0];
-	/*propel = Vector2D (player->GetDirection().x, player->GetDirection().y);
-	//SetExternalForce(newPosition *0.1F);
-	//SetLinearVelocity(newPosition);*/
 	GetTargetNode()->Invalidate();
 
 	if (lightPath)
@@ -323,8 +318,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.01f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.01f;
 
 			// Hand orientation
 			Quaternion x, y, z;
