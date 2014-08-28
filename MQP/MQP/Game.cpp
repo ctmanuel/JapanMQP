@@ -112,9 +112,6 @@ Game::Game() :
 		file.Close();
 	}
 
-	// temp
-	settings[0] = 0;
-
 	// Load music and play menu music
 	levelMusic = nullptr;
 	WaveStreamer* menuStreamer = new WaveStreamer;
