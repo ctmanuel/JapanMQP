@@ -126,6 +126,9 @@ namespace C4
 
 		//player speed
 		float speed = START_SPEED;
+		//presious speed
+		float prevSpeed = 0;
+
 		std::vector<float>	rollHistory;
 
 		MainPlayerController(const MainPlayerController& playerController);				//private constructor
