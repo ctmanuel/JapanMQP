@@ -329,7 +329,8 @@ void MainPlayerController::SetPowerUp(PowerUp powerUp)
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/pickup");
-		sound->Play();
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 	}
 }
 
@@ -379,7 +380,8 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/downer");
-		sound->Play();
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		SetLinearVelocity(GetOriginalLinearVelocity());
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		AddSpeed(-2.0f);
@@ -434,7 +436,8 @@ RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyC
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		Sound* sound2 = new Sound;
 		sound2->Load("SoundEffects/derez");
-		sound2->Play();
+		sound2->Delay(1);
+		sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
