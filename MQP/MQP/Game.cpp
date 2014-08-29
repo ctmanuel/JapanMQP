@@ -39,6 +39,8 @@ Game::Game() :
 	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
 	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
 	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+	smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
+	largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
 	
 	//Animated Object Registration
 	//Animated Hand Registration

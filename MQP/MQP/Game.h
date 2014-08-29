@@ -51,7 +51,9 @@ enum
 	kModelSpeedBoost = 'sbst',
 	kModelRingExpander = 'rexp',
 	kModelHandHeldSpeedBoost = 'hhsb',
-	kModelHandHeldRingExpander = 'hhrx'
+	kModelHandHeldRingExpander = 'hhrx',
+	kModelSmallBuilding = 'sbil',
+	kModelLargeBuilding = 'lbil'
 };
 
 class Game : public Singleton<Game>, public Application
@@ -71,6 +73,8 @@ private:
 	ModelRegistration						ringExpanderModelReg;
 	ModelRegistration						handHeldSpeedBoostModelReg;
 	ModelRegistration						handHeldRingExpanderModelReg;
+	ModelRegistration						smallBuildingModelReg;
+	ModelRegistration						largeBuildingModelReg;
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;
