@@ -413,7 +413,8 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		Sound* sound2 = new Sound;
 		sound2->Load("SoundEffects/derez");
-		sound2->Play();
+		sound2->Delay(1);
+		sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);

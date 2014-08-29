@@ -139,6 +139,15 @@ void HandController::Preprocess(void)
 
 void HandController::Move(void)
 {
+
+	// temp
+	char p[64];
+	sprintf(p, "player x: %f, y: %f, z: %f", player->GetTargetNode()->GetNodePosition().x, player->GetTargetNode()->GetNodePosition().y, player->GetTargetNode()->GetNodePosition().z);
+	TheEngine->Report(p);
+	char s[64];
+	sprintf(s, "x: %f, y: %f, z: %f", GetTargetNode()->GetNodePosition().x, GetTargetNode()->GetNodePosition().y, GetTargetNode()->GetNodePosition().z);
+	TheEngine->Report(s);
+
 	//animate model
 	Model *myModel = GetTargetModel();
 	myModel->Animate();
@@ -205,15 +214,17 @@ void HandController::Move(void)
 	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
 	GetTargetNode()->Invalidate();
 
+	// temp
+	char r[64];
+	sprintf(r, "player x: %f, y: %f, z: %f", player->GetTargetNode()->GetNodePosition().x, player->GetTargetNode()->GetNodePosition().y, player->GetTargetNode()->GetNodePosition().z);
+	TheEngine->Report(r);
+	char q[64];
+	sprintf(q, "x: %f, y: %f, z: %f", GetTargetNode()->GetNodePosition().x, GetTargetNode()->GetNodePosition().y, GetTargetNode()->GetNodePosition().z);
+	TheEngine->Report(q);
+
 	if (lightPath)
 	{
-		Point3D position = GetTargetNode()->GetNodePosition();
-
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
-
-		//temp
-		//leapMotion.y = 0.06f;
-
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
 	}
 
@@ -260,6 +271,13 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 	}
 	else
 	{
+
+		// temp
+		TheEngine->Report("Hand hit geometry");
+		char s[64];
+		sprintf(s, "x: %f, y: %f, z: %f", GetTargetNode()->GetNodePosition().x, GetTargetNode()->GetNodePosition().y, GetTargetNode()->GetNodePosition().z);
+		TheEngine->Report(s);
+
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
 		sound->Delay(1);
@@ -333,7 +351,7 @@ void MenuHandController::Move(void)
 
 			if (pushed)
 			{
-				if (hand.grabStrength() < 0.2)
+				if (hand.grabStrength() < 0.4)
 				{
 					pushed = false;
 					const Node* interactionNode = interactor.GetInteractionNode(); 
@@ -349,7 +367,7 @@ void MenuHandController::Move(void)
 			}
 
 			// Grip
-			if (hand.grabStrength() >= 1.0)
+			if (hand.grabStrength() >= 0.5)
 			{
 				pushed = true;
 				// Send activate event
