@@ -339,7 +339,8 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		//AddSpeed(5);
+		// temp
+		AddSpeed(5);
 		//speedTime = 600;		//roughly 5 seconds
 		break;
 	case powerUpRingExpander:
