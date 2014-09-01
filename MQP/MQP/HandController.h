@@ -83,6 +83,8 @@ namespace C4
 		MainPlayerController* player;
 
 		int rollTimer;
+		Point3D leapMotion;
+		float handRoll;
 
 		// Light particle system
 		LightParticleSystem* lps;

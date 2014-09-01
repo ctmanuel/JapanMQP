@@ -99,6 +99,9 @@ void HandController::Preprocess(void)
 	//Give it 0 gravity
 	SetGravityMultiplier(0.0F);
 
+	leapMotion = Point3D(0.0f, 0.0f, 0.0f);
+	handRoll = 0.0f;
+
 	//use frame animator to play animation resources for the hand model
 	Model *myModel = GetTargetModel();
 	frameAnimator = new FrameAnimator(myModel);
@@ -144,7 +147,6 @@ void HandController::Move(void)
 	myModel->Animate();
 
 	Point3D basePosition(1.0f, 0.0f, 1.0f);
-	Point3D leapMotion = Point3D(0.0f, 0.0f, 0.0f);
 	Point3D newPosition = Point3D(0.0f, 0.0f, 0.0f);
 
 	if (leap.isConnected())
@@ -157,25 +159,10 @@ void HandController::Move(void)
 			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
 			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
 
-			Quaternion x;// , y, z;
-			x.SetRotationAboutX(-1 * hand.palmNormal().roll());
+			handRoll = -1.0f * hand.palmNormal().roll();
+			//Quaternion x;// , y, z;
 			//y.SetRotationAboutY(-1 * hand.direction().pitch());
 			//z.SetRotationAboutZ((-1 * hand.direction().yaw()));
-			GetTargetNode()->SetNodeMatrix3D((x).GetRotationMatrix() * startOrientation);
-			SetRigidBodyMatrix3D(x.GetRotationMatrix() * startOrientation);
-
-			if (lightPath)
-			{
-				lightPath->ChangeRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
-			}
-
-			// Report roll to player if it's time
-			rollTimer += TheTimeMgr->GetDeltaTime();
-			if (rollTimer >= ROLL_REPORT_FREQUENCY)
-			{
-				player->ReportRoll(hand.palmNormal().roll() * -1.0f * ROLL_SENSITIVITY);
-				rollTimer = 0;
-			}
 
 			// Check for power up use
 			if (hand.grabStrength() >= 1.0f)
@@ -185,30 +172,33 @@ void HandController::Move(void)
 		}
 		else // Hand not in range of Leap
 		{
-			// Go to default position
-			Matrix3D i;
-			i.SetIdentity();
-			SetRigidBodyMatrix3D(i * startOrientation);
-
-			// Report roll to player if it's time
-			rollTimer += TheTimeMgr->GetDeltaTime();
-			if (rollTimer >= ROLL_REPORT_FREQUENCY)
-			{
-				player->ReportRoll(0.0f);
-				rollTimer = 0;
-			}
+			// Do something to show player that it's out of range
 		}
 	}
+
+	Quaternion rollQ;
+	rollQ.SetRotationAboutX(handRoll);
+	GetTargetNode()->SetNodeMatrix3D(rollQ.GetRotationMatrix() * startOrientation);
+	SetRigidBodyMatrix3D(rollQ.GetRotationMatrix() * startOrientation);
 
 	newPosition = basePosition + leapMotion;
 	SetRigidBodyPosition(newPosition);
 	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
 	GetTargetNode()->Invalidate();
 
+	// Report roll to player if it's time
+	rollTimer += TheTimeMgr->GetDeltaTime();
+	if (rollTimer >= ROLL_REPORT_FREQUENCY)
+	{
+		player->ReportRoll(handRoll * ROLL_SENSITIVITY);
+		rollTimer = 0;
+	}
+
 	if (lightPath)
 	{
 		lightPath->ChangePitch(leapMotion.z * PITCH_SENSITIVITY);
 		lightPath->ChangeYaw(leapMotion.y * YAW_SENSITIVITY * (float)TheTimeMgr->GetDeltaTime());
+		lightPath->ChangeRoll(handRoll * ROLL_SENSITIVITY);
 	}
 
 	// Update position of light particle system
