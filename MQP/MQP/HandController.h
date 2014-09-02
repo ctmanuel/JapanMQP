@@ -15,6 +15,8 @@
 #define ROLL_SENSITIVITY 1.0f
 #define YAW_SENSITIVITY 0.0025f
 #define ROLL_REPORT_FREQUENCY 100 // milliseconds between roll reports to player
+#define MAX_LEAP_Y 0.75f 
+#define MAX_LEAP_Z 0.75f
 
 
 namespace C4

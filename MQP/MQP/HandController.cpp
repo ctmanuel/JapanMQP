@@ -147,7 +147,6 @@ void HandController::Move(void)
 	myModel->Animate();
 
 	Point3D basePosition(1.0f, 0.0f, 1.0f);
-	Point3D newPosition = Point3D(0.0f, 0.0f, 0.0f);
 
 	if (leap.isConnected())
 	{
@@ -155,9 +154,30 @@ void HandController::Move(void)
 		if (!hands.isEmpty())
 		{
 			Leap::Hand hand = hands.frontmost();
+			/*
 			leapMotion.x = hand.stabilizedPalmPosition()[2] * -0.002f;
 			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
 			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
+			*/
+			leapMotion.x = 0.0f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			if (leapMotion.y > MAX_LEAP_Y)
+			{
+				leapMotion.y = MAX_LEAP_Y;
+			}
+			if (leapMotion.y < (MAX_LEAP_Y * -1.0f))
+			{
+				leapMotion.y = (MAX_LEAP_Y * -1.0f);
+			}
+			if (leapMotion.z > MAX_LEAP_Z)
+			{
+				leapMotion.z = MAX_LEAP_Z;
+			}
+			if (leapMotion.z < (MAX_LEAP_Z * -1.0f))
+			{
+				leapMotion.z = (MAX_LEAP_Z * -1.0f);
+			}
 
 			handRoll = -1.0f * hand.palmNormal().roll();
 			//Quaternion x;// , y, z;
@@ -181,8 +201,7 @@ void HandController::Move(void)
 	GetTargetNode()->SetNodeMatrix3D(rollQ.GetRotationMatrix() * startOrientation);
 	SetRigidBodyMatrix3D(rollQ.GetRotationMatrix() * startOrientation);
 
-	newPosition = basePosition + leapMotion;
-	SetRigidBodyPosition(newPosition);
+	SetRigidBodyPosition(basePosition + leapMotion);
 	SetRigidBodyTransform(player->GetTargetNode()->GetWorldTransform() * GetTargetNode()->GetNodeTransform());
 	GetTargetNode()->Invalidate();
 
@@ -305,8 +324,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.005f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.005f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
 
 			// Hand orientation
 			Quaternion x, y, z;
