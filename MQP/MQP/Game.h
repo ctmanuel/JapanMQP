@@ -109,8 +109,7 @@ private:
 
 	MainPlayerController* playerController;
 
-	Sound* menuMusic;
-	Sound* levelMusic;
+	Sound* music;
 
 public:
 

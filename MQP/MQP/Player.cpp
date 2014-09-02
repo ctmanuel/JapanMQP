@@ -339,6 +339,7 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
+		// temp
 		//AddSpeed(5);
 		//speedTime = 600;		//roughly 5 seconds
 		break;

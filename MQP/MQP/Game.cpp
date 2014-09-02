@@ -115,14 +115,13 @@ Game::Game() :
 	}
 
 	// Load music and play menu music
-	levelMusic = nullptr;
 	WaveStreamer* menuStreamer = new WaveStreamer;
 	menuStreamer->AddComponent("Hikarimichi");
-	menuMusic = new Sound;
-	menuMusic->Stream(menuStreamer);
-	menuMusic->SetLoopCount(kSoundLoopInfinite);
-	menuMusic->Delay(10);
-	menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+	music = new Sound;
+	music->Stream(menuStreamer);
+	music->SetLoopCount(kSoundLoopInfinite);
+	music->Delay(10);
+	music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 	playerController = nullptr;
 }
@@ -159,18 +158,15 @@ void Game::StartLevel(const char* name)
 		// Going to the menu
 
 		// Play music
-		if (levelMusic)
-		{
-			levelMusic->Stop();
-			levelMusic->Release();
-		}
+		music->Stop();
+		music->Release();
 		WaveStreamer* menuStreamer = new WaveStreamer;
 		menuStreamer->AddComponent("Hikarimichi");
-		menuMusic = new Sound;
-		menuMusic->Stream(menuStreamer);
-		menuMusic->SetLoopCount(kSoundLoopInfinite);
-		menuMusic->Delay(10);
-		menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+		music = new Sound;
+		music->Stream(menuStreamer);
+		music->SetLoopCount(kSoundLoopInfinite);
+		music->Delay(10);
+		music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 
 		// Check if player just got best time on a level
@@ -213,15 +209,15 @@ void Game::StartLevel(const char* name)
 	else // not the menu
 	{
 		// play music
-		menuMusic->Stop();
-		menuMusic->Release();
-		levelMusic = new Sound;
+		music->Stop();
+		music->Release();
+		music = new Sound;
 		WaveStreamer *levelStreamer = new WaveStreamer;
 		levelStreamer->AddComponent("A_Light_Groove");
-		levelMusic->Stream(levelStreamer);
-		levelMusic->SetLoopCount(kSoundLoopInfinite);
-		levelMusic->Delay(10);
-		levelMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+		music->Stream(levelStreamer);
+		music->SetLoopCount(kSoundLoopInfinite);
+		music->Delay(10);
+		music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 		if (Text::CompareTextCaseless(name, "level1"))
 		{
@@ -469,7 +465,7 @@ int Game::GetRiftSensitivity(void)
 void Game::SetMusicVolume(int musicVolume)
 {
 	settings[0] = musicVolume;
-	menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+	music->VaryVolume((float)settings[0] / 100.0f, 0);
 }
 
 void Game::SetSoundVolume(int soundVolume)
