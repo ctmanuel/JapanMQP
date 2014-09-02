@@ -12,53 +12,53 @@ Application* ConstructApplication(void)
 
 Game::Game() :
 
-	Singleton<Game>(TheGame),														
+Singleton<Game>(TheGame),
 
-	// The display event handler encapsulates a function that gets called
-	// when the Display Manager changes something like the screen resolution.
+// The display event handler encapsulates a function that gets called
+// when the Display Manager changes something like the screen resolution.
 
-	displayEventHandler(&HandleDisplayEvent),
+displayEventHandler(&HandleDisplayEvent),
 
-	//Controller Registrations
-	//Hand Controller registration, player controller registration, lightpath controller registration
-	handControllerReg(kControllerAnimatedHand, "Hand"),
-	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
-	playerControllerReg(kControllerPlayer, "Main Player Controller"),
-	lightPathControllerReg(kControllerLightPath, "Light Path"),
-	ringControllerReg(kControllerRing, "Ring"),
+//Controller Registrations
+//Hand Controller registration, player controller registration, lightpath controller registration
+handControllerReg(kControllerAnimatedHand, "Hand"),
+menuHandControllerReg(kControllerMenuHand, "MenuHand"),
+playerControllerReg(kControllerPlayer, "Main Player Controller"),
+lightPathControllerReg(kControllerLightPath, "Light Path"),
+ringControllerReg(kControllerRing, "Ring"),
 
-	//Model Registrations
-	//Player model registration, Hand Model Registration, 
-	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
-	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
-	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
-	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
-	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
-	downerModelReg(kModelDowner, "Downer", "Model/downer"),
-	speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
-	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
-	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
-	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
-	smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
-	largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
-	
-	//Animated Object Registration
-	//Animated Hand Registration
-	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
+//Model Registrations
+//Player model registration, Hand Model Registration, 
+playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
+gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
+ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
+ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
+downerModelReg(kModelDowner, "Downer", "Model/downer"),
+speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
+ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
+handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
+handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
+largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
 
-	//Particle System Registration
-	lightParticleSystemReg(kParticleSystemLight, "Light"),
+//Animated Object Registration
+//Animated Hand Registration
+animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
 
-	//Script Method Registration
-	quitMethodReg(kMethodQuit, "Quit Game"),
-	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
-	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
-	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
-	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
-	clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
-	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
-	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
-	addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
+//Particle System Registration
+lightParticleSystemReg(kParticleSystemLight, "Light"),
+
+//Script Method Registration
+quitMethodReg(kMethodQuit, "Quit Game"),
+loadWorldMethodReg(kMethodLoadWorld, "Load World"),
+getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
+getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
+getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
+clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
+setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
+getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
+addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -69,6 +69,9 @@ Game::Game() :
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
+
+	// temp
+	TheInputMgr->SetInputMode(kInputAllActive);
 
 	loadLevel = "";
 
@@ -83,7 +86,7 @@ Game::Game() :
 	// Load times
 	if (file.Open(TIME_FILE_PATH) != kFileOpenFailed)
 	{
-		file.Read(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Read(bestTimes, sizeof(int)* NUM_BEST_TIMES);
 		file.Close();
 	}
 	else // file couldn't be openned, probably because it isn't there
@@ -93,14 +96,14 @@ Game::Game() :
 			bestTimes[i] = -1;
 		}
 		file.Open(TIME_FILE_PATH, kFileCreate);
-		file.Write(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Write(bestTimes, sizeof(int)* NUM_BEST_TIMES);
 		file.Close();
 	}
 
 	// Load settings
 	if (file.Open(SETTING_FILE_PATH) != kFileOpenFailed)
 	{
-		file.Read(settings, sizeof(int) * 4);
+		file.Read(settings, sizeof(int)* 4);
 		file.Close();
 	}
 	else
@@ -110,7 +113,7 @@ Game::Game() :
 		settings[2] = 50;
 		settings[3] = 50;
 		file.Open(SETTING_FILE_PATH, kFileCreate);
-		file.Write(settings, sizeof(int) * 4);
+		file.Write(settings, sizeof(int)* 4);
 		file.Close();
 	}
 
@@ -124,6 +127,8 @@ Game::Game() :
 	music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 	playerController = nullptr;
+
+	lookOrigin = TheWorldMgr->GetTrackingOrientation();
 }
 
 Game::~Game()
@@ -313,7 +318,6 @@ void Game::UnloadWorld(void)
 	TheWorldMgr->UnloadWorld();
 	TheGame->handController = nullptr;
 	playerController = nullptr;
-	//TheGame = nullptr;
 }
 
 void Game::SetLevelEndState(LevelEndState levelEndState)

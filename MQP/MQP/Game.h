@@ -113,6 +113,8 @@ private:
 
 public:
 
+	Quaternion lookOrigin;
+
 	Game(void);
 	~Game(void);
 

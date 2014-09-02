@@ -1,12 +1,15 @@
+#include "C4Engine.h"
+
 #include "GameCamera.h"
 #include "Player.h"
-#include "C4Engine.h"
+#include "Game.h"
 
 using namespace C4;
 
+extern Game* TheGame;
+
 GameCamera::GameCamera() : FrustumCamera(2.0F, 1.0F)
 {
-	origin = TheWorldMgr->GetTrackingOrientation();
 	playerNode = nullptr;
 	lookedForPlayer = false;
 }
@@ -74,11 +77,11 @@ void GameCamera::Move(void)
 	}
 
 	// These two lines handle Rift head tracking
-	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse(origin.GetRotationMatrix());
+	Matrix3D m = GetNodeTransform().GetMatrix3D() * Inverse((TheGame->lookOrigin).GetRotationMatrix());
 	SetNodeMatrix3D(m * TheWorldMgr->GetTrackingOrientation().GetRotationMatrix());
 }
 
 void GameCamera::Reset(void)
 {
-	origin = TheWorldMgr->GetTrackingOrientation();
+	TheGame->lookOrigin = TheWorldMgr->GetTrackingOrientation();
 }
