@@ -336,18 +336,29 @@ void MainPlayerController::SetPowerUp(PowerUp powerUp)
 
 void MainPlayerController::UsePowerUp(void)
 {
+	Sound* sound;
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
 		// temp
 		//AddSpeed(5);
 		//speedTime = 600;		//roughly 5 seconds
+
+		// Play sound effect
+		sound = new Sound;
+		sound->Load("SoundEffects/speedboost");
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		break;
+
 	case powerUpRingExpander:
 		// do someting
 
-		// temp
-		TheEngine->Report("Using ring expander!");
+		// Play sound effect
+		sound = new Sound;
+		sound->Load("SoundEffects/expansion");
+		sound->Delay(1);
+		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 
 		break;
 	}
