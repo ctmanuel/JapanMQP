@@ -122,24 +122,6 @@ Controller *MainPlayerController::Replicate(void) const
 	 }
 
 	 banking = false;
-
-	 Node* root = GetTargetNode()->GetRootNode();
-	 Node* node = root;
-	 int i = 0;
-	 
-	 do
-	 {
-		 if (node->GetController())
-		 {
-			 if (node->GetController()->GetControllerType() == kControllerRing)
-			 {
-				 ringNodes.push_back(node);
-				 i++;
-			 }
-		 }
-		 node = root->GetNextNode(node);
-	 } while (node);
-	 
 }
 
 void MainPlayerController::SplinePoint(Point3D position)
@@ -270,13 +252,17 @@ void MainPlayerController::Move(void)
 		speed = MIN_SPEED;
 	}
 
+	
 	if (speedTime <= 0){
-		AddSpeed(-(speed-prevSpeed));
+		AddSpeed(-5);
+		AddSpeed(-(speed - prevSpeed));
 		prevSpeed = speed;
 	}
 	else if (speedTime > 0){
 		speedTime--;
 	}
+	
+
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
 	{
@@ -284,7 +270,7 @@ void MainPlayerController::Move(void)
 	}
 
 	// Adjust path sound frequency based on speed
-	pathSound->VaryFrequency(speed / START_SPEED, 0);
+	pathSound->VaryFrequency(speed / BASE_SPEED, 0);
 
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
@@ -341,8 +327,6 @@ PowerUp MainPlayerController::GetPowerUp(void)
 void MainPlayerController::SetPowerUp(PowerUp powerUp)
 {
 	this->powerUp = powerUp;
-<<<<<<< HEAD
-=======
 
 	if (powerUp != powerUpNone)
 	{
@@ -351,7 +335,6 @@ void MainPlayerController::SetPowerUp(PowerUp powerUp)
 		sound->Delay(1);
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 	}
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 }
 
 void MainPlayerController::UsePowerUp(void)
@@ -360,43 +343,25 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-<<<<<<< HEAD
 		prevSpeed = speed;
 		speed = MAX_SPEED;
 		speedTime = 300;		//roughly 3 seconds
-=======
-		// temp
-		//AddSpeed(5);
-		//speedTime = 600;		//roughly 5 seconds
 
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/speedboost");
 		sound->Delay(1);
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 		break;
 
 	case powerUpRingExpander:
 		// do someting
-<<<<<<< HEAD
-		if (!(ringNodes.empty())){
-			for (auto node : ringNodes)
-			{
-				RingController *controller = (RingController*)node->GetController();
-				controller->ExpandRings(2);
-			}
-		}
-		// temp
-		TheEngine->Report("Using ring expander!");
-=======
 
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/expansion");
 		sound->Delay(1);
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 
 		break;
 	}
@@ -436,7 +401,9 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		AddSpeed(-2.0f);
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
@@ -457,16 +424,12 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	{
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
-<<<<<<< HEAD
-		sound->Play();
-=======
 		sound->Delay(1);
 		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
 		Sound* sound2 = new Sound;
 		sound2->Load("SoundEffects/derez");
 		sound2->Delay(1);
 		sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);

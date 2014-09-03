@@ -12,54 +12,6 @@ Application* ConstructApplication(void)
 
 Game::Game() :
 
-<<<<<<< HEAD
-	Singleton<Game>(TheGame),														
-
-	// The display event handler encapsulates a function that gets called
-	// when the Display Manager changes something like the screen resolution.
-
-	displayEventHandler(&HandleDisplayEvent),
-
-	//Controller Registrations
-	//Hand Controller registration, player controller registration, lightpath controller registration
-	handControllerReg(kControllerAnimatedHand, "Hand"),
-	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
-	playerControllerReg(kControllerPlayer, "Main Player Controller"),
-	lightPathControllerReg(kControllerLightPath, "Light Path"),
-	ringControllerReg(kControllerRing, "Ring"),
-
-	//Model Registrations
-	//Player model registration, Hand Model Registration, Ring Model Registration(S/M/L)
-	//Ring Expander Model
-	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
-	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
-	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
-	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
-	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
-	downerModelReg(kModelDowner, "Downer", "Model/downer"),
-	speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
-	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
-	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
-	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
-	
-	//Animated Object Registration
-	//Animated Hand Registration
-	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
-
-	//Particle System Registration
-	lightParticleSystemReg(kParticleSystemLight, "Light"),
-
-	//Script Method Registration
-	quitMethodReg(kMethodQuit, "Quit Game"),
-	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
-	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
-	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
-	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
-	clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
-	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
-	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
-	addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
-=======
 Singleton<Game>(TheGame),
 
 // The display event handler encapsulates a function that gets called
@@ -107,7 +59,6 @@ clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
 setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
 getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
 addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -212,13 +163,8 @@ void Game::StartLevel(const char* name)
 		// Going to the menu
 
 		// Play music
-<<<<<<< HEAD
-		levelMusic->Stop();
-		levelMusic->Release();
-=======
 		music->Stop();
 		music->Release();
->>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 		WaveStreamer* menuStreamer = new WaveStreamer;
 		menuStreamer->AddComponent("Hikarimichi");
 		music = new Sound;

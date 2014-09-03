@@ -16,13 +16,14 @@ namespace C4
 
 	private:
 		Point3D start;
-		Point3D end;
+		Point3D endLeft;
+		Point3D endRight;
 
 		ParticlePool<> particlePool;
 		Particle particleArray[MAX_LIGHT_PARTICLES];
 
 	public:
-		LightParticleSystem(Point3D start, Point3D end);
+		LightParticleSystem(Point3D start, Point3D endLeft, Point3D endRight);
 		LightParticleSystem();
 		~LightParticleSystem();
 
@@ -30,6 +31,7 @@ namespace C4
 		void AnimateParticles(void) override;
 
 		void SetStart(Point3D start);
-		void SetEnd(Point3D end);
+		void SetEndLeft(Point3D endLeft);
+		void SetEndRight(Point3D endRight);
 	};
 }
