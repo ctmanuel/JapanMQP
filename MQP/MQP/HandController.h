@@ -31,7 +31,6 @@ namespace C4
 		kModelAnimatedHand = 'ahnd'
 	};
 
-	///This defines the type of controller that is goign to be associated with teh animated object.
 	enum
 	{
 		kControllerAnimatedHand = 'anhd'

@@ -28,7 +28,8 @@ Game::Game() :
 	ringControllerReg(kControllerRing, "Ring"),
 
 	//Model Registrations
-	//Player model registration, Hand Model Registration, 
+	//Player model registration, Hand Model Registration, Ring Model Registration(S/M/L)
+	//Ring Expander Model
 	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
 	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
@@ -157,11 +158,8 @@ void Game::StartLevel(const char* name)
 		// Going to the menu
 
 		// Play music
-		if (levelMusic)
-		{
-			levelMusic->Stop();
-			levelMusic->Release();
-		}
+		levelMusic->Stop();
+		levelMusic->Release();
 		WaveStreamer* menuStreamer = new WaveStreamer;
 		menuStreamer->AddComponent("Hikarimichi");
 		menuMusic = new Sound;

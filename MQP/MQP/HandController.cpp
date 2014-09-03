@@ -1,6 +1,5 @@
 #include "HandController.h"
 #include "Game.h"
-
 #include "string.h"
 
 using namespace C4;
@@ -94,7 +93,7 @@ void HandController::Preprocess(void)
 {
 	CharacterController::Preprocess();
 
-	SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
+	SetRigidBodyFlags(kRigidBodyKeepAwake);
 	SetFrictionCoefficient(0.0F);
 	//Give it 0 gravity
 	SetGravityMultiplier(0.0F);
@@ -126,15 +125,15 @@ void HandController::Preprocess(void)
 	} while (node);
 
 	//Register our interactor with the World
-	//handInteractor.SetOwner
 	myModel->GetWorld()->AddInteractor(&handInteractor);
 
 	// Set up particle system
 	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
 	{
-		lps = new LightParticleSystem();
+		lps = new LightParticleSystem(Point3D(10.0f, -10.0f, 1.0f), Point3D(10.0f, 10.0f, 1.0f));
 		GetTargetNode()->GetRootNode()->AddNewSubnode(lps);
 	}
+
 }
 
 void HandController::Move(void)
@@ -221,8 +220,7 @@ void HandController::Move(void)
 	if (lps)
 	{
 		lps->SetStart(GetTargetNode()->GetWorldPosition());
-		lps->SetEndLeft(lightPath->GetFrontLeft());
-		lps->SetEndRight(lightPath->GetFrontRight());
+		lps->SetEnd(player->GetLightPathFront());
 	}
 }
 
@@ -238,9 +236,7 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 		player->AddSpeed(-2.0f);
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
+		delete geometry;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
@@ -262,9 +258,6 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 		Sound* sound = new Sound;
 		sound->Load("SoundEffects/crash");
 		sound->Play();
-		Sound* sound2 = new Sound;
-		sound2->Load("SoundEffects/derez");
-		sound2->Play();
 		TheGame->SetLevelEndState(levelEndFailed);
 		TheGame->StartLevel("Menu");
 		return (kRigidBodyUnchanged);
@@ -318,8 +311,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.005f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.005f;
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.01f;
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.01f;
 
 			// Hand orientation
 			Quaternion x, y, z;
@@ -328,14 +321,16 @@ void MenuHandController::Move(void)
 			z.SetRotationAboutZ(K::pi_over_2);
 			GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
 
-			if (pushed)
+			if (pushed) // This is true on the frame LoadWorld is called
 			{
-				if (hand.grabStrength() < 0.2)
+				if (hand.grabStrength() < 0.2) // So is this
 				{
 					pushed = false;
+					// This returns a non-null but still invalid pointer. interactor is a member of the controller.
 					const Node* interactionNode = interactor.GetInteractionNode(); 
 					if (interactionNode)
 					{
+						// I try to call GetController on the invalid pointer and bad things happen
 						Controller* interactionController = interactionNode->GetController(); 
 						if (interactionController)
 						{

@@ -56,7 +56,7 @@ void GameCamera::Move(void)
 		SetNodeTransform(playerNode->GetNodeTransform() * GetNodeTransform());
 
 		// Potentially set off triggers
-		TheWorldMgr->GetWorld()->ActivateTriggers(oldPos, GetNodePosition(), 0.0f);
+		TheWorldMgr->GetWorld()->ActivateTriggers(oldPos, GetNodePosition(), 0.01f);
 	}
 	else if (lookedForPlayer) // There is no player in this world. It's probably the menu
 	{

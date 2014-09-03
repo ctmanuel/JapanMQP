@@ -294,19 +294,3 @@ void LightPathController::ChangeYaw(float change)
 {
 	nextYaw += change;
 }
-
-Point3D LightPathController::GetFrontLeft()
-{
-	Transform4D offset;
-	offset.SetTranslation(Point3D(0.0f, PATH_WIDTH / 2.0f, 0.0f) + GetTargetNode()->GetFirstSubnode()->GetNodePosition());
-	Transform4D leftFront = GetTargetNode()->GetNodeTransform() * offset;
-	return leftFront.GetTranslation();
-}
-
-Point3D LightPathController::GetFrontRight()
-{
-	Transform4D offset;
-	offset.SetTranslation(Point3D(0.0f, -1.0f * PATH_WIDTH / 2.0f, 0.0f) + GetTargetNode()->GetFirstSubnode()->GetNodePosition());
-	Transform4D rightFront = GetTargetNode()->GetNodeTransform() * offset;
-	return rightFront.GetTranslation();
-}

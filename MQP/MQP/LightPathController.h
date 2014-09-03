@@ -9,10 +9,12 @@
 #define PITCH_THRESHOLD (0.05f)
 #define ROLL_THRESHOLD (0.1f)
 #define YAW_THRESHOLD (0.05f)
+
 #define ROLL_RATE (1.0f) // radians/second
+
 #define SOLIDIFY_TIME (4000) // msec it takes for a piece of the path to turn on collision detection after it's not the front piece
-#define SPLINE_FREQUENCY (50.0f) // msec before adding front of path to player spline
-#define PATH_WIDTH (1.0f) // m
+
+#define SPLINE_FREQUENCY (8.0f) // msec before adding front of path to player spline
 
 namespace C4
 {
@@ -88,8 +90,5 @@ namespace C4
 		float GetSpeed(){
 			return speed;
 		}
-
-		Point3D GetFrontLeft();
-		Point3D GetFrontRight();
 	};
 }
