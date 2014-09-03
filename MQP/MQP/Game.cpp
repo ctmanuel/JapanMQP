@@ -12,6 +12,7 @@ Application* ConstructApplication(void)
 
 Game::Game() :
 
+<<<<<<< HEAD
 	Singleton<Game>(TheGame),														
 
 	// The display event handler encapsulates a function that gets called
@@ -58,6 +59,55 @@ Game::Game() :
 	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
 	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
 	addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
+=======
+Singleton<Game>(TheGame),
+
+// The display event handler encapsulates a function that gets called
+// when the Display Manager changes something like the screen resolution.
+
+displayEventHandler(&HandleDisplayEvent),
+
+//Controller Registrations
+//Hand Controller registration, player controller registration, lightpath controller registration
+handControllerReg(kControllerAnimatedHand, "Hand"),
+menuHandControllerReg(kControllerMenuHand, "MenuHand"),
+playerControllerReg(kControllerPlayer, "Main Player Controller"),
+lightPathControllerReg(kControllerLightPath, "Light Path"),
+ringControllerReg(kControllerRing, "Ring"),
+
+//Model Registrations
+//Player model registration, Hand Model Registration, 
+playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
+gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
+ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
+ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
+downerModelReg(kModelDowner, "Downer", "Model/downer"),
+speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
+ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
+handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
+handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
+largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
+
+//Animated Object Registration
+//Animated Hand Registration
+animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
+
+//Particle System Registration
+lightParticleSystemReg(kParticleSystemLight, "Light"),
+
+//Script Method Registration
+quitMethodReg(kMethodQuit, "Quit Game"),
+loadWorldMethodReg(kMethodLoadWorld, "Load World"),
+getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
+getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
+getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
+clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
+setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
+getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
+addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
+>>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -68,6 +118,9 @@ Game::Game() :
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
+
+	// temp
+	TheInputMgr->SetInputMode(kInputAllActive);
 
 	loadLevel = "";
 
@@ -82,7 +135,7 @@ Game::Game() :
 	// Load times
 	if (file.Open(TIME_FILE_PATH) != kFileOpenFailed)
 	{
-		file.Read(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Read(bestTimes, sizeof(int)* NUM_BEST_TIMES);
 		file.Close();
 	}
 	else // file couldn't be openned, probably because it isn't there
@@ -92,14 +145,14 @@ Game::Game() :
 			bestTimes[i] = -1;
 		}
 		file.Open(TIME_FILE_PATH, kFileCreate);
-		file.Write(bestTimes, sizeof(int) * NUM_BEST_TIMES);
+		file.Write(bestTimes, sizeof(int)* NUM_BEST_TIMES);
 		file.Close();
 	}
 
 	// Load settings
 	if (file.Open(SETTING_FILE_PATH) != kFileOpenFailed)
 	{
-		file.Read(settings, sizeof(int) * 4);
+		file.Read(settings, sizeof(int)* 4);
 		file.Close();
 	}
 	else
@@ -109,21 +162,22 @@ Game::Game() :
 		settings[2] = 50;
 		settings[3] = 50;
 		file.Open(SETTING_FILE_PATH, kFileCreate);
-		file.Write(settings, sizeof(int) * 4);
+		file.Write(settings, sizeof(int)* 4);
 		file.Close();
 	}
 
 	// Load music and play menu music
-	levelMusic = nullptr;
 	WaveStreamer* menuStreamer = new WaveStreamer;
 	menuStreamer->AddComponent("Hikarimichi");
-	menuMusic = new Sound;
-	menuMusic->Stream(menuStreamer);
-	menuMusic->SetLoopCount(kSoundLoopInfinite);
-	menuMusic->Delay(10);
-	menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+	music = new Sound;
+	music->Stream(menuStreamer);
+	music->SetLoopCount(kSoundLoopInfinite);
+	music->Delay(10);
+	music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 	playerController = nullptr;
+
+	lookOrigin = TheWorldMgr->GetTrackingOrientation();
 }
 
 Game::~Game()
@@ -158,15 +212,20 @@ void Game::StartLevel(const char* name)
 		// Going to the menu
 
 		// Play music
+<<<<<<< HEAD
 		levelMusic->Stop();
 		levelMusic->Release();
+=======
+		music->Stop();
+		music->Release();
+>>>>>>> aa26a35897d3155d63129325d805b581c1c99e56
 		WaveStreamer* menuStreamer = new WaveStreamer;
 		menuStreamer->AddComponent("Hikarimichi");
-		menuMusic = new Sound;
-		menuMusic->Stream(menuStreamer);
-		menuMusic->SetLoopCount(kSoundLoopInfinite);
-		menuMusic->Delay(10);
-		menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+		music = new Sound;
+		music->Stream(menuStreamer);
+		music->SetLoopCount(kSoundLoopInfinite);
+		music->Delay(10);
+		music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 
 		// Check if player just got best time on a level
@@ -209,15 +268,15 @@ void Game::StartLevel(const char* name)
 	else // not the menu
 	{
 		// play music
-		menuMusic->Stop();
-		menuMusic->Release();
-		levelMusic = new Sound;
+		music->Stop();
+		music->Release();
+		music = new Sound;
 		WaveStreamer *levelStreamer = new WaveStreamer;
 		levelStreamer->AddComponent("A_Light_Groove");
-		levelMusic->Stream(levelStreamer);
-		levelMusic->SetLoopCount(kSoundLoopInfinite);
-		levelMusic->Delay(10);
-		levelMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+		music->Stream(levelStreamer);
+		music->SetLoopCount(kSoundLoopInfinite);
+		music->Delay(10);
+		music->VaryVolume((float)settings[0] / 100.0f, 0);
 
 		if (Text::CompareTextCaseless(name, "level1"))
 		{
@@ -313,7 +372,6 @@ void Game::UnloadWorld(void)
 	TheWorldMgr->UnloadWorld();
 	TheGame->handController = nullptr;
 	playerController = nullptr;
-	//TheGame = nullptr;
 }
 
 void Game::SetLevelEndState(LevelEndState levelEndState)
@@ -465,7 +523,7 @@ int Game::GetRiftSensitivity(void)
 void Game::SetMusicVolume(int musicVolume)
 {
 	settings[0] = musicVolume;
-	menuMusic->VaryVolume((float)settings[0] / 100.0f, 0);
+	music->VaryVolume((float)settings[0] / 100.0f, 0);
 }
 
 void Game::SetSoundVolume(int soundVolume)
