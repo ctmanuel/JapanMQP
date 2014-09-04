@@ -1,92 +1,12 @@
-﻿Build started 9/4/2014 4:10:42 PM.
-     1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
+﻿Build started 9/4/2014 17:11:08.
+     1>Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp GameCamera.cpp GameWorld.cpp HandController.cpp LightPathController.cpp Player.cpp ResetAction.cpp ScriptMethods.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp Player.cpp
          Player.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
          Game.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         Generating Code...
-         Compiling...
-         ScriptMethods.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         ResetAction.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         LightPathController.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         HandController.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         GameWorld.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         GameCamera.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=unsigned char *
-         ,            _InIt=const unsigned char *
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib pthreadVC2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
          Debug\looping_cubic_b_spline.obj
          Debug\cr_spline.obj
          Debug\cubic_hermite_spline.obj
@@ -118,11 +38,11 @@
          Debug\Ring.obj
          Debug\ScriptMethods.obj
          Debug\ResetAction.obj
-         MQP.vcxproj -> C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
+         MQP.vcxproj -> C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
        PostBuildEvent:
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
          :VCEnd
          ..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll
          1 File(s) copied
@@ -130,8 +50,8 @@
          1 File(s) copied
          ..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll
          1 File(s) copied
-     1>Done Building Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:52.96
+Time Elapsed 00:00:06.18

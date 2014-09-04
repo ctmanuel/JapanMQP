@@ -69,8 +69,6 @@ addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
-
-	// temp
 	TheInputMgr->SetInputMode(kInputAllActive);
 
 	loadLevel = "";
