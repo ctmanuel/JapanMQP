@@ -506,3 +506,32 @@ MainPlayerController* Game::GetPlayerController(void)
 {
 	return playerController;
 }
+
+void Game::HostGame()
+{
+	TheMessageMgr->BeginMultiplayerGame(true);
+	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
+
+	//TheGame->LoadWorld("world/mult");
+
+	//boxSnapShot = new BoxSnapShot();
+	//TheMessageMgr->AddSnapshotSender(boxSnapShot);
+}
+
+void Game::JoinGame(String<> ipAddress)
+{
+	TheMessageMgr->BeginMultiplayerGame(false);
+	NetworkAddress addr = MessageMgr::StringToAddress(ipAddress);
+	addr.SetPort(kGamePort);
+	NetworkResult result = TheMessageMgr->Connect(addr);
+	TheEngine->Report(String<>("Attempting connection with: ") + MessageMgr::AddressToString(addr, true));
+
+	if (result == C4::kNetworkOkay)
+	{
+		TheEngine->Report("Network initialized. Waiting on response...");
+	}
+	else
+	{
+		TheEngine->Report(String<>("Issues arose when trying to initialize the connection. Code: ") += result);
+	}
+}
