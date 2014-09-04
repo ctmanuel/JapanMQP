@@ -252,14 +252,16 @@ void MainPlayerController::Move(void)
 		speed = MIN_SPEED;
 	}
 
-	/*
+	
 	if (speedTime <= 0){
 		AddSpeed(-5);
+		AddSpeed(-(speed - prevSpeed));
+		prevSpeed = speed;
 	}
 	else if (speedTime > 0){
 		speedTime--;
 	}
-	*/
+	
 
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
@@ -305,6 +307,7 @@ Point3D MainPlayerController::GetLightPathFront(void)
 void MainPlayerController::AddSpeed(float speedChange)
 {
 	speed += speedChange;
+	prevSpeed += speedChange;
 
 	if (speed > MAX_SPEED)
 	{
@@ -340,9 +343,9 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		// temp
-		//AddSpeed(5);
-		//speedTime = 600;		//roughly 5 seconds
+		prevSpeed = speed;
+		speed = MAX_SPEED;
+		speedTime = 300;		//roughly 3 seconds
 
 		// Play sound effect
 		sound = new Sound;

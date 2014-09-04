@@ -22,6 +22,9 @@
 
 using namespace C4;
 
+const unsigned long kGameProtocol = 0x00000012;
+const unsigned short kGamePort = 3003;
+
 enum
 {
 	kLocatorAnimatedObject = 'aobj'
@@ -149,6 +152,10 @@ public:
 	void SaveSettings(void);
 	void SetPlayerController(MainPlayerController* playerController);
 	MainPlayerController* GetPlayerController(void);
+
+	//networking stuff
+	void HostGame();
+	void JoinGame(String<> ipAddress);
 };
 
 extern "C"
