@@ -12,53 +12,55 @@ Application* ConstructApplication(void)
 
 Game::Game() :
 
-Singleton<Game>(TheGame),
+	Singleton<Game>(TheGame),
 
-// The display event handler encapsulates a function that gets called
-// when the Display Manager changes something like the screen resolution.
+	// The display event handler encapsulates a function that gets called
+	// when the Display Manager changes something like the screen resolution.
 
-displayEventHandler(&HandleDisplayEvent),
+	displayEventHandler(&HandleDisplayEvent),
 
-//Controller Registrations
-//Hand Controller registration, player controller registration, lightpath controller registration
-handControllerReg(kControllerAnimatedHand, "Hand"),
-menuHandControllerReg(kControllerMenuHand, "MenuHand"),
-playerControllerReg(kControllerPlayer, "Main Player Controller"),
-lightPathControllerReg(kControllerLightPath, "Light Path"),
-ringControllerReg(kControllerRing, "Ring"),
+	//Controller Registrations
+	//Hand Controller registration, player controller registration, lightpath controller registration
+	handControllerReg(kControllerAnimatedHand, "Hand"),
+	menuHandControllerReg(kControllerMenuHand, "MenuHand"),
+	playerControllerReg(kControllerPlayer, "Main Player Controller"),
+	lightPathControllerReg(kControllerLightPath, "Light Path"),
+	ringControllerReg(kControllerRing, "Ring"),
 
-//Model Registrations
-//Player model registration, Hand Model Registration, 
-playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
-gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
-ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
-ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
-ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
-downerModelReg(kModelDowner, "Downer", "Model/downer"),
-speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
-ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
-handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
-handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
-smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
-largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
+	//Model Registrations
+	//Player model registration, Hand Model Registration, 
+	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
+	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
+	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
+	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
+	downerModelReg(kModelDowner, "Downer", "Model/downer"),
+	speedBoostModelReg(kModelSpeedBoost, "Speed Boost", "Model/speedBoost"),
+	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
+	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
+	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+	smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
+	largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
 
-//Animated Object Registration
-//Animated Hand Registration
-animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
+	//Animated Object Registration
+	//Animated Hand Registration
+	animatedHand(kLocatorAnimatedObject, "AnimatedGauntlet"),
 
-//Particle System Registration
-lightParticleSystemReg(kParticleSystemLight, "Light"),
+	//Particle System Registration
+	lightParticleSystemReg(kParticleSystemLight, "Light"),
 
-//Script Method Registration
-quitMethodReg(kMethodQuit, "Quit Game"),
-loadWorldMethodReg(kMethodLoadWorld, "Load World"),
-getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
-getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
-getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
-clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
-setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
-getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
-addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
+	//Script Method Registration
+	quitMethodReg(kMethodQuit, "Quit Game"),
+	loadWorldMethodReg(kMethodLoadWorld, "Load World"),
+	getLevelResultMethodReg(kMethodGetLevelResult, "Get Level Result", kMethodOutputValue),
+	getTimeStringMethodReg(kMethodGetTimeString, "Get Time String", kMethodOutputValue),
+	getBestTimeStringMethodReg(kMethodGetBestTimeString, "Get Best Time String", kMethodOutputValue),
+	clearScoresMethodReg(kMethodClearScores, "Clear Scores"),
+	setGameSettingsMethodReg(kMethodSetGameSettings, "Set Game Settings"),
+	getGameSettingsMethodReg(kMethodGetGameSettings, "Get Game Settings", kMethodOutputValue),
+	addSpeedMethodReg(kMethodAddSpeed, "Add Speed"),
+	hostMethodReg(kMethodHost, "Host"),
+	joinMethodReg(kMethodJoin, "Join")
 {
 	// This installs an event handler for display events. This is only
 	// necessary if we need to perform some action in response to
@@ -67,9 +69,10 @@ addSpeedMethodReg(kMethodAddSpeed, "Add Speed")
 
 	TheWorldMgr->SetWorldConstructor(&ConstructWorld);
 	TheInterfaceMgr->SetInputManagementMode(kInputManagementAutomatic);
+	TheInterfaceMgr->HideCursor();
+	TheInputMgr->SetInputMode(kInputAllActive);
 	resetAction = new ResetAction(kActionReset);
 	TheInputMgr->AddAction(resetAction);
-	TheInputMgr->SetInputMode(kInputAllActive);
 
 	loadLevel = "";
 
@@ -265,47 +268,7 @@ EngineResult Game::LoadWorld(const char *name)
 	WorldResult result = TheWorldMgr->LoadWorld(name);
 	if (result == kWorldOkay)
 	{
-
 		TheMessageMgr->BeginSinglePlayerGame();
-
-		/*
-		GameWorld *world = static_cast<GameWorld *>(TheWorldMgr->GetWorld());
-		Model *model = Model::Get(kModelAnimatedHand);
-		HandController *controller = new HandController();
-		model->SetController(controller);
-		TheGame->handController = controller;
-		*/
-		//const LocatorMarker *locator = world->GetSpawnLocator();
-		/*if (locator)
-		{
-			// If a spawn locator was found in the world, put a soldier character there.
-
-			// The BeginSinglePlayerGame() function puts the Message Manager in single player mode.
-
-			// Calculate the angle corresponding to the direction the character is initially facing.
-
-			const Vector3D direction = locator->GetWorldTransform()[0];
-			float azimuth = Atan(direction.y, direction.x);
-
-			// Load a soldier model and attach a controller to it.
-
-			Model *model = Model::Get(kModelSoldier);
-			SoldierController *controller = new SoldierController(azimuth);
-			model->SetController(controller);
-			TheGame->soldierController = controller;
-
-			// Put the model in the world at the locator's position.
-
-			model->SetNodePosition(locator->GetWorldPosition());
-			locator->GetWorld()->AddNewNode(model);
-
-			// Set the world's current camera to be our chase camera.
-			// The world will not render without a camera being set.
-
-			ChaseCamera *camera = world->GetChaseCamera();
-			camera->SetTargetModel(model);
-			world->SetCamera(camera);
-		}*/
 	}
 
 	return (result);
@@ -507,6 +470,10 @@ MainPlayerController* Game::GetPlayerController(void)
 
 void Game::HostGame()
 {
+
+	// temp
+	TheEngine->Report("Poop");
+
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
@@ -518,6 +485,10 @@ void Game::HostGame()
 
 void Game::JoinGame(String<> ipAddress)
 {
+
+	// temp
+	TheEngine->Report("Poop");
+
 	TheMessageMgr->BeginMultiplayerGame(false);
 	NetworkAddress addr = MessageMgr::StringToAddress(ipAddress);
 	addr.SetPort(kGamePort);

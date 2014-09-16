@@ -626,3 +626,100 @@ void AddSpeedMethod::Execute(const ScriptState* state)
 	}
 	CallCompletionProc();
 }
+
+
+// Host method
+HostMethod::HostMethod() : Method(kMethodHost)
+{
+}
+
+HostMethod::HostMethod(const HostMethod& hostMethod) : Method(hostMethod)
+{
+}
+
+HostMethod::~HostMethod()
+{
+}
+
+Method* HostMethod::Replicate(void) const
+{
+	return (new HostMethod(*this));
+}
+
+void HostMethod::Pack(Packer& data, unsigned long packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void HostMethod::Unpack(Unpacker& data, unsigned long unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 HostMethod::GetSettingCount(void) const
+{
+	return 0;
+}
+
+Setting* HostMethod::GetSetting(long index) const
+{
+	return nullptr;
+}
+
+void HostMethod::SetSetting(const Setting* setting)
+{
+}
+
+void HostMethod::Execute(const ScriptState* state)
+{
+	TheMessageMgr->BeginMultiplayerGame(true);
+	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
+}
+
+
+// Join method
+JoinMethod::JoinMethod() : Method(kMethodJoin)
+{
+}
+
+JoinMethod::JoinMethod(const JoinMethod& joinMethod) : Method(joinMethod)
+{
+}
+
+JoinMethod::~JoinMethod()
+{
+}
+
+Method* JoinMethod::Replicate(void) const
+{
+	return (new JoinMethod(*this));
+}
+
+void JoinMethod::Pack(Packer& data, unsigned long packFlags) const
+{
+	Method::Pack(data, packFlags);
+}
+
+void JoinMethod::Unpack(Unpacker& data, unsigned long unpackFlags)
+{
+	Method::Unpack(data, unpackFlags);
+}
+
+int32 JoinMethod::GetSettingCount(void) const
+{
+	return 0;
+}
+
+Setting* JoinMethod::GetSetting(long index) const
+{
+	return nullptr;
+}
+
+void JoinMethod::SetSetting(const Setting* setting)
+{
+}
+
+void JoinMethod::Execute(const ScriptState* state)
+{
+	TheEngine->Report("Joining game... Not really though.");
+}

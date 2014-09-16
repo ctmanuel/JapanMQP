@@ -5,56 +5,22 @@
 
 using namespace C4;
 
-HandInteractor::HandInteractor(HandController *controller)
-{
-	handController = controller;
-}
-
-HandInteractor::HandInteractor()
-{
-}
-
-HandInteractor::~HandInteractor()
-{
-}
-
-void HandInteractor::HandleInteractionEvent(InteractionEventType type, Node *node, const Point3D *position)
-{
-	//Always call the base class counterpart
-
-	Interactor::HandleInteractionEvent(type, node, position);
-	Engine::Report("HandInteractor Interaction Event");
-	//if the node with which we are interacting has a controller, 
-	// then pass the event through to that controller.
-
-	Controller *controller = node->GetController();
-	if (controller)
-	{
-		Engine::Report(String<63>("Node Name ") += node->GetNodeName());
-		controller->HandleInteractionEvent(type, position);
-		
-	}
-}
-
 HandController::HandController() : 
-		CharacterController(kControllerAnimatedHand),
-		handInteractor(this)
+		CharacterController(kControllerAnimatedHand)
 {
 	lightPath = nullptr;
-	animatedModelPath = "Model/Gauntlet_Animated";
+	animatedModelPath = "Model/Gauntlet_Redux";
 	backward = 0.0f;
 }
 
 HandController::HandController(const HandController& handController) : 
-		CharacterController(handController),
-		handInteractor(this)
+		CharacterController(handController)
 {
 	backward = 0.0f;
 }
 
 HandController::HandController(const char* amp, bool b) : 
-		CharacterController(kControllerAnimatedHand),
-		handInteractor(this)
+		CharacterController(kControllerAnimatedHand)
 {
 	backward = b;
 	animatedModelPath = amp;
@@ -128,10 +94,6 @@ void HandController::Preprocess(void)
 		node = root->GetNextNode(node);
 	} while (node);
 
-	//Register our interactor with the World
-	//handInteractor.SetOwner
-	myModel->GetWorld()->AddInteractor(&handInteractor);
-
 	// Set up particle system
 	if (!GetTargetNode()->GetManipulator()) // Check if we're in the world editor
 	{
@@ -154,11 +116,6 @@ void HandController::Move(void)
 		if (!hands.isEmpty())
 		{
 			Leap::Hand hand = hands.frontmost();
-			/*
-			leapMotion.x = hand.stabilizedPalmPosition()[2] * -0.002f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -0.002f;
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * 0.002f;
-			*/
 			leapMotion.x = 0.0f;
 			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
 			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
@@ -180,9 +137,6 @@ void HandController::Move(void)
 			}
 
 			handRoll = -1.0f * hand.palmNormal().roll();
-			//Quaternion x;// , y, z;
-			//y.SetRotationAboutY(-1 * hand.direction().pitch());
-			//z.SetRotationAboutZ((-1 * hand.direction().yaw()));
 
 			// Check for power up use
 			if (hand.grabStrength() >= 1.0f)

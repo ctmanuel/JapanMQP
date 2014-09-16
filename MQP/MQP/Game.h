@@ -98,6 +98,8 @@ private:
 	MethodReg<SetGameSettingsMethod>		setGameSettingsMethodReg;
 	MethodReg<GetGameSettingsMethod>		getGameSettingsMethodReg;
 	MethodReg<AddSpeedMethod>				addSpeedMethodReg;
+	MethodReg<HostMethod>					hostMethodReg;
+	MethodReg<JoinMethod>					joinMethodReg;
 
 	HandController							*handController;
 
