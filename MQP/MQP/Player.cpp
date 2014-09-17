@@ -122,6 +122,8 @@ Controller *MainPlayerController::Replicate(void) const
 	 }
 
 	 banking = false;
+	 speedTime = 0;
+	 prevSpeed = speed;
 }
 
 void MainPlayerController::SplinePoint(Point3D position)
@@ -252,14 +254,14 @@ void MainPlayerController::Move(void)
 		speed = MIN_SPEED;
 	}
 
-	
-	if (speedTime <= 0){
-		AddSpeed(-5);
-		AddSpeed(-(speed - prevSpeed));
-		prevSpeed = speed;
-	}
-	else if (speedTime > 0){
-		speedTime--;
+	// Handle speed boost
+	if (speedTime > 0){
+		speed = MAX_SPEED;
+		speedTime -= TheTimeMgr->GetDeltaTime();
+		if (speedTime <= 0)
+		{
+			speed = prevSpeed;
+		}
 	}
 	
 
@@ -344,8 +346,7 @@ void MainPlayerController::UsePowerUp(void)
 	{
 	case powerUpSpeedBoost:
 		prevSpeed = speed;
-		speed = MAX_SPEED;
-		speedTime = 300;		//roughly 3 seconds
+		speedTime = SPEED_BOOST_TIME;
 
 		// Play sound effect
 		sound = new Sound;

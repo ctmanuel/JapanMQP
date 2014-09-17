@@ -41,22 +41,6 @@ namespace C4
 
 	class LightPathController;
 	class HandController;
-
-	//The interactor class is used to track player interactions with objects in the scene.
-	class HandInteractor : public Interactor
-	{
-		private:
-
-			HandController	*handController;
-
-		public:
-
-			HandInteractor(HandController *controller);
-			HandInteractor();
-			~HandInteractor();
-
-			void HandleInteractionEvent(InteractionEventType type, Node *node, const Point3D *position) override;
-	};
 	
 	class HandController : public CharacterController
 	{
@@ -65,8 +49,6 @@ namespace C4
 		Leap::Controller leap;
 
 		Matrix3D startOrientation;
-
-		HandInteractor handInteractor;
 
 		HandController(const HandController& handController);
 		Controller* Replicate(void) const;
@@ -141,12 +123,6 @@ namespace C4
 		Model *GetTargetModel(void) const
 		{
 			return (static_cast<Model *>(Controller::GetTargetNode()));
-		}
-
-		//Return Hand Interactor
-		HandInteractor *GetHandInteractor(void)
-		{
-			return (&handInteractor);
 		}
 
 		//Is called whenever node interacts with a geometry node

@@ -33,6 +33,8 @@
 #define TURN_ACCELERATION (0.1f) // m/s/s player loses when turning sharply without banking
 #define ROLL_REQUIREMENT (0.6f) // roll required to not lose speed around turns
 
+// Other stuff
+#define SPEED_BOOST_TIME (3000) // ms
 
 namespace C4
 {

@@ -16,7 +16,9 @@ namespace C4
 		kMethodClearScores = 'cler',
 		kMethodSetGameSettings = 'sset',
 		kMethodGetGameSettings = 'gset',
-		kMethodAddSpeed = 'aspd'
+		kMethodAddSpeed = 'aspd',
+		kMethodHost = 'host',
+		kMethodJoin = 'join'
 	};
 
 	class QuitMethod : public Method
@@ -222,6 +224,50 @@ namespace C4
 
 		int32 GetSettingCount(void) const;
 		Setting* GetSetting(int32 index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class HostMethod : public Method
+	{
+	private:
+
+		HostMethod(const HostMethod& hostMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		HostMethod();
+		~HostMethod();
+
+		void Pack(Packer& data, unsigned long packFlags) const;
+		void Unpack(Unpacker& data, unsigned long upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(long index) const;
+		void SetSetting(const Setting* setting);
+
+		void Execute(const ScriptState* state);
+	};
+
+	class JoinMethod : public Method
+	{
+	private:
+
+		JoinMethod(const JoinMethod& joinMethod);
+		Method* Replicate(void) const;
+
+	public:
+
+		JoinMethod();
+		~JoinMethod();
+
+		void Pack(Packer& data, unsigned long packFlags) const;
+		void Unpack(Unpacker& data, unsigned long upackFlags);
+
+		int32 GetSettingCount(void) const;
+		Setting* GetSetting(long index) const;
 		void SetSetting(const Setting* setting);
 
 		void Execute(const ScriptState* state);
