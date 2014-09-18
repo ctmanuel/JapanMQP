@@ -356,8 +356,30 @@ void MainPlayerController::UsePowerUp(void)
 		break;
 
 	case powerUpRingExpander:
+		ringList.clear();
 		// do someting
+		Node* root = GetTargetNode()->GetRootNode();
+		Node* node = root;
+		do
+		{
+			if (node->GetController())
+			{
+				if (node->GetController()->GetControllerType() == kControllerRing)
+				{
+					ringList.push_back(node);
+				}
+			}
+			node = root->GetNextNode(node);
+		} while (node);
 
+		for(int i = 0; i < ringList.size(); i++){
+			Engine::Report(String<63>("found ") + i + ("rings"));
+			//Model* temp = (Model*)(ringList[i]->GetObject());
+			//Geometry* tm = (Geometry*)ringList[i]->get
+			Transform4D trans = ringList[i]->GetNodeTransform();
+			trans.SetScale(5, 5, 5);
+			ringList[i]->SetNodeTransform(trans);
+		}
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/expansion");

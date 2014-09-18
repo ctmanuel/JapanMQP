@@ -1,6 +1,10 @@
 #pragma once
 
 #include "C4Controller.h"
+#include "C4Models.h"
+#include "C4World.h"
+#include "C4Animation.h"
+#include "C4Character.h"
 
 namespace C4
 {

@@ -14,6 +14,15 @@ Game::Game() :
 
 	Singleton<Game>(TheGame),
 
+	//Networking stuff
+	serverObserver(this, &Game::ServerCommand),
+	joinObserver(this, &Game::JoinCommand),
+	//Create the server command to bind the text 'server' in the console.
+	serverCommand("server", &serverObserver),
+
+	//Create the join command to bind to the text 'join' in the console.
+	joinCommand("join", &joinObserver),
+
 	// The display event handler encapsulates a function that gets called
 	// when the Display Manager changes something like the screen resolution.
 
@@ -130,6 +139,17 @@ Game::Game() :
 	playerController = nullptr;
 
 	lookOrigin = TheWorldMgr->GetTrackingOrientation();
+
+	//Register both console commands with the engine
+	TheEngine->AddCommand(&serverCommand);
+	TheEngine->AddCommand(&joinCommand);
+
+	//Set some settings in the network manager
+	TheNetworkMgr->SetProtocol(kGameProtocol);
+	TheNetworkMgr->SetPortNumber(kGamePort);
+
+	//CommandObserver<Game> explodeObserver(&JoinCommand);
+	//Command *explodeCommand = new Command("explode", &explodeObserver);
 }
 
 Game::~Game()
@@ -503,4 +523,61 @@ void Game::JoinGame(String<> ipAddress)
 	{
 		TheEngine->Report(String<>("Issues arose when trying to initialize the connection. Code: ") += result);
 	}
+}
+
+void Game::ServerCommand(Command *command, const char *params)
+{
+	// Just start the server. The 'true' parameter 
+	// is to indicate that this machine is the server.
+	TheMessageMgr->BeginMultiplayerGame(true);
+	TheEngine->Report("Server initialized", kReportError);
+}
+
+void Game::JoinCommand(Command *command, const char *params)
+{
+	// We'll first want to provide the user with some feedback - so he'll know what he's doing.
+	String<128> str("Attempting to join ");
+	str += params;
+	TheEngine->Report(str, kReportError);
+
+	// Next, we convert the entered parameters into a C4 NetworkAddress.
+	// This format is used internally. It has both an IP address and a port number.
+	NetworkAddress address = MessageMgr::StringToAddress(params);
+
+	// We explicitly set a port in this example - it defaults to 0.
+	address.SetPort(kGamePort);
+
+	// Now we're just going to (try to) connect to the entered address.
+	TheMessageMgr->Connect(address);
+}
+
+void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *param)
+{
+	switch (event)
+	{
+		// We've received a chat. 
+	case kPlayerChatReceived:
+	{
+								// We'll want to display the player's name in front of the chat message,
+								// so we'll first paste the player's name and his message together in a String object.
+								// We limit the size of the displayed text using the String class, which automatically
+								// cuts off text that exceeds the boundary set in the template parameter.
+
+								String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
+								text += ": ";
+								text += static_cast<const char *>(param);
+
+								// Next, we'll make the completed message appear in the console.
+								// The kReportError parameter tells the engine to put the message in the console. 
+								// It doesn't actually mean there's an error.
+
+								TheEngine->Report(text, kReportError);
+								break;
+	}
+	}
+
+	// Finally, we pass the player event to the parent Application's HandlePlayerEvent method,
+	// so it can display errors if needed. The method does nothing at the moment, but we'll
+	// add it just in case it will somewhere in the future.
+	Application::HandlePlayerEvent(event, player, param);
 }

@@ -22,8 +22,8 @@
 
 using namespace C4;
 
-const unsigned long kGameProtocol = 0x00000012;
-const unsigned short kGamePort = 3003;
+//const unsigned long kGameProtocol = 0x00000012;
+//const unsigned short kGamePort = 3003;
 
 enum
 {
@@ -56,7 +56,10 @@ enum
 	kModelHandHeldSpeedBoost = 'hhsb',
 	kModelHandHeldRingExpander = 'hhrx',
 	kModelSmallBuilding = 'sbil',
-	kModelLargeBuilding = 'lbil'
+	kModelLargeBuilding = 'lbil',
+	
+	kGameProtocol = 0x0000000B,
+	kGamePort = 28327
 };
 
 class Game : public Singleton<Game>, public Application
@@ -116,6 +119,14 @@ private:
 
 	Sound* music;
 
+	//Console Commands
+	CommandObserver<Game>	serverObserver;
+	CommandObserver<Game>	joinObserver;
+	//this will start a new server
+	Command serverCommand;
+	//this will join an existing game
+	Command joinCommand;
+
 public:
 
 	Quaternion lookOrigin;
@@ -158,11 +169,19 @@ public:
 	//networking stuff
 	void HostGame();
 	void JoinGame(String<> ipAddress);
+	// This method will be executed whenever the user uses the server command
+	void ServerCommand(Command *command, const char *params);
+
+	// This method will be executed whenever the user uses the join command.
+	void JoinCommand(Command *command, const char *params);
+
+	//this method will be called by the enegine whenever a chat is recieved
+	void HandlePlayerEvent(PlayerEvent event, Player *player, const void *param);
 };
 
 extern "C"
 {
-	C4MODULEEXPORT Application* ConstructApplication(void);
+	C4MODULEEXPORT C4::Application* ConstructApplication(void);
 }
 
 extern Game *TheGame;

@@ -278,8 +278,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.009f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.009f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
 
 			// Hand orientation
 			Quaternion x, y, z;
