@@ -17,15 +17,15 @@ Game::Game() :
 	//Networking stuff
 	serverObserver(this, &Game::ServerCommand),
 	joinObserver(this, &Game::JoinCommand),
+	nameObserver(this, &Game::NameCommand),
 	//Create the server command to bind the text 'server' in the console.
 	serverCommand("server", &serverObserver),
-
 	//Create the join command to bind to the text 'join' in the console.
 	joinCommand("join", &joinObserver),
+	nameCommand("name", &nameObserver),
 
 	// The display event handler encapsulates a function that gets called
 	// when the Display Manager changes something like the screen resolution.
-
 	displayEventHandler(&HandleDisplayEvent),
 
 	//Controller Registrations
@@ -143,13 +143,12 @@ Game::Game() :
 	//Register both console commands with the engine
 	TheEngine->AddCommand(&serverCommand);
 	TheEngine->AddCommand(&joinCommand);
+	TheEngine->AddCommand(&nameCommand);
 
 	//Set some settings in the network manager
 	TheNetworkMgr->SetProtocol(kGameProtocol);
 	TheNetworkMgr->SetPortNumber(kGamePort);
 
-	//CommandObserver<Game> explodeObserver(&JoinCommand);
-	//Command *explodeCommand = new Command("explode", &explodeObserver);
 }
 
 Game::~Game()
@@ -558,21 +557,21 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 		// We've received a chat. 
 	case kPlayerChatReceived:
 	{
-								// We'll want to display the player's name in front of the chat message,
-								// so we'll first paste the player's name and his message together in a String object.
-								// We limit the size of the displayed text using the String class, which automatically
-								// cuts off text that exceeds the boundary set in the template parameter.
+			// We'll want to display the player's name in front of the chat message,
+			// so we'll first paste the player's name and his message together in a String object.
+			// We limit the size of the displayed text using the String class, which automatically
+			// cuts off text that exceeds the boundary set in the template parameter.
 
-								String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
-								text += ": ";
-								text += static_cast<const char *>(param);
+			String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
+			text += ": ";
+			text += static_cast<const char *>(param);
 
-								// Next, we'll make the completed message appear in the console.
-								// The kReportError parameter tells the engine to put the message in the console. 
-								// It doesn't actually mean there's an error.
+			// Next, we'll make the completed message appear in the console.
+			// The kReportError parameter tells the engine to put the message in the console. 
+			// It doesn't actually mean there's an error.
 
-								TheEngine->Report(text, kReportError);
-								break;
+			TheEngine->Report(text, kReportError);
+			break;
 	}
 	}
 
@@ -580,4 +579,94 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 	// so it can display errors if needed. The method does nothing at the moment, but we'll
 	// add it just in case it will somewhere in the future.
 	Application::HandlePlayerEvent(event, player, param);
+}
+
+void Game::NameCommand(Command* command, const char *param)
+{
+	NameChangeRequestMessage message(param);
+	TheMessageMgr->SendMessage(kPlayerServer, message);
+}
+
+Message * Game::ConstructMessage(MessageType type, Decompressor &data) const
+{
+	switch (type)
+	{
+		//Server
+		case (kMessageNameChangeRequestMessage) :
+			return (new NameChangeRequestMessage());
+
+		//Client
+		case (kMessageNameChangeMessage) :
+			return new NameChangeMessage();
+		
+		//add cases for other types of messages
+
+		default:
+		{
+		   Engine::Report("Error: Could not determine Message type");
+		   return nullptr;
+		}
+	}
+}
+
+void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Message *message)
+{
+	MessageType type = message->GetMessageType();
+
+	switch (type)
+	{
+		//server
+		case (kMessageNameChangeRequestMessage):
+		{
+			//cast the generic message into a more defined NameChangeRequestMessage
+			//so we can get the new name from it
+			const NameChangeRequestMessage *msg = static_cast<const NameChangeRequestMessage *>(message);
+
+			//find the player who sent the message
+			Player *player = TheMessageMgr->GetPlayer(from->GetPlayerKey());
+												   
+			//TODO: Insert validation here, like checking for duplicate names, invalid player names, etc.
+
+			//send message to all connected cilents informing them that a players name has changes.
+			// this message is sent to local client as well
+			NameChangeMessage ncmsg(NameChangeMessage(msg->GetNewName(), player->GetPlayerKey()));
+			TheMessageMgr->SendMessageAll(ncmsg);
+
+			break;
+		}
+
+		//client
+		case(kMessageNameChangeMessage) :
+		{
+			//cast the message
+			const NameChangeMessage *msg = static_cast<const NameChangeMessage *> (message);
+
+			//Find the player
+			Player *player = TheMessageMgr->GetPlayer(msg->GetPlayerKey());
+
+			//change the name if the player exists
+			if (player)
+			{
+				//write confirmation message now
+				String<128> str("Player ");
+				str += player->GetPlayerName();
+				str += " changed name to ";
+				str += msg->GetNewName();
+
+				//Update the players name
+				player->SetPlayerName(msg->GetNewName());
+
+				//confirm to user
+				TheEngine->Report(str, kReportError);
+			}
+			else{
+				//player wasn't found
+				String<128> str("Player ");
+				str += msg->GetPlayerKey();
+				str += " not found while trying to update name. =(";
+				TheEngine->Report(str, kReportError);
+			}
+			break;
+		}
+	}
 }

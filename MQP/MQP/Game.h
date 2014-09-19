@@ -15,6 +15,7 @@
 #include "LightParticleSystem.h"
 #include "ScriptMethods.h"
 #include "Ring.h"
+#include "NameChangeRequestMessage.h"
 
 #define NUM_BEST_TIMES 6
 #define TIME_FILE_PATH "Save/times"
@@ -119,13 +120,16 @@ private:
 
 	Sound* music;
 
-	//Console Commands
+	//Console Commands and netrowking stuff
 	CommandObserver<Game>	serverObserver;
 	CommandObserver<Game>	joinObserver;
+	CommandObserver<Game>	nameObserver;
 	//this will start a new server
 	Command serverCommand;
 	//this will join an existing game
 	Command joinCommand;
+	//The name change command will attempt to change the players name
+	Command nameCommand;
 
 public:
 
@@ -171,12 +175,23 @@ public:
 	void JoinGame(String<> ipAddress);
 	// This method will be executed whenever the user uses the server command
 	void ServerCommand(Command *command, const char *params);
-
 	// This method will be executed whenever the user uses the join command.
 	void JoinCommand(Command *command, const char *params);
+	//This method will be executed whenevere the user uses the name command.
+	void NameCommand(Command *command, const char *params);
 
 	//this method will be called by the enegine whenever a chat is recieved
 	void HandlePlayerEvent(PlayerEvent event, Player *player, const void *param);
+
+	//this is called whenever the local sysytem recieves a Message from a specific player
+	//On the server system, this method will respond to both locally sent messages (a system can send
+	//messages to itself) or from one of the connect clients. For clien systems, this method will 
+	//almost always respond to messages from the server - a client cannot normally connect to other clients
+	void ReceiveMessage(Player *from, const NetworkAddress &address, const Message *message);
+
+	//This method will be called whenever the messagemanager recieves a message.
+	//Its task is to create an instance of a Message based on the Message Type given to it.
+	Message *ConstructMessage(MessageType type, Decompressor &data) const;
 };
 
 extern "C"
