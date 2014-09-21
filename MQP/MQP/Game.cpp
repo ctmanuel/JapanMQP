@@ -491,8 +491,7 @@ void Game::HostGame()
 {
 
 	// temp
-	TheEngine->Report("Poop");
-
+	TheEngine->Report("Hosting Game");
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
