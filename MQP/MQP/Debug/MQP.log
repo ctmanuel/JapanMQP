@@ -1,7 +1,17 @@
-﻿Build started 9/22/2014 4:42:55 AM.
+﻿Build started 9/22/2014 8:40:19 AM.
      1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\optimization.cpp" Game.cpp LightParticleSystem.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\optimization.cpp" Game.cpp GameCamera.cpp GameWorld.cpp HandController.cpp LightParticleSystem.cpp LightPathController.cpp Player.cpp ResetAction.cpp ScriptMethods.cpp
+         ScriptMethods.cpp
+     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
+                 c:\users\thedragonsalien\documents\github\japanmqp\leapsdk\leapsdk\include\leap.h(2951) : see reference to function template instantiation '_OutIt std::copy<const unsigned char*,unsigned char*>(_InIt,_InIt,_OutIt)' being compiled
+                 with
+                 [
+                     _OutIt=unsigned char *
+         ,            _InIt=const unsigned char *
+                 ]
+                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
          Game.cpp
      1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
                  c:\program files (x86)\microsoft visual studio 12.0\vc\include\xutility(2113) : see declaration of 'std::_Copy_impl'
@@ -16,6 +26,12 @@
          Skipping... (no relevant changes detected)
          LightParticleSystem.cpp
          optimization.cpp
+         ResetAction.cpp
+         Player.cpp
+         LightPathController.cpp
+         HandController.cpp
+         GameWorld.cpp
+         GameCamera.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib pthreadVC2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
          Debug\looping_cubic_b_spline.obj
@@ -66,4 +82,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:58.78
+Time Elapsed 00:00:23.45

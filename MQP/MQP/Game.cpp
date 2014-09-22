@@ -480,6 +480,7 @@ void Game::SaveSettings(void)
 void Game::SetPlayerController(MainPlayerController* playerController)
 {
 	this->playerController = playerController;
+	
 }
 
 MainPlayerController* Game::GetPlayerController(void)
@@ -490,28 +491,26 @@ MainPlayerController* Game::GetPlayerController(void)
 void Game::HostGame()
 {
 
-	// temp
+	
 	TheEngine->Report("Hosting Game");
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
-	//TheGame->LoadWorld("world/mult");
-
-	//boxSnapShot = new BoxSnapShot();
-	//TheMessageMgr->AddSnapshotSender(boxSnapShot);
+	TheGame->LoadWorld("Menu");
+	
+	//TheMessageMgr->SendMessageAll(RequestMessage());
 }
 
 void Game::JoinGame(String<> ipAddress)
 {
 
-	// temp
-	TheEngine->Report("Poop");
-
 	TheMessageMgr->BeginMultiplayerGame(false);
+	TheMessageMgr->BroadcastServerQuery();
 	NetworkAddress addr = MessageMgr::StringToAddress(ipAddress);
 	addr.SetPort(kGamePort);
-	NetworkResult result = TheMessageMgr->Connect(addr);
 	TheEngine->Report(String<>("Attempting connection with: ") + MessageMgr::AddressToString(addr, true));
+	NetworkResult result = TheMessageMgr->Connect(addr);
+	//TheMessageMgr->
 
 	if (result == C4::kNetworkOkay)
 	{
@@ -611,7 +610,7 @@ Message * Game::ConstructMessage(MessageType type, Decompressor &data) const
 void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Message *message)
 {
 	MessageType type = message->GetMessageType();
-
+	
 	switch (type)
 	{
 		//server
@@ -666,6 +665,25 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 				TheEngine->Report(str, kReportError);
 			}
 			break;
+		}//case
+
+		case kMessageServerInfo:
+		{
+			String<> addr(MessageMgr::AddressToString(address, true));
+			JoinGame(addr);
+			break;
 		}
 	}
 }
+
+/*void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param)
+{
+	switch (event)
+	{
+	case kConnectionQueryReceived:
+		//do something
+		break;
+	}
+}
+
+*/

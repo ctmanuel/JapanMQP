@@ -192,6 +192,10 @@ public:
 	//This method will be called whenever the messagemanager recieves a message.
 	//Its task is to create an instance of a Message based on the Message Type given to it.
 	Message *ConstructMessage(MessageType type, Decompressor &data) const;
+
+	//Override from Application's HandleConnectionEvent function. Used to handle a server
+	//broadcast query from clients
+	//void HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param);
 };
 
 extern "C"

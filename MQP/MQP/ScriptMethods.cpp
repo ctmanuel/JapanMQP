@@ -721,5 +721,7 @@ void JoinMethod::SetSetting(const Setting* setting)
 
 void JoinMethod::Execute(const ScriptState* state)
 {
-	TheEngine->Report("Joining game... Not really though.");
+	TheMessageMgr->BroadcastServerQuery();
+	TheEngine->Report("Joining game");
+	
 }
