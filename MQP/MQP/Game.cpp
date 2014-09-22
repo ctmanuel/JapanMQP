@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "HandController.h"
+#include "Multiplayer.h"
+
 
 using namespace C4;
 
@@ -667,8 +669,9 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 			break;
 		}//case
 
-		case kMessageServerInfo:
-		{
+		case C4::kMessageServerInfo:
+		{	
+			Engine::Report("Recieved Message Server Info");
 			String<> addr(MessageMgr::AddressToString(address, true));
 			JoinGame(addr);
 			break;
@@ -676,14 +679,46 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 	}
 }
 
-/*void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param)
+void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param)
 {
 	switch (event)
 	{
-	case kConnectionQueryReceived:
-		//do something
-		break;
+		case kConnectionQueryReceived:
+		{
+			Engine::Report("Recieved kConnectionQueryReceived");
+			//send connectionless package to client that requested query
+			ServerInfoMessage msg(2, 2, "New Game");
+			TheMessageMgr->SendConnectionlessMessage(address, msg);
+
+			break;
+		}
+		case kConnectionClientOpened:
+		{
+			Engine::Report("Client Connected");
+			break;
+		}
+		case kConnectionClientClosed:
+		case kConnectionClientTimedOut:
+		{
+			Engine::Report("Client Connection Closed");
+			break;
+		}
+		case kConnectionServerAccepted:
+		{
+			Engine::Report("We are connected");
+			//load world here?
+			//send messageall request here?
+			break;
+		}
+		case C4::kConnectionServerClosed:
+		case C4::kConnectionServerTimedOut:
+		{
+			Engine::Report("Server Connection Closed.");
+			//UnloadWorld();
+			break;
+		}
 	}
+
+	Application::HandleConnectionEvent(event, address, param);
 }
 
-*/

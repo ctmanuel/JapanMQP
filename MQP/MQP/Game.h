@@ -195,7 +195,7 @@ public:
 
 	//Override from Application's HandleConnectionEvent function. Used to handle a server
 	//broadcast query from clients
-	//void HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param);
+	void HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param);
 };
 
 extern "C"
