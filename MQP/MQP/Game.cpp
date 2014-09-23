@@ -492,13 +492,11 @@ MainPlayerController* Game::GetPlayerController(void)
 
 void Game::HostGame()
 {
-
-	
 	TheEngine->Report("Hosting Game");
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
-	TheGame->LoadWorld("Menu");
+	//TheGame->LoadWorld("Menu");
 	
 	//TheMessageMgr->SendMessageAll(RequestMessage());
 }
@@ -507,7 +505,6 @@ void Game::JoinGame(String<> ipAddress)
 {
 
 	TheMessageMgr->BeginMultiplayerGame(false);
-	TheMessageMgr->BroadcastServerQuery();
 	NetworkAddress addr = MessageMgr::StringToAddress(ipAddress);
 	addr.SetPort(kGamePort);
 	TheEngine->Report(String<>("Attempting connection with: ") + MessageMgr::AddressToString(addr, true));
@@ -524,29 +521,35 @@ void Game::JoinGame(String<> ipAddress)
 	}
 }
 
+void Game::JoinGame()
+{
+	Engine::Report("Sending broadcast query");
+	//TheMessageMgr->BroadcastServerQuery();
+
+}
+
 void Game::ServerCommand(Command *command, const char *params)
 {
 	// Just start the server. The 'true' parameter 
 	// is to indicate that this machine is the server.
 	TheMessageMgr->BeginMultiplayerGame(true);
+	TheMessageMgr->BroadcastServerQuery();
+
 	TheEngine->Report("Server initialized", kReportError);
+	TheMessageMgr->SendMessageAll(RequestMessage());
 }
 
 void Game::JoinCommand(Command *command, const char *params)
 {
-	// We'll first want to provide the user with some feedback - so he'll know what he's doing.
+	//temp
+	TheNetworkMgr->SetPortNumber(0);
 	String<128> str("Attempting to join ");
 	str += params;
 	TheEngine->Report(str, kReportError);
 
-	// Next, we convert the entered parameters into a C4 NetworkAddress.
-	// This format is used internally. It has both an IP address and a port number.
+	//TheMessageMgr->BeginMultiplayerGame(false);
 	NetworkAddress address = MessageMgr::StringToAddress(params);
-
-	// We explicitly set a port in this example - it defaults to 0.
 	address.SetPort(kGamePort);
-
-	// Now we're just going to (try to) connect to the entered address.
 	TheMessageMgr->Connect(address);
 }
 
@@ -557,18 +560,9 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 		// We've received a chat. 
 	case kPlayerChatReceived:
 	{
-			// We'll want to display the player's name in front of the chat message,
-			// so we'll first paste the player's name and his message together in a String object.
-			// We limit the size of the displayed text using the String class, which automatically
-			// cuts off text that exceeds the boundary set in the template parameter.
-
 			String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
 			text += ": ";
 			text += static_cast<const char *>(param);
-
-			// Next, we'll make the completed message appear in the console.
-			// The kReportError parameter tells the engine to put the message in the console. 
-			// It doesn't actually mean there's an error.
 
 			TheEngine->Report(text, kReportError);
 			break;
@@ -587,24 +581,38 @@ void Game::NameCommand(Command* command, const char *param)
 	TheMessageMgr->SendMessage(kPlayerServer, message);
 }
 
+//When the message manager recieves a message 
 Message * Game::ConstructMessage(MessageType type, Decompressor &data) const
 {
+	Engine::Report(String<>("ConstructMessage: Got type ") + type);
 	switch (type)
 	{
-		//Server
 		case (kMessageNameChangeRequestMessage) :
-			return (new NameChangeRequestMessage());
+			return (new NameChangeRequestMessage);
 
-		//Client
 		case (kMessageNameChangeMessage) :
-			return new NameChangeMessage();
+			return (new NameChangeMessage);
 		
-		//add cases for other types of messages
+		case(kConnectionQueryReceived) :
+		{
+			Engine::Report("Constructing server info message");
+			return new ServerInfoMessage;
+		}
+		case kMessageRequest:
+		{
+			Engine::Report("Constructing message request message");
+			return new RequestMessage;
+		}
 
+		case kMessageBattleLevel:
+		{
+			Engine::Report("Constructing message load multiplayer message");
+			return new LoadMultiplayerLevel;
+		}
 		default:
 		{
-		   Engine::Report("Error: Could not determine Message type");
-		   return nullptr;
+			Engine::Report(String<>("Could not determine type: ") + type);
+			return nullptr;
 		}
 	}
 }
@@ -612,6 +620,7 @@ Message * Game::ConstructMessage(MessageType type, Decompressor &data) const
 void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Message *message)
 {
 	MessageType type = message->GetMessageType();
+	Engine::Report(String<>("ReceiveMessage: Got Message Type ") + type);
 	
 	switch (type)
 	{
@@ -669,6 +678,10 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 			break;
 		}//case
 
+		case kMessageBattleLevel:
+		{
+			Engine::Report("Loading level");
+		}
 		case C4::kMessageServerInfo:
 		{	
 			Engine::Report("Recieved Message Server Info");
@@ -681,6 +694,8 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 
 void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& address, const void *param)
 {
+	Engine::Report(String<> ("Recieved Connection event ") + event);
+	
 	switch (event)
 	{
 		case kConnectionQueryReceived:
@@ -695,6 +710,7 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 		case kConnectionClientOpened:
 		{
 			Engine::Report("Client Connected");
+			//TheMessageMgr->SendMessageAll(LoadMultiplayerLevel(23));
 			break;
 		}
 		case kConnectionClientClosed:
@@ -715,6 +731,11 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 		{
 			Engine::Report("Server Connection Closed.");
 			//UnloadWorld();
+			break;
+		}
+		case C4::kConnectionAttemptFailed:
+		{
+			Engine::Report("Connection Attemp Failed.");
 			break;
 		}
 	}

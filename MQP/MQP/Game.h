@@ -59,8 +59,8 @@ enum
 	kModelSmallBuilding = 'sbil',
 	kModelLargeBuilding = 'lbil',
 	
-	kGameProtocol = 0x0000000B,
-	kGamePort = 28327
+	kGameProtocol = 0x00000012,
+	kGamePort = 3003
 };
 
 class Game : public Singleton<Game>, public Application
@@ -173,6 +173,7 @@ public:
 	//networking stuff
 	void HostGame();
 	void JoinGame(String<> ipAddress);
+	void JoinGame();
 	// This method will be executed whenever the user uses the server command
 	void ServerCommand(Command *command, const char *params);
 	// This method will be executed whenever the user uses the join command.

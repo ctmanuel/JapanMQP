@@ -1,17 +1,23 @@
 #pragma once
 
 #include "C4Application.h"
+#include "C4Messages.h"
 
 using namespace C4;
 
-enum
+enum MESSAGES
 {
-	kMessageServerInfo = kMessageBaseCount
+	kMessageServerInfo = kMessageBaseCount,
+	kMessageRequest = 159,
+	kMessageSpawn,
+	kMessageOrientation,
+	kMessageBattleLevel
 };
+namespace C4{
 
-class ServerInfoMessage : public Message
-{
-	friend class Game;
+	class ServerInfoMessage : public Message
+	{
+		friend class Game;
 
 	private:
 
@@ -46,4 +52,112 @@ class ServerInfoMessage : public Message
 		void Compress(Compressor& data) const override;
 		bool Decompress(Decompressor& data) override;
 
-};
+	};
+
+	class RequestMessage : public Message
+	{
+	public:
+
+		RequestMessage();
+		~RequestMessage();
+
+		void Compress(Compressor &data) const;
+		bool Decompress(Decompressor &data);
+	};
+
+	class SpawnMessage : public Message
+	{
+	private:
+		Point3D loc;
+		int32 contIndex;
+		PlayerKey key;
+
+	public:
+		SpawnMessage();
+		SpawnMessage(PlayerKey playerKey, int32 controllerIndex, Point3D location);
+		~SpawnMessage();
+
+		bool HandleMessage(Player *sender) const;
+
+		void Compress(Compressor &data) const;
+		bool Decompress(Decompressor &data);
+
+		Point3D GetLocation() const
+		{
+			return loc;
+		}
+
+		PlayerKey GetPlayerKey() const
+		{
+			return key;
+		}
+
+		long GetControllerIndex() const
+		{
+			return contIndex;
+		}
+	};
+
+	class ClientMovementMessage : public Message
+	{
+		friend class Game;
+
+	private:
+
+		unsigned long movementFlag;
+
+		ClientMovementMessage(MessageType type);
+
+	public:
+
+		ClientMovementMessage(MessageType type, unsigned long flag);
+		~ClientMovementMessage();
+
+		long GetMovementFlag(void) const
+		{
+			return movementFlag;
+		}
+
+		void Compress(Compressor& data) const;
+		bool Decompress(Decompressor& data);
+
+		bool HandleMessage(Player *sender) const;
+	};
+
+	class ClientOrientationMessage : public Message
+	{
+	private:
+
+		float orientation;
+
+	public:
+
+		ClientOrientationMessage(void);
+		ClientOrientationMessage(float _orientation);
+		~ClientOrientationMessage(void);
+
+		void Compress(Compressor& data) const;
+		bool Decompress(Decompressor& data);
+
+		bool HandleMessage(Player *sender) const;
+	};
+
+	class LoadMultiplayerLevel : public Message
+	{
+		private:
+			unsigned long level;
+		public:
+			LoadMultiplayerLevel();
+			LoadMultiplayerLevel(unsigned long lvl);
+			~LoadMultiplayerLevel();
+
+			unsigned long GetMultiplayerLevel()
+			{
+				return level;
+			}
+
+			void Compress(Compressor& data) const;
+			bool Decompress(Decompressor& data);
+
+	};
+}

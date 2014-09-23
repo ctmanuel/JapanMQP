@@ -68,12 +68,12 @@ NameChangeMessage::~NameChangeMessage()
 void NameChangeMessage::Compress(Compressor &data) const
 {
 	data << playerKey;
-	NameChangeMessage::Compress(data);
+	NameChangeRequestMessage::Compress(data);
 }
 
 bool NameChangeMessage::Decompress(Decompressor &data)
 {
 	data >> playerKey;
-	NameChangeMessage::Decompress(data);
+	NameChangeRequestMessage::Decompress(data);
 	return true;
 }
