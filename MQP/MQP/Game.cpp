@@ -122,7 +122,7 @@ Game::Game() :
 	{
 		settings[0] = 100;
 		settings[1] = 100;
-		settings[2] = 50;
+		settings[2] = 20;
 		settings[3] = 50;
 		file.Open(SETTING_FILE_PATH, kFileCreate);
 		file.Write(settings, sizeof(int)* 4);
@@ -558,15 +558,20 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 	switch (event)
 	{
 		// We've received a chat. 
-	case kPlayerChatReceived:
-	{
-			String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
-			text += ": ";
-			text += static_cast<const char *>(param);
+		case kPlayerChatReceived:
+		{
+				String<kMaxChatMessageLength + kMaxPlayerNameLength + 2> text(player->GetPlayerName());
+				text += ": ";
+				text += static_cast<const char *>(param);
 
-			TheEngine->Report(text, kReportError);
-			break;
-	}
+				TheEngine->Report(text, kReportError);
+				break;
+		}
+
+		case kPlayerInitialized:
+		{
+								   Engine::Report("Player initialized");
+		}
 	}
 
 	// Finally, we pass the player event to the parent Application's HandlePlayerEvent method,

@@ -106,9 +106,9 @@ void HandController::Move(void)
 {
 	//animate model
 	Model *myModel = GetTargetModel();
-	myModel->Animate();
+	//myModel->Animate();
 
-	Point3D basePosition(1.0f, 0.0f, 1.0f);
+	Point3D basePosition(0.9f, 0.0f, 0.8f);
 
 	if (leap.isConnected())
 	{
@@ -117,8 +117,16 @@ void HandController::Move(void)
 		{
 			Leap::Hand hand = hands.frontmost();
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.y = (hand.stabilizedPalmPosition()[0] * -1.0f) * (0.0038f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0038f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+
+			// Hand orientation
+			Quaternion x, y, z;
+			x.SetRotationAboutX(-1 * hand.palmNormal().roll());
+			y.SetRotationAboutY(K::pi_over_2);
+			z.SetRotationAboutZ(K::pi_over_2);
+			//GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
+
 			if (leapMotion.y > MAX_LEAP_Y)
 			{
 				leapMotion.y = MAX_LEAP_Y;
