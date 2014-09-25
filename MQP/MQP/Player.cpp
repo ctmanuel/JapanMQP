@@ -345,9 +345,8 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		if (speedTime < 0) prevSpeed = speed;
+		if (speedTime <= 0) prevSpeed = speed;
 		speedTime = SPEED_BOOST_TIME;
-
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/speedboost");
@@ -373,7 +372,7 @@ void MainPlayerController::UsePowerUp(void)
 		} while (node);
 
 		for(int i = 0; i < ringList.size(); i++){
-			Engine::Report(String<63>("found ") + i + ("rings"));
+			Engine::Report(String<63>("found ") + (i + 1) + ("rings"));
 			//Model* temp = (Model*)(ringList[i]->GetObject());
 			//Geometry* tm = (Geometry*)ringList[i]->get
 			Transform4D trans = ringList[i]->GetNodeTransform();
