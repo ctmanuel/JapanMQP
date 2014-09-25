@@ -345,7 +345,7 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-		if (speedTime < 0) prevSpeed = speed;
+		prevSpeed = speed;
 		speedTime = SPEED_BOOST_TIME;
 
 		// Play sound effect
@@ -432,18 +432,14 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
+		delete geometry;
 		powerUp = powerUpSpeedBoost;
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
+		delete geometry;
 		powerUp = powerUpRingExpander;
 		return (kRigidBodyContactsBroken);
 	}
