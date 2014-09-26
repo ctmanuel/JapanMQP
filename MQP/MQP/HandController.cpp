@@ -205,14 +205,18 @@ RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		player->SetPowerUp(powerUpSpeedBoost);
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
 		player->SetPowerUp(powerUpRingExpander);
 		return (kRigidBodyContactsBroken);
 	}

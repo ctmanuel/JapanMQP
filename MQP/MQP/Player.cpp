@@ -345,11 +345,7 @@ void MainPlayerController::UsePowerUp(void)
 	switch (powerUp)
 	{
 	case powerUpSpeedBoost:
-<<<<<<< HEAD
-		prevSpeed = speed;
-=======
 		if (speedTime <= 0) prevSpeed = speed;
->>>>>>> 88109c2bb4c7b216e0e2ebe6d47eb8a16ef5cf55
 		speedTime = SPEED_BOOST_TIME;
 		// Play sound effect
 		sound = new Sound;
@@ -365,17 +361,23 @@ void MainPlayerController::UsePowerUp(void)
 		Node* node = root;
 		do
 		{
-			if (node->GetController())
+			/*if (node->GetController())
 			{
 				if (node->GetController()->GetControllerType() == kControllerRing)
 				{
 					ringList.push_back(node);
 				}
+			}*/
+			if (node->GetNodeName() == "ring") {
+				Engine::Report(String<63>("found ring"));
+				Transform4D trans = node->GetNodeTransform();
+				trans.SetScale(2, 2, 2);
+				node->SetNodeTransform(trans);
 			}
 			node = root->GetNextNode(node);
 		} while (node);
 
-		for(int i = 0; i < ringList.size(); i++){
+		/*for(int i = 0; i < ringList.size(); i++){
 			Engine::Report(String<63>("found ") + (i + 1) + ("rings"));
 			//Model* temp = (Model*)(ringList[i]->GetObject());
 			//Geometry* tm = (Geometry*)ringList[i]->get
@@ -383,7 +385,7 @@ void MainPlayerController::UsePowerUp(void)
 			Transform4D trans = temp->GetNodeTransform();
 			trans.SetScale(10, 10, 10);
 			temp->SetNodeTransform(trans);
-		}
+		}*/
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/expansion");
@@ -436,15 +438,19 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
-		powerUp = powerUpSpeedBoost;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
+		SetPowerUp(powerUpSpeedBoost);
 		return (kRigidBodyContactsBroken);
 	}
 	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
 	{
 		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
-		powerUp = powerUpRingExpander;
+		Node* parent = geometry->GetSuperNode();
+		parent->PurgeSubtree();
+		delete parent;
+		SetPowerUp(powerUpRingExpander);
 		return (kRigidBodyContactsBroken);
 	}
 	else
