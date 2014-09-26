@@ -50,8 +50,28 @@ Game::Game() :
 	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
 	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
 	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+
+	//Environemnt Models
 	smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
 	largeBuildingModelReg(kModelLargeBuilding, "Large Building", "Model/largeBuilding"),
+	CityWall_1(kModelCityWall, "Green City Wall 1", "Model/Environment/CityWall1"),
+	CityWall_2(kModelCityWall2, "Green City Wall 2", "Model/Environment/CityWall2"),
+	CityWall_3(kModelCityWall3, "Green City Wall 3", "Model/Environment/CityWall3"),
+	BlueCityWall_1(kModelBlueCityWall, "Blue City Wall 1", "Model/Environment/BlueCityWall1"),
+	BlueCityWall_2(kModelBlueCityWall2, "Blue City Wall 2", "Model/Environment/BlueCityWall2"),
+	BlueCityWall_3(kModelBlueCityWall3, "Blue City Wall 3", "Model/Environment/BlueCityWall3"),
+	CityPillar_1(kModelCityPillar, "Green City Pillar 1", "Model/Environment/CityPillar1"),
+	CityPillar_2(kModelCityPillar2, "Green City Pillar 2", "Model/Environment/CityPillar2"),
+	CityPillar_3(kModelCityPillar3, "Green City Pillar 3", "Model/Environment/CityPillar3"),
+	BlueCityPillar_1(kModelBlueCityPillar, "Blue City Pillar 1", "Model/Environment/BlueCityPillar1"),
+	BlueCityPillar_2(kModelBlueCityPillar2, "Blue City Pillar 2", "Model/Environment/BlueCityPillar2"),
+	BlueCityPillar_3(kModelBlueCityPillar3, "Blue City Pillar 3", "Model/Environment/BlueCityPillar3"),
+	CityCube_1(kModelCityCube, "Green City Cube 1", "Model/Environment/CityCube1"),
+	CityCube_2(kModelCityCube2, "Green City Cube 2", "Model/Environment/CityCube2"),
+	CityCube_3(kModelCityCube3, "Green City Cube 3", "Model/Environment/CityCube3"),
+	BlueCityCube_1(kModelBlueCityCube, "Blue City Cube 1", "Model/Environment/BlueCityCube1"),
+	BlueCityCube_2(kModelBlueCityCube2, "Blue City Cube 2", "Model/Environment/BlueCityCube2"),
+	BlueCityCube_3(kModelBlueCityCube3, "Blue City Cube 3", "Model/Environment/BlueCityCube3"),
 
 	//Animated Object Registration
 	//Animated Hand Registration

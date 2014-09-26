@@ -49,7 +49,7 @@ void GameCamera::Move(void)
 	if (playerNode != nullptr){
 		Point3D oldPos = GetNodePosition();
 
-		SetNodePosition(Point3D(0.0f, 0.0f, 1.64f));
+		SetNodePosition(Point3D(0.0f, 0.0f, 1.3f));
 
 		// temp
 		//SetNodePosition(Point3D(-10.0f, 0.0f, 3.0f));

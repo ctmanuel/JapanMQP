@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2014-09-25T02:49:26Z</created><keywords></keywords><modified>2014-09-25T02:49:26Z</modified><revision></revision><subject></subject><title></title><unit meter="0.010000" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
+  <library_images>
+    <image id="file1-image" name="file1"><init_from>file://C:/Users/aston_000/Desktop/For_GDrive/Environment/Alt_Green_City_Diffuse.tga</init_from></image>
+  </library_images>
+  <library_materials>
+    <material id="lambert2" name="lambert2">
+      <instance_effect url="#lambert2-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert2-fx" name="lambert2">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <texture texture="file1-image" texcoord="CHANNEL0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU sid="wrapU0">TRUE</wrapU>
+                    <wrapV sid="wrapV0">TRUE</wrapV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="pCylinder1-lib" name="pCylinder1Mesh">
+      <mesh>
+        <source id="pCylinder1-POSITION">
+          <float_array id="pCylinder1-POSITION-array" count="54">
+7.071067 -36.000000 -7.071067
+0.000000 -36.000000 -9.999999
+-7.071067 -36.000000 -7.071067
+-9.999999 -36.000000 0.000000
+-7.071067 -36.000000 7.071067
+0.000000 -36.000000 9.999999
+7.071068 -36.000000 7.071068
+10.000000 -36.000000 0.000000
+7.071067 36.000000 -7.071067
+0.000000 36.000000 -9.999999
+-7.071067 36.000000 -7.071067
+-9.999999 36.000000 0.000000
+-7.071067 36.000000 7.071067
+0.000000 36.000000 9.999999
+7.071068 36.000000 7.071068
+10.000000 36.000000 0.000000
+0.000000 -36.000000 0.000000
+0.000000 36.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-POSITION-array" count="18" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder1-Normal0">
+          <float_array id="pCylinder1-Normal0-array" count="288">
+0.000000 0.000000 -1.000000
+0.707107 0.000000 -0.707107
+0.000000 0.000000 -1.000000
+0.707107 0.000000 -0.707107
+0.000000 0.000000 -1.000000
+0.707107 0.000000 -0.707107
+-0.707107 0.000000 -0.707107
+0.000000 0.000000 -1.000000
+-0.707107 0.000000 -0.707107
+0.000000 0.000000 -1.000000
+-0.707107 0.000000 -0.707107
+0.000000 0.000000 -1.000000
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 -0.707107
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 -0.707107
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 -0.707107
+-0.707107 0.000000 0.707107
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 0.707107
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 0.707107
+-1.000000 0.000000 0.000000
+-0.707107 0.000000 0.707107
+-0.707107 0.000000 0.707107
+-0.000000 0.000000 1.000000
+-0.000000 0.000000 1.000000
+-0.707107 0.000000 0.707107
+-0.000000 0.000000 1.000000
+-0.000000 0.000000 1.000000
+-0.000000 0.000000 1.000000
+0.707107 0.000000 0.707107
+0.707107 0.000000 0.707107
+-0.000000 0.000000 1.000000
+0.707107 0.000000 0.707107
+1.000000 0.000000 -0.000000
+1.000000 0.000000 -0.000000
+0.707107 0.000000 0.707107
+0.707107 0.000000 0.707107
+0.707107 0.000000 0.707107
+1.000000 0.000000 -0.000000
+0.707107 0.000000 -0.707107
+0.707107 0.000000 -0.707107
+1.000000 0.000000 -0.000000
+1.000000 0.000000 -0.000000
+1.000000 0.000000 -0.000000
+0.707107 0.000000 -0.707107
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-Normal0-array" count="96" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pCylinder1-UV0">
+          <float_array id="pCylinder1-UV0-array" count="76">
+0.910485 0.689515
+0.800000 0.643750
+0.689515 0.689515
+0.643750 0.800000
+0.689515 0.910485
+0.800000 0.956250
+0.910485 0.910485
+0.956250 0.800000
+0.250000 0.000000
+0.500000 0.000000
+0.750000 0.000000
+1.000000 0.000000
+0.250000 0.000000
+0.500000 0.000000
+0.750000 0.000000
+1.000000 0.000000
+1.000000 1.000000
+0.250000 1.000000
+0.500000 1.000000
+0.750000 1.000000
+0.000000 1.000000
+0.250000 1.000000
+0.500000 1.000000
+0.750000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+0.910485 0.689515
+0.800000 0.643750
+0.689515 0.689515
+0.643750 0.800000
+0.689515 0.910485
+0.800000 0.956250
+0.910485 0.910485
+0.956250 0.800000
+0.800000 0.793750
+0.800000 0.793750
+0.000000 0.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pCylinder1-UV0-array" count="38" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pCylinder1-VERTEX">
+          <input semantic="POSITION" source="#pCylinder1-POSITION"/>
+        </vertices>
+        <triangles count="32" material="lambert2"><input semantic="VERTEX" offset="0" source="#pCylinder1-VERTEX"/><input semantic="NORMAL" offset="1" source="#pCylinder1-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#pCylinder1-UV0"/><p> 9 0 18 0 1 8 1 2 9 0 3 8 9 4 18 8 5 17 10 6 19 1 7 9 2 8 10 1 9 9 10 10 19 9 11 18 11 12 16 2 13 10 3 14 11 2 15 10 11 16 16 10 17 19 12 18 21 3 19 25 4 20 12 3 21 25 12 22 21 11 23 20 12 24 21 4 25 12 13 26 22 13 27 22 4 28 12 5 29 13 13 30 22 5 31 13 14 32 23 14 33 23 5 34 13 6 35 14 7 36 15 15 37 37 6 38 14 14 39 23 6 40 14 15 41 37 0 42 8 8 43 17 7 44 36 15 45 24 7 46 36 8 47 17 1 48 1 0 49 0 16 50 34 2 51 2 1 52 1 16 53 34 3 54 3 2 55 2 16 56 34 4 57 4 3 58 3 16 59 34 5 60 5 4 61 4 16 62 34 6 63 6 5 64 5 16 65 34 7 66 7 6 67 6 16 68 34 0 69 0 7 70 7 16 71 34 8 72 32 9 73 31 17 74 35 9 75 31 10 76 30 17 77 35 10 78 30 11 79 29 17 80 35 11 81 29 12 82 28 17 83 35 12 84 28 13 85 27 17 86 35 13 87 27 14 88 26 17 89 35 14 90 26 15 91 33 17 92 35 15 93 33 8 94 32 17 95 35</p></triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Alt_City_Pillarl" name="Alt_City_Pillarl">
+      <node name="pCylinder1" id="pCylinder1" sid="pCylinder1"><matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 36.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix><instance_geometry url="#pCylinder1-lib"><bind_material><technique_common><instance_material symbol="lambert2" target="#lambert2"/></technique_common></bind_material></instance_geometry><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <extra><technique profile="MAX3D"><frame_rate>24.000000</frame_rate></technique><technique profile="FCOLLADA"><start_time>0.041667</start_time><end_time>2.000000</end_time></technique></extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Alt_City_Pillarl"></instance_visual_scene>
+  </scene>
+</COLLADA>

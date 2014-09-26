@@ -376,9 +376,10 @@ void MainPlayerController::UsePowerUp(void)
 			Engine::Report(String<63>("found ") + i + ("rings"));
 			//Model* temp = (Model*)(ringList[i]->GetObject());
 			//Geometry* tm = (Geometry*)ringList[i]->get
-			Transform4D trans = ringList[i]->GetNodeTransform();
-			trans.SetScale(5, 5, 5);
-			ringList[i]->SetNodeTransform(trans);
+			Node * temp = ringList[i]->GetFirstSubnode();
+			Transform4D trans = temp->GetNodeTransform();
+			trans.SetScale(10, 10, 10);
+			temp->SetNodeTransform(trans);
 		}
 		// Play sound effect
 		sound = new Sound;

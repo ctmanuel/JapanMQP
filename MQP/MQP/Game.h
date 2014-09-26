@@ -58,6 +58,26 @@ enum
 	kModelHandHeldRingExpander = 'hhrx',
 	kModelSmallBuilding = 'sbil',
 	kModelLargeBuilding = 'lbil',
+	kModelCityCube = 'ccty',
+	kModelCityCube2 = 'cct2',
+	kModelCityCube3 = 'cct3',
+	kModelBlueCityCube = 'bct1',
+	kModelBlueCityCube2 = 'bct2',
+	kModelBlueCityCube3 = 'bct3',
+	kModelCityPillar = 'pcty',
+	kModelCityPillar2 = 'pct2',
+	kModelCityPillar3 = 'pct3',
+	kModelBlueCityPillar = 'pcby',
+	kModelBlueCityPillar2 = 'pcb2',
+	kModelBlueCityPillar3 = 'pcb3',
+	kModelCityWall = 'wcty',
+	kModelCityWall2 = 'cty2',
+	kModelCityWall3 = 'cty3',
+	kModelBlueCityWall = 'bcty',
+	kModelBlueCityWall2 = 'bty2',
+	kModelBlueCityWall3 = 'bty3',
+
+
 	
 	kGameProtocol = 0x00000012,
 	kGamePort = 3003
@@ -82,6 +102,25 @@ private:
 	ModelRegistration						handHeldRingExpanderModelReg;
 	ModelRegistration						smallBuildingModelReg;
 	ModelRegistration						largeBuildingModelReg;
+	ModelRegistration						CityWall_1;
+	ModelRegistration						CityWall_2;
+	ModelRegistration						CityWall_3;
+	ModelRegistration						BlueCityWall_1;
+	ModelRegistration						BlueCityWall_2;
+	ModelRegistration						BlueCityWall_3;
+	ModelRegistration						CityPillar_1;
+	ModelRegistration						CityPillar_2;
+	ModelRegistration						CityPillar_3;
+	ModelRegistration						BlueCityPillar_1;
+	ModelRegistration						BlueCityPillar_2;
+	ModelRegistration						BlueCityPillar_3;
+	ModelRegistration						CityCube_1;
+	ModelRegistration						CityCube_2;
+	ModelRegistration						CityCube_3;
+	ModelRegistration						BlueCityCube_1;
+	ModelRegistration						BlueCityCube_2;
+	ModelRegistration						BlueCityCube_3;
+	
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;

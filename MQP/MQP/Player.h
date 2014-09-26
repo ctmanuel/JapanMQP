@@ -22,15 +22,15 @@
 #define DISTANCE_TO_PATH (2.0F) // meters between player and front of light path
 
 // Speed stuff
-#define START_SPEED (2.0f) // m/s
-#define MIN_SPEED (1.0f) // m/s
-#define MAX_SPEED (10.0f) // m/s
-#define BASE_SPEED (4.0f) // m/s, if below this speed, player will gradually accelerate towards it
-#define BASE_ACCELERATION (0.5f) // m/s/s
+#define START_SPEED (3.0f) // m/s
+#define MIN_SPEED (2.0f) // m/s
+#define MAX_SPEED (15.0f) // m/s
+#define BASE_SPEED (5.0f) // m/s, if below this speed, player will gradually accelerate towards it
+#define BASE_ACCELERATION (1.0f) // m/(s*s)
 #define BASE_CLIMB_THRESHOLD (0.4f) // m/s vertical that player must be below to get base acceleration
-#define HILL_ACCELERATION (0.1f) // no useful units. just a scale
+#define HILL_ACCELERATION (0.5f) // no useful units. just a scale
 #define TURN_SLOW_THRESHOLD (0.1f) // turn "sharpness" (in no useful units) above which player will lose speed when turning
-#define TURN_ACCELERATION (0.1f) // m/s/s player loses when turning sharply without banking
+#define TURN_ACCELERATION (0.1f) // m/(s*s) player loses when turning sharply without banking
 #define ROLL_REQUIREMENT (0.6f) // roll required to not lose speed around turns
 
 // Other stuff
