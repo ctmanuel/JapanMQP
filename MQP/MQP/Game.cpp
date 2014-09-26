@@ -317,6 +317,8 @@ EngineResult Game::LoadWorld(const char *name)
 
 void Game::UnloadWorld(void)
 {
+	music->Stop();
+	music->Release();
 	TheWorldMgr->UnloadWorld();
 	TheGame->handController = nullptr;
 	playerController = nullptr;
