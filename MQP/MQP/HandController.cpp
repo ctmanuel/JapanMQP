@@ -187,6 +187,7 @@ void HandController::Move(void)
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
 	Geometry* geometry = contact->GetContactGeometry();
+	if (geometry)
 	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
 	{
 		Sound* sound = new Sound;
