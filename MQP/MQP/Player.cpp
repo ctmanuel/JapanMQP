@@ -371,7 +371,7 @@ void MainPlayerController::UsePowerUp(void)
 			if (node->GetNodeName() == "ring") {
 				Engine::Report(String<63>("found ring"));
 				Transform4D trans = node->GetNodeTransform();
-				trans.SetScale(2, 2, 2);
+				trans.SetScale(3, 3, 3);
 				node->SetNodeTransform(trans);
 			}
 			node = root->GetNextNode(node);
