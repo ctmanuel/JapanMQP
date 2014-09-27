@@ -623,6 +623,22 @@ void AddSpeedMethod::Execute(const ScriptState* state)
 	if (player)
 	{
 		player->AddSpeed(speedChange);
+		int ringMs = static_cast<int>(player->GetRingTime());
+		Engine::Report(String<63>("added speed, ring time is ") + (ringMs) + (" ms"));
+		if ((speedChange == 0.5) && (player->GetRingTime() > 0)) // ring during ring enhance time
+		{
+			int time = static_cast<int>(player->GetSpeedTime());
+			if (time <= 0) { // not currently in speedTime, current speed must be stored
+				player->SetPrevSpeed(player->GetSpeed());
+			}
+			time += 1000.0F;
+			// five second cap on stored time for max speed effect
+			if (time > 5000.0F) {
+				time = 5000.0F;
+			}
+			player->SetSpeedTime(time);
+			Engine::Report(String<63>("speed time is now ") + (time));
+		}
 	}
 	CallCompletionProc();
 }
