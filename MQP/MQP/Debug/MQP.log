@@ -1,6 +1,41 @@
-﻿Build started 9/26/2014 10:58:29 PM.
+﻿Build started 9/27/2014 2:04:42 AM.
      1>Project "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib pthreadVC2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
+         Debug\looping_cubic_b_spline.obj
+         Debug\cr_spline.obj
+         Debug\cubic_hermite_spline.obj
+         Debug\looping_cr_spline.obj
+         Debug\looping_cubic_hermite_spline.obj
+         Debug\looping_quintic_cr_spline.obj
+         Debug\looping_quintic_hermite_spline.obj
+         Debug\quintic_cr_spline.obj
+         Debug\quintic_hermite_spline.obj
+         Debug\linear_spline.obj
+         Debug\looping_linear_spline.obj
+         Debug\looping_natural_spline.obj
+         Debug\natural_spline.obj
+         Debug\spline.obj
+         Debug\splineinverter.obj
+         Debug\splinelengthcalculator.obj
+         Debug\linearalgebra.obj
+         Debug\optimization.obj
+         Debug\t_calculator.obj
+         Debug\vector3d.obj
+         Debug\Game.obj
+         Debug\GameCamera.obj
+         Debug\GameWorld.obj
+         Debug\HandController.obj
+         Debug\LightParticleSystem.obj
+         Debug\LightPathController.obj
+         Debug\Multiplayer.obj
+         Debug\NameChangeRequestMessage.obj
+         Debug\Player.obj
+         Debug\PlayerInteractor.obj
+         Debug\Ring.obj
+         Debug\ScriptMethods.obj
+         Debug\ResetAction.obj
+            Creating library ..\..\C4\MQP.lib and object ..\..\C4\MQP.exp
          MQP.vcxproj -> C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
        PostBuildEvent:
          xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\TheDragonsAlien\Documents\GitHub\JapanMQP\C4\"
@@ -17,4 +52,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.39
+Time Elapsed 00:00:08.76

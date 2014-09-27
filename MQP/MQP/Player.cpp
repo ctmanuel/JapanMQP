@@ -107,7 +107,7 @@ Controller *MainPlayerController::Replicate(void) const
 	 splinePoints.push_back(SplineVector3D(position.x + 0.01f, position.y, position.z));
 	 splinePoints.push_back(SplineVector3D(position.x + 0.02f, position.y, position.z));
 
-	 // Start level time at 0
+	 // Start level time at 0x
 	 levelTime = 0;
 
 	 if (!(GetTargetNode()->GetManipulator()))
