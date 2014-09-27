@@ -35,6 +35,7 @@
 
 // Other stuff
 #define SPEED_BOOST_TIME (3000) // ms
+#define RING_ENHANCE_TIME (5000) // ms
 
 namespace C4
 {
@@ -139,6 +140,7 @@ namespace C4
 
 		long levelTime;
 		float speedTime = 0;				//duration of the speed item
+		float ringTime = 0;				    //duration of the ring item
 
 		PowerUp powerUp;
 
@@ -196,7 +198,27 @@ namespace C4
 		{
 			return direction;
 		}
-		
+
+		float GetRingTime()
+		{
+			return ringTime;
+		}
+
+		float GetSpeedTime()
+		{
+			return speedTime;
+		}
+
+		void SetSpeedTime(float time)
+		{
+			speedTime = time;
+		}
+
+		void SetPrevSpeed(float speed)
+		{
+			prevSpeed = speed;
+		}
+
 		static bool ValidNode(const Node *node);
 
 		void SplinePoint(Point3D position);

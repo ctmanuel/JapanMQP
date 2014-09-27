@@ -263,7 +263,37 @@ void MainPlayerController::Move(void)
 			speed = prevSpeed;
 		}
 	}
-	
+
+	// Handle ring enhance
+	if (ringTime > 0) {
+		ringTime -= TheTimeMgr->GetDeltaTime();
+		if (ringTime <= 0)
+		{
+			ringList.clear();
+			Node* root = GetTargetNode()->GetRootNode();
+			Node* node = root;
+			do
+			{
+				if (node->GetController())
+				{
+					if (node->GetController()->GetControllerType() == kControllerRing)
+					{
+						ringList.push_back(node);
+					}
+				}
+				node = root->GetNextNode(node);
+			} while (node);
+
+			for (int i = 0; i < ringList.size(); i++){
+				// adjust spin speed
+			}
+			// Play sound effect
+			Sound* sound = new Sound;
+			sound->Load("SoundEffects/contraction");
+			sound->Delay(1);
+			sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+		}
+	}
 
 	// Keep set of points below max
 	if (splinePoints.size() > MAX_SPLINE_POINTS)
@@ -361,31 +391,21 @@ void MainPlayerController::UsePowerUp(void)
 		Node* node = root;
 		do
 		{
-			/*if (node->GetController())
+			if (node->GetController())
 			{
 				if (node->GetController()->GetControllerType() == kControllerRing)
 				{
 					ringList.push_back(node);
 				}
-			}*/
-			if (node->GetNodeName() == "ring") {
-				Engine::Report(String<63>("found ring"));
-				Transform4D trans = node->GetNodeTransform();
-				trans.SetScale(3, 3, 3);
-				node->SetNodeTransform(trans);
 			}
 			node = root->GetNextNode(node);
 		} while (node);
 
-		/*for(int i = 0; i < ringList.size(); i++){
+		for(int i = 0; i < ringList.size(); i++){
 			Engine::Report(String<63>("found ") + (i + 1) + ("rings"));
-			//Model* temp = (Model*)(ringList[i]->GetObject());
-			//Geometry* tm = (Geometry*)ringList[i]->get
-			Node * temp = ringList[i]->GetFirstSubnode();
-			Transform4D trans = temp->GetNodeTransform();
-			trans.SetScale(10, 10, 10);
-			temp->SetNodeTransform(trans);
-		}*/
+			// adjust spin speed
+		}
+		ringTime = RING_ENHANCE_TIME;
 		// Play sound effect
 		sound = new Sound;
 		sound->Load("SoundEffects/expansion");
