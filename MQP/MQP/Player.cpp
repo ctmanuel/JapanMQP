@@ -285,7 +285,19 @@ void MainPlayerController::Move(void)
 			} while (node);
 
 			for (int i = 0; i < ringList.size(); i++){
-				// adjust spin speed
+				// trigger ring spin speed up script for each ring
+				Node *sub = ringList[i]->GetFirstSubnode();
+				while (sub) {
+					if (sub->GetController()) {
+						if (sub->GetNodeName()) {
+							if (Text::CompareText(sub->GetNodeName(), "spinDown")) {
+								Controller *cont = sub->GetController();
+								cont->Activate(nullptr, nullptr);
+							}
+						}
+					}
+					sub = sub->Next();
+				}
 			}
 			// Play sound effect
 			Sound* sound = new Sound;
@@ -386,7 +398,7 @@ void MainPlayerController::UsePowerUp(void)
 
 	case powerUpRingExpander:
 		ringList.clear();
-		// do someting
+		// gather list of rings
 		Node* root = GetTargetNode()->GetRootNode();
 		Node* node = root;
 		do
@@ -402,8 +414,19 @@ void MainPlayerController::UsePowerUp(void)
 		} while (node);
 
 		for(int i = 0; i < ringList.size(); i++){
-			Engine::Report(String<63>("found ") + (i + 1) + ("rings"));
-			// adjust spin speed
+			// trigger ring spin speed up script for each ring
+			Node *sub = ringList[i]->GetFirstSubnode();
+			while (sub) {
+				if (sub->GetController()) {
+					if (sub->GetNodeName()) {
+						if (Text::CompareText(sub->GetNodeName(), "spinUp")) {
+							Controller *cont = sub->GetController();
+							cont->Activate(nullptr, nullptr);
+						}
+					}
+				}
+				sub = sub->Next();
+			}
 		}
 		ringTime = RING_ENHANCE_TIME;
 		// Play sound effect
