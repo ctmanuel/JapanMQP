@@ -23,7 +23,7 @@
 
 // Speed stuff
 #define START_SPEED (3.0f) // m/s
-#define MIN_SPEED (2.0f) // m/s
+#define MIN_SPEED (3.0f) // m/s
 #define MAX_SPEED (50.0f) // m/s
 #define BOOST_SPEED (15.0f) // m/s
 #define BASE_SPEED (5.0f) // m/s, if below this speed, player will gradually accelerate towards it
