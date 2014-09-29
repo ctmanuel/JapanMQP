@@ -625,7 +625,7 @@ void AddSpeedMethod::Execute(const ScriptState* state)
 		player->AddSpeed(speedChange);
 		int ringMs = static_cast<int>(player->GetRingTime());
 		int speed = 1000 * player->GetSpeed();
-		if (player->GetRingTime() > 0) // ring during ring enhance time
+		if ((speedChange == 1.0) && (player->GetRingTime() > 0)) // ring during ring enhance time
 		{
 			int time = static_cast<int>(player->GetSpeedTime());
 			if (time <= 0) { // not currently in speedTime, current speed must be stored

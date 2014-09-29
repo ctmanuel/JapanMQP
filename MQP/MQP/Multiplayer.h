@@ -2,6 +2,7 @@
 
 #include "C4Application.h"
 #include "C4Messages.h"
+#include "Player.h"
 
 using namespace C4;
 
