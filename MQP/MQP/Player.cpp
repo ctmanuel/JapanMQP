@@ -256,7 +256,8 @@ void MainPlayerController::Move(void)
 
 	// Handle speed boost
 	if (speedTime > 0){
-		speed = MAX_SPEED;
+		speed = 2 * prevSpeed;
+		if (speed < BOOST_SPEED) speed = BOOST_SPEED;
 		speedTime -= TheTimeMgr->GetDeltaTime();
 		if (speedTime <= 0)
 		{
@@ -285,7 +286,19 @@ void MainPlayerController::Move(void)
 			} while (node);
 
 			for (int i = 0; i < ringList.size(); i++){
-				// adjust spin speed
+				// trigger ring spin speed up script for each ring
+				Node *sub = ringList[i]->GetFirstSubnode();
+				while (sub) {
+					if (sub->GetController()) {
+						if (sub->GetNodeName()) {
+							if (Text::CompareText(sub->GetNodeName(), "spinDown")) {
+								Controller *cont = sub->GetController();
+								cont->Activate(nullptr, nullptr);
+							}
+						}
+					}
+					sub = sub->Next();
+				}
 			}
 			// Play sound effect
 			Sound* sound = new Sound;
@@ -386,7 +399,7 @@ void MainPlayerController::UsePowerUp(void)
 
 	case powerUpRingExpander:
 		ringList.clear();
-		// do someting
+		// gather list of rings
 		Node* root = GetTargetNode()->GetRootNode();
 		Node* node = root;
 		do
@@ -396,14 +409,26 @@ void MainPlayerController::UsePowerUp(void)
 				if (node->GetController()->GetControllerType() == kControllerRing)
 				{
 					ringList.push_back(node);
+					Engine::Report(String<63>(ringList.size()) + (" rings"));
 				}
 			}
 			node = root->GetNextNode(node);
 		} while (node);
 
 		for(int i = 0; i < ringList.size(); i++){
-			Engine::Report(String<63>("found ") + (i + 1) + ("rings"));
-			// adjust spin speed
+			// trigger ring spin speed up script for each ring
+			Node *sub = ringList[i]->GetFirstSubnode();
+			while (sub) {
+				if (sub->GetController()) {
+					if (sub->GetNodeName()) {
+						if (Text::CompareText(sub->GetNodeName(), "spinUp")) {
+							Controller *cont = sub->GetController();
+							cont->Activate(nullptr, nullptr);
+						}
+					}
+				}
+				sub = sub->Next();
+			}
 		}
 		ringTime = RING_ENHANCE_TIME;
 		// Play sound effect
@@ -440,53 +465,74 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
 	Geometry* geometry = contact->GetContactGeometry();
-	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
+	if (geometry)
 	{
-		Sound* sound = new Sound;
-		sound->Load("SoundEffects/downer");
-		sound->Delay(1);
-		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		SetLinearVelocity(GetOriginalLinearVelocity());
-		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
-		AddSpeed(-2.0f);
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
-		return (kRigidBodyContactsBroken);
+		if (geometry->GetNodeName())
+		{
+			if (Text::CompareText(geometry->GetNodeName(), "downer"))
+			{
+				Sound* sound = new Sound;
+				sound->Load("SoundEffects/downer");
+				sound->Delay(1);
+				sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				SetLinearVelocity(GetOriginalLinearVelocity());
+				SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+				AddSpeed(-2.0f);
+				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->PurgeSubtree();
+				delete parent;
+				return (kRigidBodyContactsBroken);
+			}
+			else if (Text::CompareText(geometry->GetNodeName(), "speedBoost"))
+			{
+				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->PurgeSubtree();
+				delete parent;
+				SetPowerUp(powerUpSpeedBoost);
+				return (kRigidBodyContactsBroken);
+			}
+			else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
+			{
+				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->PurgeSubtree();
+				delete parent;
+				SetPowerUp(powerUpRingExpander);
+				return (kRigidBodyContactsBroken);
+			}
+			else
+			{
+				Sound* sound = new Sound;
+				sound->Load("SoundEffects/crash");
+				sound->Delay(1);
+				sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				Sound* sound2 = new Sound;
+				sound2->Load("SoundEffects/derez");
+				sound2->Delay(1);
+				sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				TheGame->SetLevelEndState(levelEndFailed);
+				TheGame->StartLevel("Menu");
+				return (kRigidBodyUnchanged);
+			}
+		}
+		else
+		{
+			Sound* sound = new Sound;
+			sound->Load("SoundEffects/crash");
+			sound->Delay(1);
+			sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+			Sound* sound2 = new Sound;
+			sound2->Load("SoundEffects/derez");
+			sound2->Delay(1);
+			sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+			TheGame->SetLevelEndState(levelEndFailed);
+			TheGame->StartLevel("Menu");
+			return (kRigidBodyUnchanged);
+		}
 	}
-	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
-	{
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
-		SetPowerUp(powerUpSpeedBoost);
-		return (kRigidBodyContactsBroken);
-	}
-	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
-	{
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
-		SetPowerUp(powerUpRingExpander);
-		return (kRigidBodyContactsBroken);
-	}
-	else
-	{
-		Sound* sound = new Sound;
-		sound->Load("SoundEffects/crash");
-		sound->Delay(1);
-		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		Sound* sound2 = new Sound;
-		sound2->Load("SoundEffects/derez");
-		sound2->Delay(1);
-		sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		TheGame->SetLevelEndState(levelEndFailed);
-		TheGame->StartLevel("Menu");
-		return (kRigidBodyUnchanged);
-	}
+	return (kRigidBodyUnchanged);
 }
 
 RigidBodyStatus MainPlayerController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
