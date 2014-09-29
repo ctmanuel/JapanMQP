@@ -207,6 +207,7 @@ public:
 	void SetRiftSensitivity(int riftSensitivity);
 	void SaveSettings(void);
 	void SetPlayerController(MainPlayerController* playerController);
+	void SpawnPlayer(Player *player, Point3D location, int32 controllerIndex);
 	MainPlayerController* GetPlayerController(void);
 
 	//networking stuff

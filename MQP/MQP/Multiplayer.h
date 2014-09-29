@@ -15,6 +15,27 @@ enum MESSAGES
 };
 namespace C4{
 
+	class GamePlayer : public Player
+	{
+		private:
+			MainPlayerController *cont;
+
+		public:
+
+			GamePlayer(PlayerKey key);
+			~GamePlayer();
+
+			MainPlayerController *GetController() const
+			{
+				return cont;
+			}
+
+			void SetController(MainPlayerController *controller)
+			{
+				cont = controller;
+			}
+	};
+
 	class ServerInfoMessage : public Message
 	{
 		friend class Game;

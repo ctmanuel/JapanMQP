@@ -592,7 +592,33 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 
 		case kPlayerInitialized:
 		{
-								   Engine::Report("Player initialized");
+				Engine::Report("Player initialized");
+				GamePlayer *gp = nullptr;
+				MainPlayerController *controller = nullptr;
+				Node *node = nullptr;
+				PlayerKey key = -1;
+				long id = -1;
+				Point3D loc;
+
+				Player *p = TheMessageMgr->GetFirstPlayer();
+				while (p)
+				{
+					gp = static_cast<GamePlayer *>(p);
+					
+					controller = gp->GetController();
+					if (controller)
+					{
+						node = controller->GetTargetNode();
+
+						key = gp->GetPlayerKey();
+						id = controller->GetControllerIndex();
+						loc = node->GetWorldPosition();
+
+						TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc));
+					}
+
+					p = p->Next();
+				}
 		}
 	}
 

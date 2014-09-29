@@ -3,6 +3,15 @@
 
 using namespace C4;
 
+GamePlayer::GamePlayer(PlayerKey key) : Player(key)
+{
+	cont = nullptr;
+}
+
+GamePlayer::~GamePlayer()
+{
+}
+
 ServerInfoMessage::ServerInfoMessage() : Message(kMessageServerInfo)
 {
 
@@ -85,6 +94,7 @@ bool SpawnMessage::HandleMessage(Player *sender) const
 {
 	Player *player = TheMessageMgr->GetPlayer(GetPlayerKey());
 	//TODO:: spawn method here
+	
 	return true;
 }
 
