@@ -479,27 +479,30 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 				SetLinearVelocity(GetOriginalLinearVelocity());
 				SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
 				AddSpeed(-2.0f);
-				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
 				Node* parent = geometry->GetSuperNode();
-				parent->PurgeSubtree();
-				delete parent;
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
 				return (kRigidBodyContactsBroken);
 			}
 			else if (Text::CompareText(geometry->GetNodeName(), "speedBoost"))
 			{
-				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
 				Node* parent = geometry->GetSuperNode();
-				parent->PurgeSubtree();
-				delete parent;
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
 				SetPowerUp(powerUpSpeedBoost);
 				return (kRigidBodyContactsBroken);
 			}
 			else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
 			{
-				GetPhysicsController()->PurgeGeometryContacts(geometry);
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
 				Node* parent = geometry->GetSuperNode();
-				parent->PurgeSubtree();
-				delete parent;
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
 				SetPowerUp(powerUpRingExpander);
 				return (kRigidBodyContactsBroken);
 			}
