@@ -465,6 +465,7 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
 	Geometry* geometry = contact->GetContactGeometry();
+	String<> name = String<>(contact->GetContactGeometry()->GetNodeName());
 	if (geometry)
 	{
 		if (geometry->GetNodeName())

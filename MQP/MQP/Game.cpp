@@ -309,7 +309,17 @@ EngineResult Game::LoadWorld(const char *name)
 	WorldResult result = TheWorldMgr->LoadWorld(name);
 	if (result == kWorldOkay)
 	{
-		TheMessageMgr->BeginSinglePlayerGame();
+		String<128> str("Loading World ");
+		str += name;
+		TheEngine->Report(str, kReportError);
+		if (TheMessageMgr->Server())
+		{
+			TheMessageMgr->BeginMultiplayerGame(true);
+		}
+		else{
+			TheMessageMgr->BeginSinglePlayerGame();
+		}
+		
 	}
 
 	return (result);
@@ -512,15 +522,60 @@ MainPlayerController* Game::GetPlayerController(void)
 	return playerController;
 }
 
+void Game::SpawnPlayer(Player *player, Point3D location, int32 controllerIndex)
+{
+	World *world = TheWorldMgr->GetWorld();
+	if (world)
+	{
+		Point3D point(2.0f, 0.0f, 2.0f);
+
+		GamePlayer *gPlayer = static_cast<GamePlayer *>(player);
+		MainPlayerController *cont = new MainPlayerController();
+		HandController *hcont = new HandController();
+
+		if (!cont)
+		{
+			cont->SetControllerIndex(controllerIndex);
+			hcont->SetControllerIndex(controllerIndex *= 2);
+
+			gPlayer->SetController(cont);
+
+			Model *player = Model::Get(kModelPlayer);
+			Model *hand = Model::Get(kModelAnimatedHand);
+			player->SetController(cont);
+			hand->SetController(hcont);
+
+			player->SetNodePosition(location);
+			hand->SetNodePosition(point);
+
+			world->AddNewNode(player);
+			world->AddNewNode(hand);
+			Engine::Report("Spawning player");
+		}
+		//Model *playereee = Model::Get(kModelRingExpander);
+
+		//playereee->SetNodePosition(location);
+		//world->AddNewNode(playereee);
+		//Engine::Report("Spawning ring");
+		
+	}
+}
+
 void Game::HostGame()
 {
 	TheEngine->Report("Hosting Game");
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
-	//TheGame->LoadWorld("Menu");
+	//TheGame->LoadWorld("test");
+	StartLevel("test");
+
+	/*loadLevel = "test";
+	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
+	task->SetTaskFlags(kTaskNonpersistent);
+	TheTimeMgr->AddTask(task);*/
 	
-	//TheMessageMgr->SendMessageAll(RequestMessage());
+	TheMessageMgr->SendMessageAll(RequestMessage());
 }
 
 void Game::JoinGame(String<> ipAddress)
@@ -556,6 +611,14 @@ void Game::ServerCommand(Command *command, const char *params)
 	// is to indicate that this machine is the server.
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheMessageMgr->BroadcastServerQuery();
+	
+	//CANT USE MULTITHREADING CUZ THINGS GET SPAWNED IN THE MENU FUUUUUUCCCCCCCCCCCC
+	TheGame->LoadWorld("test");
+
+	/*loadLevel = "test";
+	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
+	task->SetTaskFlags(kTaskNonpersistent);
+	TheTimeMgr->AddTask(task);*/
 
 	TheEngine->Report("Server initialized", kReportError);
 	TheMessageMgr->SendMessageAll(RequestMessage());
@@ -569,7 +632,7 @@ void Game::JoinCommand(Command *command, const char *params)
 	str += params;
 	TheEngine->Report(str, kReportError);
 
-	//TheMessageMgr->BeginMultiplayerGame(false);
+	TheMessageMgr->BeginMultiplayerGame(false);
 	NetworkAddress address = MessageMgr::StringToAddress(params);
 	address.SetPort(kGamePort);
 	TheMessageMgr->Connect(address);
@@ -603,7 +666,7 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 				Player *p = TheMessageMgr->GetFirstPlayer();
 				while (p)
 				{
-					gp = static_cast<GamePlayer *>(p);
+					/*gp = static_cast<GamePlayer *>(p);
 					
 					controller = gp->GetController();
 					if (controller)
@@ -615,7 +678,13 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 						loc = node->GetWorldPosition();
 
 						TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc));
-					}
+					}*/
+					Point3D loc2;
+					loc2.x = 2.0f;
+					loc2.y = 1.0f;
+					loc2.z = 1.5f;
+
+					TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc2));
 
 					p = p->Next();
 				}
@@ -640,6 +709,8 @@ Message * Game::ConstructMessage(MessageType type, Decompressor &data) const
 	Engine::Report(String<>("ConstructMessage: Got type ") + type);
 	switch (type)
 	{
+		case kMessageSpawn:
+			return (new SpawnMessage);
 		case (kMessageNameChangeRequestMessage) :
 			return (new NameChangeRequestMessage);
 
@@ -742,6 +813,25 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 			JoinGame(addr);
 			break;
 		}
+		case kMessageRequest:
+		{
+								if (TheMessageMgr->Server())
+								{
+									Engine::Report("Tis the server");
+									Point3D loc;
+									loc.x = 3.0f;
+									loc.y = 0.0f;
+									loc.z = 2.0f;
+
+									Point3D loc2;
+									loc2.x = 0.0f;
+									loc2.y = 0.0f;
+									loc2.z = 0.0f;
+
+									long contIndex = TheWorldMgr->GetWorld()->NewControllerIndex();
+									TheMessageMgr->SendMessageAll(SpawnMessage(from->GetPlayerKey(), contIndex, loc));
+								}
+		}
 	}
 }
 
@@ -767,9 +857,13 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 			break;
 		}
 		case kConnectionClientClosed:
+		{
+										Engine::Report("Client Connection Closed");
+										break;
+		}
 		case kConnectionClientTimedOut:
 		{
-			Engine::Report("Client Connection Closed");
+			Engine::Report("Client Timed Out");
 			break;
 		}
 		case kConnectionServerAccepted:

@@ -2,6 +2,8 @@
 
 #include "C4Application.h"
 #include "C4Messages.h"
+#include "Player.h"
+#include "Game.h"
 
 using namespace C4;
 

@@ -1,6 +1,7 @@
 #include "Multiplayer.h"
 #include "HandController.h"
 
+
 using namespace C4;
 
 GamePlayer::GamePlayer(PlayerKey key) : Player(key)
@@ -93,7 +94,7 @@ SpawnMessage::~SpawnMessage()
 bool SpawnMessage::HandleMessage(Player *sender) const
 {
 	Player *player = TheMessageMgr->GetPlayer(GetPlayerKey());
-	//TODO:: spawn method here
+	TheGame->SpawnPlayer(player, GetLocation(), GetControllerIndex());
 	
 	return true;
 }
