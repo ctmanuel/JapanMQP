@@ -38,3 +38,13 @@ C4/Data/MQP/AdamsSecretLab.wld
 *.tlog
 *.tlog
 *.idb
+
+C4/MQP.dll
+C4/MQP.dll
+*.dll
+*.lib
+MQP/MQP.sdf
+*.suo
+*.lib
+C4/MQP.dll
+C4/Data/MQP/level1.wld

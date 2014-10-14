@@ -106,9 +106,9 @@ void HandController::Move(void)
 {
 	//animate model
 	Model *myModel = GetTargetModel();
-	myModel->Animate();
+	//myModel->Animate();
 
-	Point3D basePosition(1.0f, 0.0f, 1.0f);
+	Point3D basePosition(0.9f, 0.0f, 0.8f);
 
 	if (leap.isConnected())
 	{
@@ -117,8 +117,9 @@ void HandController::Move(void)
 		{
 			Leap::Hand hand = hands.frontmost();
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.y = (hand.stabilizedPalmPosition()[0] * -1.0f) * (0.0038f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0038f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+
 			if (leapMotion.y > MAX_LEAP_Y)
 			{
 				leapMotion.y = MAX_LEAP_Y;
@@ -185,50 +186,80 @@ void HandController::Move(void)
 
 RigidBodyStatus HandController::HandleNewGeometryContact(const GeometryContact *contact)
 {
+	//String<>GeoName(contact->GetContactGeometry()->GetNodeName());
 	Geometry* geometry = contact->GetContactGeometry();
-	if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "downer"))
+	//Geometry geoCopy = &geometry;
+	if (geometry) 
 	{
-		Sound* sound = new Sound;
-		sound->Load("SoundEffects/downer");
-		sound->Delay(1);
-		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		SetLinearVelocity(GetOriginalLinearVelocity());
-		SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
-		player->AddSpeed(-2.0f);
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		Node* parent = geometry->GetSuperNode();
-		parent->PurgeSubtree();
-		delete parent;
-		return (kRigidBodyContactsBroken);
+		if (geometry->GetNodeName())
+		{
+			if (Text::CompareText(geometry->GetNodeName(), "downer"))
+			{
+				Sound* sound = new Sound;
+				sound->Load("SoundEffects/downer");
+				sound->Delay(1);
+				sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				SetLinearVelocity(GetOriginalLinearVelocity());
+				SetExternalLinearResistance(Vector2D(0.0F, 0.0F));
+				player->AddSpeed(-2.0f);
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
+				return (kRigidBodyContactsBroken);
+			}
+			else if (Text::CompareText(geometry->GetNodeName(), "speedBoost"))
+			{
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
+				player->SetPowerUp(powerUpSpeedBoost);
+				return (kRigidBodyContactsBroken);
+			}
+			else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
+			{
+				//GetPhysicsController()->PurgeGeometryContacts(geometry);
+				Node* parent = geometry->GetSuperNode();
+				parent->Disable();
+				//parent->PurgeSubtree();
+				//delete parent;
+				player->SetPowerUp(powerUpRingExpander);
+				return (kRigidBodyContactsBroken);
+			}
+			else
+			{
+				Sound* sound = new Sound;
+				sound->Load("SoundEffects/crash");
+				sound->Delay(1);
+				sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				Sound* sound2 = new Sound;
+				sound2->Load("SoundEffects/derez");
+				sound2->Delay(1);
+				sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				TheGame->SetLevelEndState(levelEndFailed);
+				TheGame->StartLevel("Menu");
+				return (kRigidBodyUnchanged);
+			}
+		}
+		else
+		{
+			Sound* sound = new Sound;
+			sound->Load("SoundEffects/crash");
+			sound->Delay(1);
+			sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+			Sound* sound2 = new Sound;
+			sound2->Load("SoundEffects/derez");
+			sound2->Delay(1);
+			sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+			TheGame->SetLevelEndState(levelEndFailed);
+			TheGame->StartLevel("Menu");
+			return (kRigidBodyUnchanged);
+		}
 	}
-	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "speedBoost"))
-	{
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
-		player->SetPowerUp(powerUpSpeedBoost);
-		return (kRigidBodyContactsBroken);
-	}
-	else if (geometry->GetNodeName() && Text::CompareText(geometry->GetNodeName(), "ringExpander"))
-	{
-		GetPhysicsController()->PurgeGeometryContacts(geometry);
-		delete geometry;
-		player->SetPowerUp(powerUpRingExpander);
-		return (kRigidBodyContactsBroken);
-	}
-	else
-	{
-		Sound* sound = new Sound;
-		sound->Load("SoundEffects/crash");
-		sound->Delay(1);
-		sound->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		Sound* sound2 = new Sound;
-		sound2->Load("SoundEffects/derez");
-		sound2->Delay(1);
-		sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
-		TheGame->SetLevelEndState(levelEndFailed);
-		TheGame->StartLevel("Menu");
-		return (kRigidBodyUnchanged);
-	}
+	return (kRigidBodyUnchanged);
 }
 
 RigidBodyStatus HandController::HandleNewRigidBodyContact(const RigidBodyContact* contact, RigidBodyController* contactBody)
@@ -278,8 +309,8 @@ void MenuHandController::Move(void)
 
 			// Hand position
 			leapMotion.x = 0.0f;
-			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
-			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.0018f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.y = hand.stabilizedPalmPosition()[0] * -1.0f * (0.009f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
+			leapMotion.z = (hand.stabilizedPalmPosition()[1] - Z_MID) * (0.009f + (0.002f * ((float)(TheGame->GetTurnSensitivity()) / 50.0f)));
 
 			// Hand orientation
 			Quaternion x, y, z;

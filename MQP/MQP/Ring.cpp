@@ -3,12 +3,12 @@
 using namespace C4;
 
 RingController::RingController() :
-	Controller(kControllerRing)
+Controller(kControllerRing)
 {
 }
 
 RingController::RingController(const RingController& ringController) :
-	Controller(ringController)
+Controller(ringController)
 {
 }
 
@@ -34,6 +34,7 @@ void RingController::Unpack(Unpacker& data, unsigned long unpackFlags)
 void RingController::Preprocess(void)
 {
 	Controller::Preprocess();
+
 }
 
 void RingController::Move(void)
