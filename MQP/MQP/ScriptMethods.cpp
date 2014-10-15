@@ -637,7 +637,7 @@ void AddSpeedMethod::Execute(const ScriptState* state)
 				time = 5000.0F;
 			}
 			player->SetSpeedTime(time);
-			Engine::Report(String<63>("speed time is now ") + (time));
+			//Engine::Report(String<63>("speed time is now ") + (time));
 		}
 	}
 	CallCompletionProc();
