@@ -1,12 +1,32 @@
-﻿Build started 10/15/2014 02:43:01 PM.
-     1>Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/16/2014 1:31:08 PM.
+     1>Project "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\MQP.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Player.cpp ScriptMethods.cpp
-         ScriptMethods.cpp
-         Player.cpp
-     1>c:\users\adam\documents\mqp\git_good\japanmqp\mqp\mqp\player.cpp(288): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\adam\documents\mqp\git_good\japanmqp\mqp\mqp\player.cpp(407): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I..\..\C4\EngineCode /I..\..\LeapSDK\LeapSDK\include /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\\Include" /I"..\..\SplineLibrary-master\SplineLibrary-master" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\um" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\shared" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\winrt" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D MQP_EXPORTS /D C4DEBUG /D C4WINDOWS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\cubic_b_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\looping_cubic_b_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cr_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\cubic_hermite_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cr_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\cubic\looping_cubic_hermite_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_cr_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\looping_quintic_hermite_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_cr_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\hermite\quintic\quintic_hermite_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\linear_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\linear\looping_linear_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\looping_natural_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\natural\natural_spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\spline.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splineinverter.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\splinelengthcalculator.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\linearalgebra.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\optimization.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\utils\t_calculator.cpp" "..\..\SplineLibrary-master\SplineLibrary-master\spline_library\vector3d.cpp" LightParticleSystem.cpp NameChangeRequestMessage.cpp Ring.cpp
+         Skipping... (no relevant changes detected)
+         Ring.cpp
+         NameChangeRequestMessage.cpp
+         LightParticleSystem.cpp
+         vector3d.cpp
+         t_calculator.cpp
+         optimization.cpp
+         linearalgebra.cpp
+         splinelengthcalculator.cpp
+         splineinverter.cpp
+         spline.cpp
+         natural_spline.cpp
+         looping_natural_spline.cpp
+         looping_linear_spline.cpp
+         linear_spline.cpp
+         quintic_hermite_spline.cpp
+         quintic_cr_spline.cpp
+         looping_quintic_hermite_spline.cpp
+         looping_quintic_cr_spline.cpp
+         looping_cubic_hermite_spline.cpp
+         looping_cr_spline.cpp
+         cubic_hermite_spline.cpp
+         cr_spline.cpp
+         looping_cubic_b_spline.cpp
+         cubic_b_spline.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\..\C4\MQP.dll" /INCREMENTAL /NOLOGO /LIBPATH:..\..\C4\VisualStudio2013\C4\Engine\Win32\Debug /LIBPATH:..\..\LeapSDK\LeapSDK\lib\x86 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib ..\..\C4\VisualStudio2013\C4\Win32\Debug\C4Engine.lib Leapd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\..\C4\MQP.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\C4\MQP.lib" /MACHINE:X86 /DLL Debug\cubic_b_spline.obj
          Debug\looping_cubic_b_spline.obj
@@ -42,11 +62,11 @@
          Debug\Ring.obj
          Debug\ScriptMethods.obj
          Debug\ResetAction.obj
-         MQP.vcxproj -> C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
+         MQP.vcxproj -> C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\..\..\C4\MQP.dll
        PostBuildEvent:
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
-         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcp120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
+         xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\C4\"
          :VCEnd
          ..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll
          1 File(s) copied
@@ -54,8 +74,8 @@
          1 File(s) copied
          ..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll
          1 File(s) copied
-     1>Done Building Project "C:\Users\Adam\Documents\MQP\Git_good\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Bowser\Downloads\College_Files_CS_3733\GitStuff\JapanMQP\MQP\MQP\MQP.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:08.83
+Time Elapsed 00:00:07.56
