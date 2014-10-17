@@ -88,6 +88,7 @@ namespace C4
 		float GetSpeed(){
 			return speed;
 		}
+		void FindPlayer();
 
 		Point3D GetFrontLeft();
 		Point3D GetFrontRight();

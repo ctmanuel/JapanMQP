@@ -41,7 +41,9 @@ Game::Game() :
 	//Model Registrations
 	//Player model registration, Hand Model Registration, 
 	playerModelReg(kModelPlayer, "Player", "Model/player", kModelPrecache, kControllerPlayer),
+	AltPlayer(kModelAltPlayer, "Alt Player", "Model/altPlayer", kModelPrecache, kControllerPlayer),
 	gauntletModelReg(kModelAnimatedHand, "AnimatedGauntlet", "Model/gauntletAnimated", kModelPrecache, kControllerAnimatedHand),
+	gauntletModelRegAlt(kModelAnimatedHandAlt, "Animated Gauntlet Alt", "Model/gauntletAnimatedAlt", kModelPrecache, kControllerAnimatedHand),
 	ringSmallModelReg(kModelRingSmall, "Small Ring", "Model/ringSmall"),
 	ringMediumModelReg(kModelRingMedium, "Medium Ring", "Model/ringMedium"),
 	ringLargeModelReg(kModelRingLarge, "Large Ring", "Model/ringLarge"),
@@ -50,6 +52,8 @@ Game::Game() :
 	ringExpanderModelReg(kModelRingExpander, "Ring Expander", "Model/ringExpander"),
 	handHeldSpeedBoostModelReg(kModelHandHeldSpeedBoost, "Hand Held Speed Boost", "Model/handHeldSpeedBoost"),
 	handHeldRingExpanderModelReg(kModelHandHeldRingExpander, "Hand Held Ring Expander", "Model/handHeldRingExpander"),
+	PlayerGroup(kModelPlayerGroup, "Player Group", "Model/PlayerGroup", kModelPrecache),
+	//LightPath(kModelLightPath, "Light Path", "Model/LightPath"),
 
 	//Environemnt Models
 	smallBuildingModelReg(kModelSmallBuilding, "Small Building", "Model/smallBuilding"),
@@ -171,10 +175,13 @@ Game::Game() :
 	TheNetworkMgr->SetProtocol(kGameProtocol);
 	TheNetworkMgr->SetPortNumber(kGamePort);
 
+	//multiplayer stuff
+	TheMessageMgr->SetPlayerConstructor(&ConstructPlayer, this);
 }
 
 Game::~Game()
 {
+	TheMessageMgr->EndGame();
 	TheWorldMgr->UnloadWorld();
 	TheWorldMgr->SetWorldConstructor(nullptr);
 	delete resetAction;
@@ -291,7 +298,8 @@ void Game::StartLevel(const char* name)
 			lastLevel = levelSix;
 		}
 	}
-
+	//call transition here
+	static_cast<GameCamera *>(TheWorldMgr->GetWorld()->GetCamera())->Transition();
 	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
 	task->SetTaskFlags(kTaskNonpersistent);
 	TheTimeMgr->AddTask(task);
@@ -300,6 +308,8 @@ void Game::StartLevel(const char* name)
 void Game::LoadLevel(DeferredTask* task, void* cookie)
 {
 	TheWorldMgr->LoadWorld(*((String<128>*)cookie));
+	//call transition here
+	static_cast<GameCamera *>(TheWorldMgr->GetWorld()->GetCamera())->Transition();
 }
 
 EngineResult Game::LoadWorld(const char *name)
@@ -317,8 +327,9 @@ EngineResult Game::LoadWorld(const char *name)
 			TheMessageMgr->BeginMultiplayerGame(true);
 		}
 		else{
-			TheMessageMgr->BeginSinglePlayerGame();
+			TheMessageMgr->BeginMultiplayerGame(false);
 		}
+
 		
 	}
 
@@ -527,37 +538,74 @@ void Game::SpawnPlayer(Player *player, Point3D location, int32 controllerIndex)
 	World *world = TheWorldMgr->GetWorld();
 	if (world)
 	{
-		Point3D point(2.0f, 0.0f, 2.0f);
 
 		GamePlayer *gPlayer = static_cast<GamePlayer *>(player);
-		MainPlayerController *cont = new MainPlayerController();
-		HandController *hcont = new HandController();
+		MainPlayerController *cont = gPlayer->GetController();
+		HandController *hcont = gPlayer->GetHandController();
+		LightPathController *lcont = new LightPathController();
+		LocatorMarker *lmarker = new LocatorMarker(kMarkerLocator);
 
-		if (!cont)
+		if (!cont || !hcont)
 		{
+			GenericGeometryObject* obj = nullptr;
+			Node *path = nullptr;
+			Node* root = world->GetRootNode();
+			Node* node = root;
+			do
+			{
+				if (node->GetNodeName())
+				{
+					if (Text::CompareText(node->GetNodeName(), "LightPath"))
+					{
+						//Engine::Report("Found");
+						//Geometry* geometry = (Geometry*)node;
+						//obj = (GenericGeometryObject*)geometry->GetObject();
+						path = node;
+						path->SetNodeName("NewLightPath");
+						
+					}
+				}
+				node = root->GetNextNode(node);
+			} while (node);
+
+			hcont = new HandController();
+			cont = new MainPlayerController();
+			lcont = new LightPathController();
+
+			hcont->SetControllerIndex(controllerIndex);
 			cont->SetControllerIndex(controllerIndex);
-			hcont->SetControllerIndex(controllerIndex *= 2);
+			lcont->SetControllerIndex(controllerIndex);
 
 			gPlayer->SetController(cont);
+			gPlayer->SetHandController(hcont);
 
 			Model *player = Model::Get(kModelPlayer);
 			Model *hand = Model::Get(kModelAnimatedHand);
+
 			player->SetController(cont);
 			hand->SetController(hcont);
+			path->SetController(lcont);
 
-			player->SetNodePosition(location);
-			hand->SetNodePosition(point);
+			//player->SetNodePosition(point);
+			//hand->SetNodePosition(location);
+			path->SetNodePosition(location);
+		
+			cont->SetGravityMultiplier(0.0f);
+			hcont->SetGravityMultiplier(0.0f);
+
+			lmarker->SetNodePosition(Point3D(location.x +=0.2f, location.y, location.z));
+			path->AddFirstSubnode(lmarker);
 
 			world->AddNewNode(player);
 			world->AddNewNode(hand);
+			world->AddNewNode(path);
+			world->AddNewNode(lmarker);
+
+			player->Invalidate();
+			hand->Invalidate();
+			
 			Engine::Report("Spawning player");
 		}
-		//Model *playereee = Model::Get(kModelRingExpander);
-
-		//playereee->SetNodePosition(location);
-		//world->AddNewNode(playereee);
-		//Engine::Report("Spawning ring");
-		
 	}
 }
 
@@ -567,13 +615,7 @@ void Game::HostGame()
 	TheMessageMgr->BeginMultiplayerGame(true);
 	TheEngine->Report(String<>("Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
-	//TheGame->LoadWorld("test");
 	StartLevel("test");
-
-	/*loadLevel = "test";
-	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
-	task->SetTaskFlags(kTaskNonpersistent);
-	TheTimeMgr->AddTask(task);*/
 	
 	TheMessageMgr->SendMessageAll(RequestMessage());
 }
@@ -610,17 +652,12 @@ void Game::ServerCommand(Command *command, const char *params)
 	// Just start the server. The 'true' parameter 
 	// is to indicate that this machine is the server.
 	TheMessageMgr->BeginMultiplayerGame(true);
-	TheMessageMgr->BroadcastServerQuery();
+	//TheMessageMgr->BroadcastServerQuery();
 	
-	//CANT USE MULTITHREADING CUZ THINGS GET SPAWNED IN THE MENU FUUUUUUCCCCCCCCCCCC
 	TheGame->LoadWorld("test");
 
-	/*loadLevel = "test";
-	DeferredTask* task = new DeferredTask(&LoadLevel, &loadLevel);
-	task->SetTaskFlags(kTaskNonpersistent);
-	TheTimeMgr->AddTask(task);*/
+	TheEngine->Report(String<>("Server Initialized. Hosting on: ") + MessageMgr::AddressToString(TheNetworkMgr->GetLocalAddress(), true));
 
-	TheEngine->Report("Server initialized", kReportError);
 	TheMessageMgr->SendMessageAll(RequestMessage());
 }
 
@@ -666,7 +703,7 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 				Player *p = TheMessageMgr->GetFirstPlayer();
 				while (p)
 				{
-					/*gp = static_cast<GamePlayer *>(p);
+					gp = static_cast<GamePlayer *>(p);
 					
 					controller = gp->GetController();
 					if (controller)
@@ -677,14 +714,8 @@ void Game::HandlePlayerEvent(PlayerEvent event, Player *player, const void *para
 						id = controller->GetControllerIndex();
 						loc = node->GetWorldPosition();
 
-						TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc));
-					}*/
-					Point3D loc2;
-					loc2.x = 2.0f;
-					loc2.y = 1.0f;
-					loc2.z = 1.5f;
-
-					TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc2));
+						//TheMessageMgr->SendMessage(player->GetPlayerKey(), SpawnMessage(key, id, loc));
+					}
 
 					p = p->Next();
 				}
@@ -815,22 +846,22 @@ void Game::ReceiveMessage(Player *from, const NetworkAddress &address, const Mes
 		}
 		case kMessageRequest:
 		{
-								if (TheMessageMgr->Server())
-								{
-									Engine::Report("Tis the server");
-									Point3D loc;
-									loc.x = 3.0f;
-									loc.y = 0.0f;
-									loc.z = 2.0f;
+			if (TheMessageMgr->Server())
+			{
+				Engine::Report("Tis the server");
+				Point3D loc;
+				loc.x = 3.0f;
+				loc.y = 0.0f;
+				loc.z = 2.0f;
 
-									Point3D loc2;
-									loc2.x = 0.0f;
-									loc2.y = 0.0f;
-									loc2.z = 0.0f;
+				Point3D loc2;
+				loc2.x = 0.0f;
+				loc2.y = 0.0f;
+				loc2.z = 0.0f;
 
-									long contIndex = TheWorldMgr->GetWorld()->NewControllerIndex();
-									TheMessageMgr->SendMessageAll(SpawnMessage(from->GetPlayerKey(), contIndex, loc));
-								}
+				long contIndex = TheWorldMgr->GetWorld()->NewControllerIndex();
+				TheMessageMgr->SendMessageAll(SpawnMessage(from->GetPlayerKey(), contIndex, loc2));
+			}
 		}
 	}
 }
@@ -853,13 +884,12 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 		case kConnectionClientOpened:
 		{
 			Engine::Report("Client Connected");
-			//TheMessageMgr->SendMessageAll(LoadMultiplayerLevel(23));
 			break;
 		}
 		case kConnectionClientClosed:
 		{
-										Engine::Report("Client Connection Closed");
-										break;
+			Engine::Report("Client Connection Closed");
+			break;
 		}
 		case kConnectionClientTimedOut:
 		{
@@ -870,14 +900,19 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 		{
 			Engine::Report("We are connected");
 			//load world here?
+			TheGame->LoadWorld("test");
 			//send messageall request here?
+			//TheMessageMgr->SendMessageAll(RequestMessage());
 			break;
 		}
 		case C4::kConnectionServerClosed:
-		case C4::kConnectionServerTimedOut:
 		{
 			Engine::Report("Server Connection Closed.");
-			//UnloadWorld();
+			break;
+		}
+		case C4::kConnectionServerTimedOut:
+		{
+			Engine::Report("Server Timed Out.");
 			break;
 		}
 		case C4::kConnectionAttemptFailed:
@@ -890,3 +925,7 @@ void Game::HandleConnectionEvent(ConnectionEvent event, const NetworkAddress& ad
 	Application::HandleConnectionEvent(event, address, param);
 }
 
+Player *Game::ConstructPlayer(PlayerKey key, void *data)
+{
+	return (new GamePlayer(key));
+}

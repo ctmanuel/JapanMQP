@@ -2,9 +2,9 @@
 
 #include "C4Application.h"
 #include "C4Messages.h"
+#include "HandController.h"
 #include "Player.h"
 #include "Game.h"
-=======
 
 using namespace C4;
 
@@ -22,6 +22,7 @@ namespace C4{
 	{
 		private:
 			MainPlayerController *cont;
+			HandController *hcont;
 
 		public:
 
@@ -36,6 +37,16 @@ namespace C4{
 			void SetController(MainPlayerController *controller)
 			{
 				cont = controller;
+			}
+
+			HandController *GetHandController() const
+			{
+				return hcont;
+			}
+
+			void SetHandController(HandController *controller)
+			{
+				hcont = controller;
 			}
 	};
 

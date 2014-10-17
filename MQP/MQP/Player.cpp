@@ -1,8 +1,11 @@
 #include "Player.h"
 #include "Game.h"
 #include <ctime>
+#include <iostream>
+#include <fstream>
 
 using namespace C4;
+using namespace std;
 
 extern Game* TheGame;
 
@@ -97,7 +100,8 @@ Controller *MainPlayerController::Replicate(void) const
 	// preprocessing it needs to do.
 		
 	 CharacterController::Preprocess();
-
+	 SetFrictionCoefficient(0.01);
+	 SetRollingResistance(0.0f);
 	 SetRigidBodyFlags(kRigidBodyFixedOrientation);
 
 	 // Spline needs at least two points in front of the player and two points behind.
@@ -176,6 +180,18 @@ void MainPlayerController::Move(void)
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
+	//GetTargetNode()->SetNodePosition(newPos);
+	ofstream myfile("path.txt", ios::app);
+	
+	if (myfile.is_open()){
+		myfile << "O " << oldPos.x << " " << oldPos.y << " " << oldPos.z;
+		myfile << "\n";
+		myfile <<"N "<< newPos.x << " " << newPos.y << " " << newPos.z;
+		myfile << "\n";
+	}
+	else
+		Engine::Report("Couldnt open");
+	//SetRigidBodyPosition(Point3D(oldPos.x-=3,0.0f,0.0f));
 	SetRigidBodyPosition(newPos);
 
 	// Change speed based on uphill/downhill
@@ -465,7 +481,6 @@ void MainPlayerController::SetPlayerMotion(int32 motion)
 RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryContact* contact)
 {
 	Geometry* geometry = contact->GetContactGeometry();
-	String<> name = String<>(contact->GetContactGeometry()->GetNodeName());
 	if (geometry)
 	{
 		if (geometry->GetNodeName())
@@ -516,6 +531,7 @@ RigidBodyStatus MainPlayerController::HandleNewGeometryContact(const GeometryCon
 				sound2->Load("SoundEffects/derez");
 				sound2->Delay(1);
 				sound2->VaryVolume((float)(TheGame->GetSoundVolume()) / 100.0f, 0);
+				//end transision here
 				TheGame->SetLevelEndState(levelEndFailed);
 				TheGame->StartLevel("Menu");
 				return (kRigidBodyUnchanged);

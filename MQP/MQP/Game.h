@@ -76,7 +76,9 @@ enum
 	kModelBlueCityWall = 'bcty',
 	kModelBlueCityWall2 = 'bty2',
 	kModelBlueCityWall3 = 'bty3',
-
+	kModelPlayerGroup = 'pg12',
+	kModelAltPlayer = 'alpl',
+	kModelAnimatedHandAlt = 'alag',
 
 	
 	kGameProtocol = 0x00000012,
@@ -120,13 +122,16 @@ private:
 	ModelRegistration						BlueCityCube_1;
 	ModelRegistration						BlueCityCube_2;
 	ModelRegistration						BlueCityCube_3;
-	
+	ModelRegistration						PlayerGroup;
+	ModelRegistration						AltPlayer;
+	ModelRegistration						gauntletModelRegAlt;
 
 	ControllerReg<HandController>			handControllerReg;
 	ControllerReg<MenuHandController>		menuHandControllerReg;
 	ControllerReg<MainPlayerController>		playerControllerReg;
 	ControllerReg<LightPathController>		lightPathControllerReg;
 	ControllerReg<RingController>			ringControllerReg;
+	
 
 	LocatorRegistration						animatedHand;
 
@@ -233,6 +238,7 @@ public:
 	//This method will be called whenever the messagemanager recieves a message.
 	//Its task is to create an instance of a Message based on the Message Type given to it.
 	Message *ConstructMessage(MessageType type, Decompressor &data) const;
+	static Player *ConstructPlayer(PlayerKey key, void *data);
 
 	//Override from Application's HandleConnectionEvent function. Used to handle a server
 	//broadcast query from clients

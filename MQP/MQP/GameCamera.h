@@ -14,6 +14,9 @@ namespace C4
 		Node *playerNode;
 		Node *GetPlayerNode();
 		bool lookedForPlayer;
+		bool inTransition = false;
+		float transitionTime = 120.0f;
+		float bias = 1.0f;
 
 	public:
 		GameCamera();
@@ -22,6 +25,7 @@ namespace C4
 		void Preprocess(void);
 		void Move(void);
 		void Reset(void);
+		void Transition(void);
 
 	};
 }

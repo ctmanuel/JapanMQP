@@ -60,7 +60,7 @@ void HandController::Preprocess(void)
 {
 	CharacterController::Preprocess();
 
-	SetRigidBodyFlags(kRigidBodyKeepAwake | kRigidBodyFixedOrientation);
+	SetRigidBodyFlags(kRigidBodyKeepAwake);
 	SetFrictionCoefficient(0.0F);
 	//Give it 0 gravity
 	SetGravityMultiplier(0.0F);
@@ -82,6 +82,7 @@ void HandController::Preprocess(void)
 	startOrientation = GetTargetNode()->GetNodeTransform().GetMatrix3D();
 	Node* root = GetTargetNode()->GetRootNode();
 	Node* node = root;
+	//TODO:: Change this maybe
 	do
 	{
 		if (node->GetController())
@@ -109,6 +110,13 @@ void HandController::Move(void)
 	//myModel->Animate();
 
 	Point3D basePosition(0.9f, 0.0f, 0.8f);
+
+	/*Quaternion x, y, z;
+	x.SetRotationAboutX(0);
+	y.SetRotationAboutY(90);
+	z.SetRotationAboutZ(90);
+	GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
+	SetRigidBodyMatrix3D((x * y * z).GetRotationMatrix());*/
 
 	if (leap.isConnected())
 	{
@@ -178,9 +186,9 @@ void HandController::Move(void)
 	// Update position of light particle system
 	if (lps)
 	{
-		lps->SetStart(GetTargetNode()->GetWorldPosition());
-		lps->SetEndLeft(lightPath->GetFrontLeft());
-		lps->SetEndRight(lightPath->GetFrontRight());
+		//lps->SetStart(GetTargetNode()->GetWorldPosition());
+		//lps->SetEndLeft(lightPath->GetFrontLeft());
+		//lps->SetEndRight(lightPath->GetFrontRight());
 	}
 }
 

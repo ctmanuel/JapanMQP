@@ -7,6 +7,7 @@ using namespace C4;
 GamePlayer::GamePlayer(PlayerKey key) : Player(key)
 {
 	cont = nullptr;
+	hcont = nullptr;
 }
 
 GamePlayer::~GamePlayer()
