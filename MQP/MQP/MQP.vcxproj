@@ -47,6 +47,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\C4\</OutDir>
+    <IncludePath>$(DXSDK_DIR)\Include;..\..\SplineLibrary-master\SplineLibrary-master;$(IncludePath)</IncludePath>
+    <SourcePath>$(VC_SourcePath);..\..\SplineLibrary-master\SplineLibrary-master</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -77,14 +80,20 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MQP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MQP_EXPORTS;C4WINDOWS;C4OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\C4\EngineCode;..\..\LeapSDK\LeapSDK\include;..\..\SplineLibrary-master\SplineLibrary-master;$(IncludePath)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\C4\VisualStudio2013\C4\Engine\Win32\Optimized;..\..\LeapSDK\LeapSDK\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;..\..\C4\VisualStudio2013\C4\Win32\Optimized\C4Engine.lib;Leapd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\Leapd.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />

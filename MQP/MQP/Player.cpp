@@ -336,17 +336,6 @@ void MainPlayerController::Move(void)
 	// Always call this after moving a node
 	GetTargetNode()->Invalidate();
 
-	/*
-	// Face direction of movement
-	Vector3D d = GetTargetNode()->GetNodePosition() - oldPos;
-	float horiz = sqrt((d.x * d.x) + (d.y * d.y));
-	float pitch = atan2(horiz, d.z) - K::pi_over_2;
-	Matrix3D pitchm, yawm;
-	pitchm.SetRotationAboutY(pitch);
-	float yaw = atan2(d.y, d.x);
-	yawm.SetRotationAboutZ(yaw);
-	GetTargetNode()->SetNodeMatrix3D(yawm * pitchm);
-	*/
  }
 
 void MainPlayerController::ReportLightpathFront(Point3D front)
@@ -425,7 +414,7 @@ void MainPlayerController::UsePowerUp(void)
 				if (node->GetController()->GetControllerType() == kControllerRing)
 				{
 					ringList.push_back(node);
-					Engine::Report(String<63>(ringList.size()) + (" rings"));
+					//Engine::Report(String<63>(ringList.size()) + (" rings"));
 				}
 			}
 			node = root->GetNextNode(node);
