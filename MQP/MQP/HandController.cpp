@@ -74,10 +74,14 @@ void HandController::Preprocess(void)
 	myModel->SetRootAnimator(frameAnimator);
 	Interpolator *interpolator = frameAnimator->GetFrameInterpolator();
 	frameAnimator->SetAnimation(animatedModelPath);
-	if (backward)
-		interpolator->SetMode(kInterpolatorBackward | kInterpolatorLoop);
-	else
-		interpolator->SetMode(kInterpolatorForward | kInterpolatorLoop);
+	if (backward){
+		interpolator->SetRange(1, 59);
+		interpolator->SetMode(kInterpolatorLoop);
+	}
+	else{
+		interpolator->SetRange(1, 59);
+		interpolator->SetMode(kInterpolatorLoop);
+	}
 
 	startOrientation = GetTargetNode()->GetNodeTransform().GetMatrix3D();
 	Node* root = GetTargetNode()->GetRootNode();
@@ -107,16 +111,9 @@ void HandController::Move(void)
 {
 	//animate model
 	Model *myModel = GetTargetModel();
-	//myModel->Animate();
+	myModel->Animate();
 
 	Point3D basePosition(0.9f, 0.0f, 0.8f);
-
-	/*Quaternion x, y, z;
-	x.SetRotationAboutX(0);
-	y.SetRotationAboutY(90);
-	z.SetRotationAboutZ(90);
-	GetTargetNode()->SetNodeMatrix3D((x * y * z).GetRotationMatrix());
-	SetRigidBodyMatrix3D((x * y * z).GetRotationMatrix());*/
 
 	if (leap.isConnected())
 	{
@@ -186,9 +183,9 @@ void HandController::Move(void)
 	// Update position of light particle system
 	if (lps)
 	{
-		//lps->SetStart(GetTargetNode()->GetWorldPosition());
-		//lps->SetEndLeft(lightPath->GetFrontLeft());
-		//lps->SetEndRight(lightPath->GetFrontRight());
+		lps->SetStart(GetTargetNode()->GetWorldPosition());
+		lps->SetEndLeft(lightPath->GetFrontLeft());
+		lps->SetEndRight(lightPath->GetFrontRight());
 	}
 }
 

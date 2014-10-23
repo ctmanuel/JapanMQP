@@ -180,18 +180,7 @@ void MainPlayerController::Move(void)
 	Point3D oldPos = GetTargetNode()->GetNodePosition();
 	SplineVector3D pos = spline->getPosition(((length - DISTANCE_TO_PATH) / length) * spline->getMaxT());
 	Point3D newPos = Point3D(pos.x(), pos.y(), pos.z());	//going to this position
-	//GetTargetNode()->SetNodePosition(newPos);
-	ofstream myfile("path.txt", ios::app);
-	
-	if (myfile.is_open()){
-		myfile << "O " << oldPos.x << " " << oldPos.y << " " << oldPos.z;
-		myfile << "\n";
-		myfile <<"N "<< newPos.x << " " << newPos.y << " " << newPos.z;
-		myfile << "\n";
-	}
-	else
-		Engine::Report("Couldnt open");
-	//SetRigidBodyPosition(Point3D(oldPos.x-=3,0.0f,0.0f));
+
 	SetRigidBodyPosition(newPos);
 
 	// Change speed based on uphill/downhill

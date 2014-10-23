@@ -109,7 +109,6 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
     <ClInclude Include="Ring.h" />
     <ClInclude Include="ScriptMethods.h" />
     <ClInclude Include="ResetAction.h" />
-    <ClInclude Include="Transition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\SplineLibrary-master\SplineLibrary-master\spline_library\basis\cubic_b_spline.cpp" />
@@ -146,7 +145,6 @@ xcopy /yr "..\..\LeapSDK\LeapSDK\lib\x86\msvcr120d.dll" "$(TargetDir)"</Command>
     <ClCompile Include="Ring.cpp" />
     <ClCompile Include="ScriptMethods.cpp" />
     <ClCompile Include="ResetAction.cpp" />
-    <ClCompile Include="Transition.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
