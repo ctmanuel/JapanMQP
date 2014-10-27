@@ -267,27 +267,27 @@ void Game::StartLevel(const char* name)
 		music->Release();
 		music = new Sound;
 		WaveStreamer *levelStreamer = new WaveStreamer;
-		levelStreamer->AddComponent("A_Light_Groove");
-		music->Stream(levelStreamer);
-		music->SetLoopCount(kSoundLoopInfinite);
-		music->Delay(10);
-		music->VaryVolume((float)settings[0] / 100.0f, 0);
+		//levelStreamer->AddComponent("A_Light_Groove");
 
 		if (Text::CompareTextCaseless(name, "level1"))
 		{
 			lastLevel = levelOne;
+			levelStreamer->AddComponent("A_Light_Groove_1");
 		}
 		else if (Text::CompareTextCaseless(name, "level2"))
 		{
 			lastLevel = levelTwo;
+			levelStreamer->AddComponent("A_Light_Groove_2");
 		}
 		else if (Text::CompareTextCaseless(name, "level3"))
 		{
 			lastLevel = levelThree;
+			levelStreamer->AddComponent("A_Light_Groove_3");
 		}
 		else if (Text::CompareTextCaseless(name, "level4"))
 		{
 			lastLevel = levelFour;
+			levelStreamer->AddComponent("A_Light_Groove_4");
 		}
 		else if (Text::CompareTextCaseless(name, "level5"))
 		{
@@ -297,6 +297,10 @@ void Game::StartLevel(const char* name)
 		{
 			lastLevel = levelSix;
 		}
+		music->Stream(levelStreamer);
+		music->SetLoopCount(kSoundLoopInfinite);
+		music->Delay(10);
+		music->VaryVolume((float)settings[0] / 100.0f, 0);
 	}
 	//call transition here
 	static_cast<GameCamera *>(TheWorldMgr->GetWorld()->GetCamera())->Transition();
